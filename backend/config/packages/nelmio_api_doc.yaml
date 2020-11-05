@@ -1,0 +1,25 @@
+nelmio_api_doc:
+  models: { use_jms: false }
+  areas:
+    path_patterns: # an array of regexps
+      - ^/api(?!/doc$)(?!/_.)
+#    host_patterns:
+#      - ^/api/users
+  documentation:
+    servers:
+      - url: http://dev.blog.kz:8080
+        description: API over HTTP
+      - url: https://dev.blog.kz:8080
+        description: API over HTTPS
+    info:
+      title: Blog
+      description: Blog API
+      version: 1.0.0
+    components:
+      securitySchemes:
+        Bearer:
+          type: http
+          scheme: bearer
+          bearerFormat: JWT
+    security:
+      - Bearer: []

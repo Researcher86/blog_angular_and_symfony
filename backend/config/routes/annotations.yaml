@@ -1,0 +1,11 @@
+controllers:
+    resource: ../../src/Controller/
+    prefix: /api
+    trailing_slash_on_root: true
+    type: annotation
+    defaults:
+        _format: json
+
+kernel:
+    resource: ../../src/Kernel.php
+    type: annotation

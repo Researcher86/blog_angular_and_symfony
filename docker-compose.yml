@@ -1,0 +1,57 @@
+version: '3'
+
+services:
+  web-server:
+    image: nginx:1.15
+    ports:
+      - 8080:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./frontend/dist:/app/frontend/dist
+      - ./backend/public/bundles:/app/backend/bundles
+    depends_on:
+      - frontend
+      - backend
+  backend:
+    build:
+      context: .
+      dockerfile: backend/docker/Dockerfile.fpm
+    volumes:
+      - ./backend/docker/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      - ./backend:/app
+    depends_on:
+      - db
+#      - worker
+  worker:
+    build:
+      context: .
+      dockerfile: backend/docker/Dockerfile.cli
+    volumes:
+      - ./backend/docker/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      - ./backend:/app
+    depends_on:
+      - db
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/docker/Dockerfile
+    command: ng serve --host 0.0.0.0 --public-host http://localhost:4200
+    tty: true
+    volumes:
+      - ./frontend:/app
+    depends_on:
+      - backend
+  db:
+    image: mysql:5.5
+#    networks:
+#      - blog
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: blog
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: ''
