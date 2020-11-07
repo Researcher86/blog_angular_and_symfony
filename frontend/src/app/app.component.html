@@ -1,17 +1,5 @@
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content below * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced. * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * Delete the template below * * * * * * * * * * -->
-<!-- * * * * * * * to get started with your project! * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<app-top-bar></app-top-bar>
+<app-layout-header></app-layout-header>
 
-<div class="container">
-  <span>{{ title }} app is running!</span>
+<router-outlet></router-outlet>
 
-  <app-product-list></app-product-list>
-
-  <router-outlet></router-outlet>
-</div>
+<app-layout-footer></app-layout-footer>

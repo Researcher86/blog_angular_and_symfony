@@ -8,5 +8,9 @@ if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule)
+const bootstrapPromise = platformBrowserDynamic().bootstrapModule(AppModule)
+  .catch(err => console.error(err));
+
+// Logging bootstrap information
+bootstrapPromise.then(success => console.log(`Bootstrap success`))
   .catch(err => console.error(err));
