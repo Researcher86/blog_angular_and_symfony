@@ -35,7 +35,7 @@ services:
     build:
       context: .
       dockerfile: frontend/docker/Dockerfile
-    command: ng serve --host 0.0.0.0 --public-host http://localhost:4200
+    command: ng serve --host frontend --public-host http://dev.blog.kz:8080 --disableHostCheck true
     tty: true
     volumes:
       - ./frontend:/app
