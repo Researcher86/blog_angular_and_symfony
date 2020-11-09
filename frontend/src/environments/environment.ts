@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  api_url: 'http://dev.blog.kz/api'
+  api_url: 'http://dev.blog.kz:8080/api'
 };
 
 /*
