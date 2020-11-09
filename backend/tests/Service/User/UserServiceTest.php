@@ -9,6 +9,7 @@ use App\Repository\User\UserRepository;
 use App\Service\User\UserService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserServiceTest extends TestCase
 {
@@ -19,9 +20,11 @@ class UserServiceTest extends TestCase
     protected function setUp(): void
     {
         $this->userRepositoryMock = $this->createMock(UserRepository::class);
-        $this->userService = new UserService($this->userRepositoryMock);
+        $this->userService = new UserService(
+            $this->createMock(ValidatorInterface::class),
+            $this->userRepositoryMock
+        );
     }
-
 
     public function testGetById()
     {
