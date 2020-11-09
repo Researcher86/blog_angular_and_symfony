@@ -1,30 +1,34 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {CommonModule} from "@angular/common";
+import {CoreModule} from "../core";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
+import {MatTableModule} from "@angular/material/table";
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatSortModule} from "@angular/material/sort";
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
-    HttpClientModule,
-    RouterModule,
-    BrowserAnimationsModule,
+    CoreModule,
     MatToolbarModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
   ],
   exports: [
-    HttpClientModule,
-    RouterModule,
-    BrowserAnimationsModule,
+    CommonModule,
+    CoreModule,
     MatToolbarModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
   ]
 })
 export class SharedModule { }
