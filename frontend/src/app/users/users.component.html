@@ -1,3 +1,31 @@
 <div class="users-page">
-  Users
+  <h2>User list</h2>
+
+  <table mat-table [dataSource]="dataSource">
+    <!-- Id Column -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef> Id </th>
+      <td mat-cell *matCellDef="let user"> {{user.id}} </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <td mat-cell *matCellDef="let user">
+        <a [title]="user.name" [routerLink]="['users', user.id]">
+          {{ user.name }}
+        </a>
+      </td>
+    </ng-container>
+
+    <!-- Action Column -->
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef> Action </th>
+      <td mat-cell *matCellDef="let element"> <button mat-raised-button color="primary" (click)="edit(element.id)">Edit</button> </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['id', 'name', 'action']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['id', 'name', 'action'];"></tr>
+  </table>
+  <mat-paginator [pageSizeOptions]="[5, 10, 20, 30]" showFirstLastButtons></mat-paginator>
 </div>

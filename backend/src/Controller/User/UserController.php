@@ -48,4 +48,34 @@ class UserController extends AbstractController
             'name' => $user->getName(),
         ]);
     }
+
+    /**
+     * @Route("/users", methods={"GET"}, name="user_list")
+     * @OA\Response(
+     *     response=200,
+     *     description="Return users",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(
+     *          @OA\Property(property="id", type="integer"),
+     *          @OA\Property(property="name", type="string")
+     *        )
+     *     )
+     * )
+     * @OA\Tag(name="Users")
+     * @Security(name="Bearer")
+     *
+     * @return Response
+     */
+    public function list(): Response
+    {
+        $users = $this->userService->getAll();
+
+        return $this->json(
+            array_map(fn($user) => [
+                'id'   => $user->getId(),
+                'name' => $user->getName(),
+            ], $users)
+        );
+    }
 }
