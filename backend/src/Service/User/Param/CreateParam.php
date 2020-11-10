@@ -10,8 +10,8 @@ class CreateParam
 {
     /**
      * @Assert\Type("string")
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(normalizer="trim")
      * @Assert\Length(min = 3, max = 45)
      */
-    public string $name;
+    public ?string $name;
 }
