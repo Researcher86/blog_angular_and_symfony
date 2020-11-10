@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\User;
 
 use App\Controller\User\Dto\ViewUser;
+use App\Core\Exception\AppEntityNotFoundException;
 use App\Core\Exception\AppValidationException;
 use App\Service\User\Param\CreateParam;
 use App\Service\User\UserService;
@@ -50,14 +51,12 @@ class UserController extends AbstractController
      */
     public function show(int $id): Response
     {
-        $user = $this->userService->getById($id);
-        if (!$user) {
+        try {
+            $user = $this->userService->getById($id);
+            return $this->json(ViewUser::createFrom($user));
+        } catch (AppEntityNotFoundException $e) {
             return $this->json([], Response::HTTP_NOT_FOUND);
         }
-
-        $user = ViewUser::createFrom($user);
-
-        return $this->json($user);
     }
 
     /**
@@ -78,14 +77,12 @@ class UserController extends AbstractController
      */
     public function delete(int $id): Response
     {
-        $user = $this->userService->getById($id);
-        if (!$user) {
+        try {
+            $this->userService->delete($id);
+            return $this->json([], Response::HTTP_NO_CONTENT);
+        } catch (AppEntityNotFoundException $e) {
             return $this->json([], Response::HTTP_NOT_FOUND);
         }
-
-        $this->userService->delete($id);
-
-        return $this->json([], Response::HTTP_NO_CONTENT);
     }
 
     /**

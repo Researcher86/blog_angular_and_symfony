@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Repository\User;
 
 use App\Entity\User\User;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Repository\DoctrineRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -15,29 +15,11 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UserRepository extends ServiceEntityRepository
+class UserRepository extends DoctrineRepository
 {
-    private EntityManagerInterface $em;
-
     public function __construct(ManagerRegistry $registry, EntityManagerInterface $em)
     {
-        parent::__construct($registry, User::class);
-        $this->em = $em;
-    }
-
-    public function save(User $user): User
-    {
-        $this->em->persist($user);
-        $this->em->flush();
-
-        return $user;
-    }
-
-    public function delete(int $id): void
-    {
-        $user = $this->find($id);
-        $this->em->remove($user);
-        $this->em->flush();
+        parent::__construct($registry, User::class, $em);
     }
 
     /**

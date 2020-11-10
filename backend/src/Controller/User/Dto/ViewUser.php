@@ -11,7 +11,7 @@ class ViewUser
     public ?int $id;
     public string $name;
 
-    public static function createFrom(User $user)
+    public static function createFrom(User $user): self
     {
         $dto = new self();
         $dto->id = $user->getId();

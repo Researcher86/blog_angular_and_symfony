@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service\User;
 
+use App\Core\Exception\AppEntityNotFoundException;
 use App\Entity\User\User;
 use App\Repository\User\UserRepository;
 use App\Service\AbstractService;
@@ -20,9 +21,15 @@ class UserService extends AbstractService
         $this->userRepository = $userRepository;
     }
 
-    public function getById(int $id): ?User
+    public function getById(int $id): User
     {
-        return $this->userRepository->find($id);
+        $user = $this->userRepository->find($id);
+
+        if (!$user) {
+            throw new AppEntityNotFoundException();
+        }
+
+        return $user;
     }
 
     /**
@@ -36,11 +43,16 @@ class UserService extends AbstractService
     public function create(CreateParam $param): User
     {
         $this->validate($param);
-        return $this->userRepository->save(new User(null, $param->name));
+
+        /** @var User $user */
+        $user = $this->userRepository->save(new User(null, $param->name));
+
+        return $user;
     }
 
     public function delete(int $id): void
     {
+        $this->getById($id);
         $this->userRepository->delete($id);
     }
 }

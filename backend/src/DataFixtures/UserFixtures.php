@@ -13,8 +13,12 @@ class UserFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         for ($i = 1; $i <= 100; ++$i) {
-            $user = new User(null, \sprintf('User %d', $i));
-            $manager->persist($user);
+            $manager->persist(
+                new User(
+                    null,
+                    \sprintf('User %d', $i)
+                )
+            );
         }
 
         $manager->flush();
