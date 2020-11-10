@@ -38,4 +38,9 @@ class UserService extends AbstractService
         $this->validate($param);
         return $this->userRepository->save(new User(null, $param->name));
     }
+
+    public function delete(int $id): void
+    {
+        $this->userRepository->delete($id);
+    }
 }

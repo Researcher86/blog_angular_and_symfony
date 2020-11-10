@@ -33,9 +33,16 @@ class UserRepository extends ServiceEntityRepository
         return $user;
     }
 
-    // /**
-    //  * @return User[] Returns an array of User objects
-    //  */
+    public function delete(int $id): void
+    {
+        $user = $this->find($id);
+        $this->em->remove($user);
+        $this->em->flush();
+    }
+
+    /**
+     * @return User[] Returns an array of User objects
+     */
     /*
     public function findByExampleField($value)
     {
@@ -48,8 +55,8 @@ class UserRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    */
 
+    */
     /*
     public function findOneBySomeField($value): ?User
     {

@@ -52,12 +52,40 @@ class UserController extends AbstractController
     {
         $user = $this->userService->getById($id);
         if (!$user) {
-            return $this->json('User not found', 404);
+            return $this->json([], Response::HTTP_NOT_FOUND);
         }
 
         $user = ViewUser::createFrom($user);
 
         return $this->json($user);
+    }
+
+    /**
+     * @Route("/users/{id}", methods={"DELETE"}, name="user_delete")
+     * @OA\Response(
+     *     response=204,
+     *     description="Delete user",
+     * ),
+     * @OA\Response(
+     *     response=404,
+     *     description="User not found"
+     * ),
+     * @OA\Tag(name="Users")
+     * @Security(name="Bearer")
+     *
+     * @param int $id
+     * @return Response
+     */
+    public function delete(int $id): Response
+    {
+        $user = $this->userService->getById($id);
+        if (!$user) {
+            return $this->json([], Response::HTTP_NOT_FOUND);
+        }
+
+        $this->userService->delete($id);
+
+        return $this->json([], Response::HTTP_NO_CONTENT);
     }
 
     /**
@@ -96,8 +124,8 @@ class UserController extends AbstractController
      *     ),
      * ),
      * @OA\Response(
-     *     response=200,
-     *     description="Return user",
+     *     response=201,
+     *     description="Created user",
      *     @OA\JsonContent(
      *        type="object",
      *        @OA\Property(property="id", type="integer"),
@@ -123,9 +151,9 @@ class UserController extends AbstractController
         $param = $this->serializer->deserialize($request->getContent(), CreateParam::class, 'json');
         try {
             $user = $this->userService->create($param);
-            return $this->json(ViewUser::createFrom($user), 201);
+            return $this->json(ViewUser::createFrom($user), Response::HTTP_CREATED);
         } catch (AppValidationException $e) {
-            return $this->json($e->getErrors(), 400);
+            return $this->json($e->getErrors(), Response::HTTP_BAD_REQUEST);
         }
     }
 }
