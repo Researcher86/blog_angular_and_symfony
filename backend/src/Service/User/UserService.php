@@ -7,17 +7,14 @@ namespace App\Service\User;
 use App\Core\Exception\AppEntityNotFoundException;
 use App\Entity\User\User;
 use App\Repository\User\UserRepository;
-use App\Service\AbstractService;
 use App\Service\User\Param\CreateParam;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class UserService extends AbstractService
+class UserService
 {
     private UserRepository $userRepository;
 
-    public function __construct(ValidatorInterface $validator, UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository)
     {
-        parent::__construct($validator);
         $this->userRepository = $userRepository;
     }
 
@@ -42,8 +39,6 @@ class UserService extends AbstractService
 
     public function create(CreateParam $param): User
     {
-        $this->validate($param);
-
         /** @var User $user */
         $user = $this->userRepository->save(new User(null, $param->name));
 

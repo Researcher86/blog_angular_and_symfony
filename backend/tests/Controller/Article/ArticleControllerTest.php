@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Controller\User;
+namespace App\Tests\Controller\Article;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class UserControllerTest extends WebTestCase
+class ArticleControllerTest extends WebTestCase
 {
     public function testShow()
     {
         $client = static::createClient();
 
-        $client->request('GET', '/api/users/5');
+        $client->request('GET', '/api/articles/5');
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertNotEmpty($client->getResponse()->getContent());
@@ -22,17 +22,17 @@ class UserControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $client->request('GET', '/api/users');
+        $client->request('GET', '/api/articles');
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertNotEmpty($client->getResponse()->getContent());
     }
 
-    public function testCreateUserSuccess()
+    public function testCreateArticleSuccess()
     {
         $client = static::createClient();
 
-        $client->request('POST', '/api/users', [], [], [], \json_encode(['name' => 'Test']));
+        $client->request('POST', '/api/articles', [], [], [], \json_encode(['name' => 'Test', 'userId' => 5, 'text' => 'Text']));
 
         $this->assertEquals(201, $client->getResponse()->getStatusCode());
         $this->assertNotEmpty($client->getResponse()->getContent());
@@ -41,14 +41,14 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @depends testCreateUserSuccess
+     * @depends testCreateArticleSuccess
      */
     public function testDelete()
     {
         $client = static::createClient();
-
         $args = \func_get_args();
-        $client->request('DELETE', '/api/users/' . $args[0]->id);
+
+        $client->request('DELETE', '/api/articles/' . $args[0]->id);
 
         $this->assertEquals(204, $client->getResponse()->getStatusCode());
         $this->assertEmpty($client->getResponse()->getContent());

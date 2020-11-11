@@ -5,27 +5,26 @@ declare(strict_types=1);
 namespace App\Controller\Article;
 
 use App\Controller\Article\Dto\ViewArticle;
+use App\Controller\BaseController;
 use App\Core\Exception\AppEntityNotFoundException;
-use App\Core\Exception\AppValidationException;
 use App\Service\Article\ArticleService;
 use App\Service\Article\Param\CreateParam;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class ArticleController extends AbstractController
+class ArticleController extends BaseController
 {
-    private SerializerInterface $serializer;
     private ArticleService $articleService;
 
-    public function __construct(SerializerInterface $serializer, ArticleService $articleService)
+    public function __construct(ValidatorInterface $validator, SerializerInterface $serializer, ArticleService $articleService)
     {
+        parent::__construct($validator, $serializer);
         $this->articleService = $articleService;
-        $this->serializer = $serializer;
     }
 
     /**
@@ -153,12 +152,15 @@ class ArticleController extends AbstractController
      */
     public function create(Request $request)
     {
-        $param = $this->serializer->deserialize($request->getContent(), CreateParam::class, 'json');
-        try {
-            $article = $this->articleService->create($param);
-            return $this->json(ViewArticle::createFrom($article), Response::HTTP_CREATED);
-        } catch (AppValidationException $e) {
-            return $this->json($e->getErrors(), Response::HTTP_BAD_REQUEST);
+        /** @var CreateParam $param */
+        $param = $this->deserialize($request, CreateParam::class);
+        $errors = $this->validate($param);
+
+        if ($errors) {
+            return $this->json($errors, Response::HTTP_BAD_REQUEST);
         }
+
+        $article = $this->articleService->create($param);
+        return $this->json(ViewArticle::createFrom($article), Response::HTTP_CREATED);
     }
 }

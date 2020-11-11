@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Tests\Service\User;
 
+use App\Core\Exception\AppEntityNotFoundException;
 use App\Entity\User\User;
 use App\Repository\User\UserRepository;
+use App\Service\User\Param\CreateParam;
 use App\Service\User\UserService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserServiceTest extends TestCase
 {
@@ -20,13 +21,10 @@ class UserServiceTest extends TestCase
     protected function setUp(): void
     {
         $this->userRepositoryMock = $this->createMock(UserRepository::class);
-        $this->userService = new UserService(
-            $this->createMock(ValidatorInterface::class),
-            $this->userRepositoryMock
-        );
+        $this->userService = new UserService($this->userRepositoryMock);
     }
 
-    public function testGetById()
+    public function testGetByIdSuccess()
     {
         $this->userRepositoryMock->method('find')->willReturn(new User(5, 'User 5'));
         $user = $this->userService->getById(5);
@@ -34,5 +32,25 @@ class UserServiceTest extends TestCase
         $this->assertNotNull($user);
         $this->assertEquals(5, $user->getId());
         $this->assertEquals('User 5', $user->getName());
+    }
+
+    public function testGetByIdFail()
+    {
+        $this->expectException(AppEntityNotFoundException::class);
+        $this->userRepositoryMock->method('find')->willReturn(null);
+        $this->userService->getById(5);
+    }
+
+    public function testCreateUserSuccess()
+    {
+        $user = new User(5, 'Test');
+        $this->userRepositoryMock->method('save')->willReturn($user);
+
+        $param = new CreateParam();
+        $param->name = 'Test';
+        $result = $this->userService->create($param);
+
+        $this->assertEquals(5, $result->getId());
+        $this->assertEquals('Test', $result->getName());
     }
 }

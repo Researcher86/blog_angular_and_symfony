@@ -4,28 +4,27 @@ declare(strict_types=1);
 
 namespace App\Controller\User;
 
+use App\Controller\BaseController;
 use App\Controller\User\Dto\ViewUser;
 use App\Core\Exception\AppEntityNotFoundException;
-use App\Core\Exception\AppValidationException;
 use App\Service\User\Param\CreateParam;
 use App\Service\User\UserService;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class UserController extends AbstractController
+class UserController extends BaseController
 {
-    private SerializerInterface $serializer;
     private UserService $userService;
 
-    public function __construct(SerializerInterface $serializer, UserService $userService)
+    public function __construct(ValidatorInterface $validator, SerializerInterface $serializer, UserService $userService)
     {
+        parent::__construct($validator, $serializer);
         $this->userService = $userService;
-        $this->serializer = $serializer;
     }
 
     /**
@@ -145,12 +144,15 @@ class UserController extends AbstractController
      */
     public function create(Request $request)
     {
-        $param = $this->serializer->deserialize($request->getContent(), CreateParam::class, 'json');
-        try {
-            $user = $this->userService->create($param);
-            return $this->json(ViewUser::createFrom($user), Response::HTTP_CREATED);
-        } catch (AppValidationException $e) {
-            return $this->json($e->getErrors(), Response::HTTP_BAD_REQUEST);
+        /** @var CreateParam $param */
+        $param = $this->deserialize($request, CreateParam::class);
+        $errors = $this->validate($param);
+
+        if ($errors) {
+            return $this->json($errors, Response::HTTP_BAD_REQUEST);
         }
+
+        $user = $this->userService->create($param);
+        return $this->json(ViewUser::createFrom($user), Response::HTTP_CREATED);
     }
 }

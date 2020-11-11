@@ -26,6 +26,7 @@
         "symfony/yaml": "5.1.*"
     },
     "require-dev": {
+        "ext-json": "*",
         "doctrine/doctrine-fixtures-bundle": "^3.3",
         "friendsofphp/php-cs-fixer": "^2.16",
         "squizlabs/php_codesniffer": "^3.5",
@@ -85,7 +86,7 @@
         "make-migration" : "bin/console make:migration",
         "migrate" : "bin/console migrate",
         "make-fixtures" : "bin/console make:fixtures",
-        "load-fixtures" : "bin/console doctrine:fixtures:load",
+        "load-fixtures" : "bin/console doctrine:fixtures:load --purge-with-truncate",
         "api-doc" : "bin/console debug:router",
 
         "sql": "bin/console doctrine:query:sql 'SELECT * FROM user'",

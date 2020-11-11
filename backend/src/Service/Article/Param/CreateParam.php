@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service\Article\Param;
 
-use App\Service\Validator\Constraints as AppAssert;
+use App\Validator\Constraints as AppAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class CreateParam

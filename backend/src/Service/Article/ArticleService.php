@@ -7,17 +7,14 @@ namespace App\Service\Article;
 use App\Core\Exception\AppEntityNotFoundException;
 use App\Entity\Article\Article;
 use App\Repository\Article\ArticleRepository;
-use App\Service\AbstractService;
 use App\Service\Article\Param\CreateParam;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class ArticleService extends AbstractService
+class ArticleService
 {
     private ArticleRepository $articleRepository;
 
-    public function __construct(ValidatorInterface $validator, ArticleRepository $articleRepository)
+    public function __construct(ArticleRepository $articleRepository)
     {
-        parent::__construct($validator);
         $this->articleRepository = $articleRepository;
     }
 
@@ -48,8 +45,6 @@ class ArticleService extends AbstractService
 
     public function create(CreateParam $param): Article
     {
-        $this->validate($param);
-
         /** @var Article $article */
         $article = $this->articleRepository->save(
             new Article(
