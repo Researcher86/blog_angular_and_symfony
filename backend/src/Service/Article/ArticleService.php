@@ -9,19 +9,16 @@ use App\Entity\Article\Article;
 use App\Repository\Article\ArticleRepository;
 use App\Service\AbstractService;
 use App\Service\Article\Param\CreateParam;
-use App\Service\User\UserService;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ArticleService extends AbstractService
 {
     private ArticleRepository $articleRepository;
-    private UserService $userService;
 
-    public function __construct(ValidatorInterface $validator, ArticleRepository $articleRepository, UserService $userService)
+    public function __construct(ValidatorInterface $validator, ArticleRepository $articleRepository)
     {
         parent::__construct($validator);
         $this->articleRepository = $articleRepository;
-        $this->userService = $userService;
     }
 
     public function getById(int $id): Article
@@ -51,7 +48,6 @@ class ArticleService extends AbstractService
 
     public function create(CreateParam $param): Article
     {
-        $param->setUserService($this->userService);
         $this->validate($param);
 
         /** @var Article $article */

@@ -6,7 +6,6 @@ namespace App\Repository\Article;
 
 use App\Entity\Article\Article;
 use App\Repository\DoctrineRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -17,9 +16,9 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ArticleRepository extends DoctrineRepository
 {
-    public function __construct(ManagerRegistry $registry, EntityManagerInterface $em)
+    public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Article::class, $em);
+        parent::__construct($registry, Article::class);
     }
 
     // /**

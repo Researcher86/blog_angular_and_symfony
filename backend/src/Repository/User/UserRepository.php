@@ -6,7 +6,6 @@ namespace App\Repository\User;
 
 use App\Entity\User\User;
 use App\Repository\DoctrineRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -17,9 +16,9 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class UserRepository extends DoctrineRepository
 {
-    public function __construct(ManagerRegistry $registry, EntityManagerInterface $em)
+    public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, User::class, $em);
+        parent::__construct($registry, User::class);
     }
 
     /**

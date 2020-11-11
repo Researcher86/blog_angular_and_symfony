@@ -31,8 +31,8 @@ class UserServiceTest extends TestCase
         $this->userRepositoryMock->method('find')->willReturn(new User(5, 'User 5'));
         $user = $this->userService->getById(5);
 
-        self::assertNotNull($user);
-        self::assertEquals(5, $user->getId());
-        self::assertEquals('User 5', $user->getName());
+        $this->assertNotNull($user);
+        $this->assertEquals(5, $user->getId());
+        $this->assertEquals('User 5', $user->getName());
     }
 }
