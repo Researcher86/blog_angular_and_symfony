@@ -18,7 +18,17 @@ abstract class DoctrineRepository extends ServiceEntityRepository
     public function delete(int $id): void
     {
         $entity = $this->find($id);
-        $this->em->remove($entity);
-        $this->em->flush();
+        $this->getEntityManager()->remove($entity);
+        $this->getEntityManager()->flush();
+    }
+
+    public function exists($id): bool
+    {
+        return (bool) $this->createQueryBuilder('entity')
+            ->select('count(entity)')
+            ->andWhere('entity.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }

@@ -33,6 +33,15 @@ class UserRepositoryTest extends KernelTestCase
     public function testGetById()
     {
         $user = $this->userRepository->find(5);
-        self::assertNotNull($user);
+        $this->assertNotNull($user);
+    }
+
+    public function testExists()
+    {
+        $result = $this->userRepository->exists(5);
+        $this->assertTrue($result);
+
+        $result = $this->userRepository->exists(-5);
+        $this->assertFalse($result);
     }
 }
