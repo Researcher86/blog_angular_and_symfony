@@ -6,7 +6,7 @@ import {MatPaginator} from "@angular/material/paginator";
 @Component({
   selector: 'users',
   templateUrl: './users.component.html',
-  styleUrls: ['./users.component.css']
+  styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit, AfterViewInit {
   users: User[] = [];
