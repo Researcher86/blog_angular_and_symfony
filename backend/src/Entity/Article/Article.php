@@ -32,14 +32,14 @@ class Article
     /**
      * @ORM\Column(type="text")
      */
-    private string $text;
+    private string $content;
 
-    public function __construct(?int $id, int $userId, string $name, string $text)
+    public function __construct(?int $id, int $userId, string $name, string $content)
     {
         $this->id = $id;
         $this->userId = $userId;
         $this->name = $name;
-        $this->text = $text;
+        $this->content = $content;
     }
 
     public function getId(): ?int
@@ -57,8 +57,8 @@ class Article
         return $this->name;
     }
 
-    public function getText(): string
+    public function getContent(): string
     {
-        return $this->text;
+        return $this->content;
     }
 }

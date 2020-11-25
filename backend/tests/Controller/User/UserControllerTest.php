@@ -14,7 +14,7 @@ class UserControllerTest extends WebTestCase
 
         $client->request('GET', '/api/users/5');
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertResponseIsSuccessful();
         $this->assertNotEmpty($client->getResponse()->getContent());
     }
 
@@ -24,7 +24,7 @@ class UserControllerTest extends WebTestCase
 
         $client->request('GET', '/api/users');
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertResponseIsSuccessful();
         $this->assertNotEmpty($client->getResponse()->getContent());
     }
 
@@ -34,7 +34,7 @@ class UserControllerTest extends WebTestCase
 
         $client->request('POST', '/api/users', [], [], [], \json_encode(['name' => 'Test']));
 
-        $this->assertEquals(201, $client->getResponse()->getStatusCode());
+        $this->assertResponseIsSuccessful();
         $this->assertNotEmpty($client->getResponse()->getContent());
 
         return \json_decode($client->getResponse()->getContent());
@@ -50,7 +50,7 @@ class UserControllerTest extends WebTestCase
         $args = \func_get_args();
         $client->request('DELETE', '/api/users/' . $args[0]->id);
 
-        $this->assertEquals(204, $client->getResponse()->getStatusCode());
+        $this->assertResponseStatusCodeSame(204);
         $this->assertEmpty($client->getResponse()->getContent());
     }
 }

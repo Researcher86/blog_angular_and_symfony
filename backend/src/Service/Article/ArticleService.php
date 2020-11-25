@@ -4,28 +4,30 @@ declare(strict_types=1);
 
 namespace App\Service\Article;
 
-use App\Core\Exception\AppEntityNotFoundException;
 use App\Entity\Article\Article;
+use App\Event\Article\ArticleCreatedEvent;
 use App\Repository\Article\ArticleRepository;
+use App\Repository\User\UserRepository;
 use App\Service\Article\Param\CreateParam;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ArticleService
 {
     private ArticleRepository $articleRepository;
+    private UserRepository $userRepository;
+    private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(ArticleRepository $articleRepository)
+    public function __construct(ArticleRepository $articleRepository, UserRepository $userRepository, EventDispatcherInterface $eventDispatcher)
     {
         $this->articleRepository = $articleRepository;
+        $this->userRepository = $userRepository;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function getById(int $id): Article
     {
-        $article = $this->articleRepository->find($id);
-
-        if (!$article) {
-            throw new AppEntityNotFoundException();
-        }
-
+        /** @var Article $article */
+        $article = $this->articleRepository->getById($id);
         return $article;
     }
 
@@ -45,6 +47,8 @@ class ArticleService
 
     public function create(CreateParam $param): Article
     {
+        $this->userRepository->getById($param->userId);
+
         /** @var Article $article */
         $article = $this->articleRepository->save(
             new Article(
@@ -54,6 +58,8 @@ class ArticleService
                 $param->text
             )
         );
+
+        $this->eventDispatcher->dispatch(new ArticleCreatedEvent($article));
 
         return $article;
     }

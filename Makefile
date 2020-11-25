@@ -15,6 +15,12 @@ down:
 app-build:
 	docker-compose run frontend bash -c "ng build --prod"
 
+app-code-fix:
+	docker-compose run backend bash -c "composer code-fix"
+
+app-code-check:
+	docker-compose run backend bash -c "composer code-fix"
+
 app-test:
 	docker-compose run backend bash -c "composer test"
 #	docker-compose run frontend bash -c "ng test"

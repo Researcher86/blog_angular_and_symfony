@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Service\User;
 
-use App\Core\Exception\AppEntityNotFoundException;
 use App\Entity\User\User;
 use App\Repository\User\UserRepository;
 use App\Service\User\Param\CreateParam;
@@ -26,19 +25,12 @@ class UserServiceTest extends TestCase
 
     public function testGetByIdSuccess()
     {
-        $this->userRepositoryMock->method('find')->willReturn(new User(5, 'User 5'));
+        $this->userRepositoryMock->method('getById')->willReturn(new User(5, 'User 5'));
         $user = $this->userService->getById(5);
 
         $this->assertNotNull($user);
         $this->assertEquals(5, $user->getId());
         $this->assertEquals('User 5', $user->getName());
-    }
-
-    public function testGetByIdFail()
-    {
-        $this->expectException(AppEntityNotFoundException::class);
-        $this->userRepositoryMock->method('find')->willReturn(null);
-        $this->userService->getById(5);
     }
 
     public function testCreateUserSuccess()

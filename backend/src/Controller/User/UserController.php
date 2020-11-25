@@ -6,9 +6,10 @@ namespace App\Controller\User;
 
 use App\Controller\BaseController;
 use App\Controller\User\Dto\ViewUser;
-use App\Core\Exception\AppEntityNotFoundException;
+use App\Core\Exception\AppException;
 use App\Service\User\Param\CreateParam;
 use App\Service\User\UserService;
+use Doctrine\ORM\EntityNotFoundException;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
@@ -53,7 +54,7 @@ class UserController extends BaseController
         try {
             $user = $this->userService->getById($id);
             return $this->json(ViewUser::createFrom($user));
-        } catch (AppEntityNotFoundException $e) {
+        } catch (EntityNotFoundException $e) {
             return $this->json([], Response::HTTP_NOT_FOUND);
         }
     }
@@ -79,7 +80,7 @@ class UserController extends BaseController
         try {
             $this->userService->delete($id);
             return $this->json([], Response::HTTP_NO_CONTENT);
-        } catch (AppEntityNotFoundException $e) {
+        } catch (EntityNotFoundException $e) {
             return $this->json([], Response::HTTP_NOT_FOUND);
         }
     }
@@ -152,7 +153,11 @@ class UserController extends BaseController
             return $this->json($errors, Response::HTTP_BAD_REQUEST);
         }
 
-        $user = $this->userService->create($param);
-        return $this->json(ViewUser::createFrom($user), Response::HTTP_CREATED);
+        try {
+            $user = $this->userService->create($param);
+            return $this->json(ViewUser::createFrom($user), Response::HTTP_CREATED);
+        } catch (AppException $e) {
+            return $this->json($e->getMessage(), Response::HTTP_BAD_REQUEST);
+        }
     }
 }

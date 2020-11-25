@@ -11,7 +11,7 @@ class ViewArticle
     public ?int $id;
     public int $userId;
     public string $name;
-    public string $text;
+    public string $content;
 
     public static function createFrom(Article $article): self
     {
@@ -19,7 +19,7 @@ class ViewArticle
         $dto->id = $article->getId();
         $dto->userId = $article->getUserId();
         $dto->name = $article->getName();
-        $dto->text = $article->getText();
+        $dto->content = $article->getContent();
         return $dto;
     }
 }

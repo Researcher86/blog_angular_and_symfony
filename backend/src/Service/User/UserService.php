@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Service\User;
 
-use App\Core\Exception\AppEntityNotFoundException;
 use App\Entity\User\User;
 use App\Repository\User\UserRepository;
 use App\Service\User\Param\CreateParam;
@@ -20,12 +19,8 @@ class UserService
 
     public function getById(int $id): User
     {
-        $user = $this->userRepository->find($id);
-
-        if (!$user) {
-            throw new AppEntityNotFoundException();
-        }
-
+        /** @var User $user */
+        $user = $this->userRepository->getById($id);
         return $user;
     }
 

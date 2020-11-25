@@ -6,9 +6,9 @@ namespace App\Controller\Article;
 
 use App\Controller\Article\Dto\ViewArticle;
 use App\Controller\BaseController;
-use App\Core\Exception\AppEntityNotFoundException;
 use App\Service\Article\ArticleService;
 use App\Service\Article\Param\CreateParam;
+use Doctrine\ORM\EntityNotFoundException;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,7 +55,7 @@ class ArticleController extends BaseController
         try {
             $article = $this->articleService->getById($id);
             return $this->json(ViewArticle::createFrom($article));
-        } catch (AppEntityNotFoundException $e) {
+        } catch (EntityNotFoundException $e) {
             return $this->json([], Response::HTTP_NOT_FOUND);
         }
     }
@@ -81,7 +81,7 @@ class ArticleController extends BaseController
         try {
             $this->articleService->delete($id);
             return $this->json([], Response::HTTP_NO_CONTENT);
-        } catch (AppEntityNotFoundException $e) {
+        } catch (EntityNotFoundException $e) {
             return $this->json([], Response::HTTP_NOT_FOUND);
         }
     }
@@ -160,7 +160,11 @@ class ArticleController extends BaseController
             return $this->json($errors, Response::HTTP_BAD_REQUEST);
         }
 
-        $article = $this->articleService->create($param);
-        return $this->json(ViewArticle::createFrom($article), Response::HTTP_CREATED);
+        try {
+            $article = $this->articleService->create($param);
+            return $this->json(ViewArticle::createFrom($article), Response::HTTP_CREATED);
+        } catch (EntityNotFoundException $e) {
+            return $this->json($e->getMessage(), Response::HTTP_BAD_REQUEST);
+        }
     }
 }
