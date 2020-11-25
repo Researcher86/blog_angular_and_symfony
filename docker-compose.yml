@@ -16,16 +16,25 @@ services:
     build:
       context: .
       dockerfile: backend/docker/Dockerfile.fpm
+    extra_hosts:
+      WIN_HOST: ${WIN_HOST}
+#    environment:
+#      XDEBUG_CONFIG: "remote_host=172.27.80.1 remote_enable=1 remote_autostart=0 remote_port=9000"
+#      PHP_IDE_CONFIG: "serverName=dev.blog.kz"
+#      - XDEBUG_CONFIG=idekey=PHPSTORM remote_enable=1 remote_host=${WIN_HOST}
+#      - PHP_IDE_CONFIG=serverName=dev.blog.kz
     volumes:
+#      - /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
       - ./backend/docker/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
       - ./backend:/app
     depends_on:
       - db
-#      - worker
   worker:
     build:
       context: .
       dockerfile: backend/docker/Dockerfile.cli
+    extra_hosts:
+      WIN_HOST: ${WIN_HOST}
     volumes:
       - ./backend/docker/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
       - ./backend:/app
@@ -43,8 +52,6 @@ services:
       - backend
   db:
     image: mysql:5.5
-#    networks:
-#      - blog
     ports:
       - "3306:3306"
     volumes:
