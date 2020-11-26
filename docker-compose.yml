@@ -6,7 +6,7 @@ services:
     ports:
       - 8080:80
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./z_config/nginx.conf:/etc/nginx/nginx.conf
       - ./frontend/dist:/app/frontend/dist
       - ./backend/public/bundles:/app/backend/bundles
     depends_on:
@@ -15,7 +15,7 @@ services:
   backend:
     build:
       context: .
-      dockerfile: backend/docker/Dockerfile.fpm
+      dockerfile: z_config/backend/Dockerfile.fpm
     extra_hosts:
       WIN_HOST: ${WIN_HOST}
 #    environment:
@@ -25,14 +25,18 @@ services:
 #      - PHP_IDE_CONFIG=serverName=dev.blog.kz
     volumes:
 #      - /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-      - ./backend/docker/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      - ./z_config/backend/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
       - ./backend:/app
     depends_on:
       - db
+      - es
+      - rabbit_mq
+      - redis
+      - centrifugo
   worker:
     build:
       context: .
-      dockerfile: backend/docker/Dockerfile.cli
+      dockerfile: z_config/backend/Dockerfile.cli
     extra_hosts:
       WIN_HOST: ${WIN_HOST}
     volumes:
@@ -40,25 +44,75 @@ services:
       - ./backend:/app
     depends_on:
       - db
+      - es
+      - rabbit_mq
+      - redis
+      - centrifugo
+      - mailer
   frontend:
     build:
       context: .
-      dockerfile: frontend/docker/Dockerfile
+      dockerfile: z_config/frontend/Dockerfile
     command: ng serve --host frontend --public-host http://dev.blog.kz:8080 --disableHostCheck true
     tty: true
     volumes:
       - ./frontend:/app
     depends_on:
       - backend
+      - centrifugo
   db:
     image: mysql:5.5
     ports:
       - "3306:3306"
     volumes:
-      - ./db_data:/var/lib/mysql
+      - db_data:/var/lib/mysql
     restart: always
     environment:
       MYSQL_DATABASE: blog
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
       MYSQL_ROOT_HOST: '%'
       MYSQL_ROOT_PASSWORD: ''
+  redis:
+    image: redis:6.0
+    ports:
+      - "6379:6379"
+  es:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - "discovery.type=single-node"
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+  rabbit_mq:
+    image: rabbitmq:3.8.9-management
+    ports:
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+  mailer:
+    image: mailhog/mailhog
+    ports:
+      - "8082:8025"
+  centrifugo:
+    image: centrifugo/centrifugo:v2.8
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    environment:
+      CENTRIFUGO_SECRET: secret
+      CENTRIFUGO_API_KEY: secret
+    volumes:
+      - ./centrifugo:/centrifugo
+    ports:
+      - "8083:8000"
+    command: centrifugo --admin --admin_insecure
+volumes:
+  db_data:
+    driver: local
+  es_data:
+    driver: local
