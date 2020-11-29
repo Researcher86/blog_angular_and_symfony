@@ -33,7 +33,7 @@ class ArticleControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $client->request('POST', '/api/articles', [], [], [], \json_encode(['name' => 'Test', 'userId' => 5, 'text' => 'Text']));
+        $client->request('POST', '/api/articles', [], [], [], \json_encode(['name' => 'Test', 'userId' => 5, 'content' => 'Text']));
 
         $this->assertResponseIsSuccessful();
         $this->assertNotEmpty($client->getResponse()->getContent());

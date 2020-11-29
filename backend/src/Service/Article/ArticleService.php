@@ -55,7 +55,7 @@ class ArticleService
                 null,
                 $param->userId,
                 $param->name,
-                $param->text
+                $param->content
             )
         );
 

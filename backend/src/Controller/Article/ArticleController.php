@@ -37,7 +37,7 @@ class ArticleController extends BaseController
      *        @OA\Property(property="id", type="integer"),
      *        @OA\Property(property="userId", type="integer"),
      *        @OA\Property(property="name", type="string"),
-     *        @OA\Property(property="text", type="string"),
+     *        @OA\Property(property="content", type="string"),
      *     )
      * ),
      * @OA\Response(
@@ -97,7 +97,7 @@ class ArticleController extends BaseController
      *          @OA\Property(property="id", type="integer"),
      *          @OA\Property(property="userId", type="integer"),
      *          @OA\Property(property="name", type="string"),
-     *          @OA\Property(property="text", type="string"),
+     *          @OA\Property(property="content", type="string"),
      *        )
      *     )
      * )
@@ -122,7 +122,7 @@ class ArticleController extends BaseController
      *         required={"name", "userId", "text"},
      *         @OA\Property(property="name", type="string"),
      *         @OA\Property(property="userId", type="integer"),
-     *         @OA\Property(property="text", type="string"),
+     *         @OA\Property(property="content", type="string"),
      *     ),
      * ),
      * @OA\Response(
@@ -133,7 +133,7 @@ class ArticleController extends BaseController
      *        @OA\Property(property="id", type="integer"),
      *        @OA\Property(property="name", type="string"),
      *        @OA\Property(property="userId", type="integer"),
-     *        @OA\Property(property="text", type="string"),
+     *        @OA\Property(property="content", type="string"),
      *     )
      * ),
      * @OA\Response(

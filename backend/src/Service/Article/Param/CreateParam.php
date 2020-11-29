@@ -27,5 +27,5 @@ class CreateParam
      * @Assert\NotBlank(normalizer="trim")
      * @Assert\Length(min = 3, max = 255)
      */
-    public ?string $text;
+    public ?string $content;
 }
