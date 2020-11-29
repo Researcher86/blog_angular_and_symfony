@@ -1,0 +1,25 @@
+framework:
+  messenger:
+#    failure_transport: failed
+    transports:
+#      failed: 'doctrine://default?queue_name=failed'
+      async_es:
+        dsn: 'in-memory://'
+#        retry_strategy:
+#          max_retries: 3
+#          multiplier: 2
+        options:
+          exchange:
+            name: es
+          queues:
+            messages_es: ~
+      async_email:
+        dsn: 'in-memory://'
+#        retry_strategy:
+#          max_retries: 3
+#          multiplier: 2
+        options:
+          exchange:
+            name: email
+          queues:
+            messages_email: ~

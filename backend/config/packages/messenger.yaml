@@ -1,14 +1,42 @@
 framework:
     messenger:
         # Uncomment this (and the failed transport below) to send failed messages to this transport for later handling.
-        # failure_transport: failed
+        failure_transport: failed
 
         transports:
+            async_es:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                retry_strategy:
+                    max_retries: 3
+                    multiplier: 2
+                options:
+                    # queue_name is specific to the doctrine transport
+#                    queue_name: es
+
+                    # for AMQP send to a separate exchange then queue
+                    exchange:
+                        name: es
+                    queues:
+                        messages_es: ~
+                    # or redis try "group"
+            async_email:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                retry_strategy:
+                    max_retries: 3
+                    multiplier: 2
+                options:
+                    exchange:
+                        name: email
+                    queues:
+                        messages_email: ~
+
             # https://symfony.com/doc/current/messenger.html#transport-configuration
-            # async: '%env(MESSENGER_TRANSPORT_DSN)%'
-            # failed: 'doctrine://default?queue_name=failed'
+#             async: '%env(MESSENGER_TRANSPORT_DSN)%'
+            failed: 'doctrine://default?queue_name=failed'
             # sync: 'sync://'
 
         routing:
+            App\Message\Article\IndexerMessage: async_es
+            App\Message\Article\SendEmailMessage: async_email
             # Route your messages to the transports
             # 'App\Message\YourMessage': async

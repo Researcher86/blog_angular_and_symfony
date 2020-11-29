@@ -33,18 +33,39 @@ services:
       - rabbit_mq
       - redis
       - centrifugo
-  worker:
+  worker_indexer:
     build:
       context: .
       dockerfile: z_config/backend/Dockerfile.cli
     extra_hosts:
       WIN_HOST: ${WIN_HOST}
     volumes:
-      - ./backend/docker/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      - ./z_config/backend/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
       - ./backend:/app
+    restart: always
+    scale: 1
+    command: bash -c "until $$(curl --output /dev/null --silent --head --fail http://rabbit_mq:15672); do echo 'Waiting RabbitMQ...'; sleep 1; done && php bin/console messenger:consume async_es -vv"
     depends_on:
       - db
       - es
+      - rabbit_mq
+      - redis
+      - centrifugo
+      - mailer
+  worker_email:
+    build:
+      context: .
+      dockerfile: z_config/backend/Dockerfile.cli
+    extra_hosts:
+      WIN_HOST: ${WIN_HOST}
+    volumes:
+      - ./z_config/backend/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      - ./backend:/app
+    restart: always
+    scale: 1
+    command: bash -c "until $$(curl --output /dev/null --silent --head --fail http://rabbit_mq:15672); do echo 'Waiting RabbitMQ...'; sleep 1; done && php bin/console messenger:consume async_email -vv"
+    depends_on:
+      - db
       - rabbit_mq
       - redis
       - centrifugo
@@ -93,6 +114,11 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:15672"]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 5
   mailer:
     image: mailhog/mailhog
     ports:
@@ -107,7 +133,7 @@ services:
       CENTRIFUGO_SECRET: secret
       CENTRIFUGO_API_KEY: secret
     volumes:
-      - ./centrifugo:/centrifugo
+      - ./z_config/centrifugo:/centrifugo
     ports:
       - "8083:8000"
     command: centrifugo --admin --admin_insecure

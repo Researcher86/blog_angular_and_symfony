@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Controller\Article;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Messenger\Transport\InMemoryTransport;
 
 class ArticleControllerTest extends WebTestCase
 {
@@ -36,6 +37,14 @@ class ArticleControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertNotEmpty($client->getResponse()->getContent());
+
+        /* @var InMemoryTransport $transport */
+        $transport = self::$container->get('messenger.transport.async_es');
+        $this->assertCount(1, $transport->getSent());
+
+        /* @var InMemoryTransport $transport */
+        $transport = self::$container->get('messenger.transport.async_email');
+        $this->assertCount(1, $transport->getSent());
 
         return \json_decode($client->getResponse()->getContent());
     }
