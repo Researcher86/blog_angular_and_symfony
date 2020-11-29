@@ -9,7 +9,7 @@ import {MatPaginator} from "@angular/material/paginator";
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit, AfterViewInit {
-  users: User[] = [];
+  private users: User[] = [];
 
   dataSource = new MatTableDataSource<User>(this.users);
   @ViewChild(MatPaginator) paginator: MatPaginator;

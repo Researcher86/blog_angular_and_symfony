@@ -1,6 +1,6 @@
 {
-    "secret": "",
-    "api_key": "",
+    "secret": "secret",
+    "api_key": "secret",
     "namespaces": [
         {
             "name": "alerts",

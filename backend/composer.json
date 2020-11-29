@@ -5,6 +5,7 @@
         "php": ">=7.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "centrifugal/phpcent": "^3.1",
         "composer/package-versions-deprecated": "^1.11",
         "doctrine/annotations": "^1.11",
         "doctrine/doctrine-bundle": "^2.1",
@@ -83,12 +84,19 @@
         ],
 
         "clear": "bin/console cache:clear",
+        "app-init": [
+            "@migrate",
+            "@load-fixtures",
+            "@test"
+        ],
         "make-list": "bin/console list make",
         "make-controller" : "bin/console make:constroller",
         "make-entity" : "bin/console make:entity",
         "make-migration" : "bin/console make:migration",
 
         "diff-migration" : "bin/console doctrine:migrations:diff",
+        "message-failed" : "bin/console messenger:failed:show -vv",
+        "message-failed-retry" : "bin/console messenger:failed:retry -vv",
 
         "migrate" : "bin/console doctrine:migrations:migrate",
         "make-fixtures" : "bin/console make:fixtures",
