@@ -6,7 +6,7 @@ namespace App\Tests\Service\User;
 
 use App\Entity\User\User;
 use App\Repository\User\UserRepository;
-use App\Service\User\Param\CreateParam;
+use App\Service\User\Command\CreateUser;
 use App\Service\User\UserService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -38,9 +38,9 @@ class UserServiceTest extends TestCase
         $user = new User(5, 'Test');
         $this->userRepositoryMock->method('save')->willReturn($user);
 
-        $param = new CreateParam();
-        $param->name = 'Test';
-        $result = $this->userService->create($param);
+        $command = new CreateUser();
+        $command->name = 'Test';
+        $result = $this->userService->create($command);
 
         $this->assertEquals(5, $result->getId());
         $this->assertEquals('Test', $result->getName());

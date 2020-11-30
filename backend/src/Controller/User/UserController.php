@@ -7,7 +7,7 @@ namespace App\Controller\User;
 use App\Controller\BaseController;
 use App\Controller\User\Dto\ViewUser;
 use App\Core\Exception\AppException;
-use App\Service\User\Param\CreateParam;
+use App\Service\User\Command\CreateUser;
 use App\Service\User\UserService;
 use Doctrine\ORM\EntityNotFoundException;
 use Nelmio\ApiDocBundle\Annotation\Security;
@@ -145,16 +145,16 @@ class UserController extends BaseController
      */
     public function create(Request $request)
     {
-        /** @var CreateParam $param */
-        $param = $this->deserialize($request, CreateParam::class);
-        $errors = $this->validate($param);
+        /** @var CreateUser $command */
+        $command = $this->deserialize($request, CreateUser::class);
+        $errors = $this->validate($command);
 
         if ($errors) {
             return $this->json($errors, Response::HTTP_BAD_REQUEST);
         }
 
         try {
-            $user = $this->userService->create($param);
+            $user = $this->userService->create($command);
             return $this->json(ViewUser::createFrom($user), Response::HTTP_CREATED);
         } catch (AppException $e) {
             return $this->json($e->getMessage(), Response::HTTP_BAD_REQUEST);

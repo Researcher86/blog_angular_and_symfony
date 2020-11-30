@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Article\Param;
+namespace App\Service\Article\Command;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CreateParam
+class CreateArticle
 {
     /**
      * @Assert\Type("string")

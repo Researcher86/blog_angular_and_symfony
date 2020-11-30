@@ -7,7 +7,8 @@ namespace App\Controller\Article;
 use App\Controller\Article\Dto\ViewArticle;
 use App\Controller\BaseController;
 use App\Service\Article\ArticleService;
-use App\Service\Article\Param\CreateParam;
+use App\Service\Article\Command\CreateArticle;
+use App\Service\CentrifugoService;
 use Doctrine\ORM\EntityNotFoundException;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
@@ -50,8 +51,10 @@ class ArticleController extends BaseController
      * @param int $id
      * @return Response
      */
-    public function show(int $id): Response
+    public function show(int $id, CentrifugoService $centrifugoService): Response
     {
+        $centrifugoService->publish('news');
+
         try {
             $article = $this->articleService->getById($id);
             return $this->json(ViewArticle::createFrom($article));
@@ -152,16 +155,16 @@ class ArticleController extends BaseController
      */
     public function create(Request $request)
     {
-        /** @var CreateParam $param */
-        $param = $this->deserialize($request, CreateParam::class);
-        $errors = $this->validate($param);
+        /** @var CreateArticle $command */
+        $command = $this->deserialize($request, CreateArticle::class);
+        $errors = $this->validate($command);
 
         if ($errors) {
             return $this->json($errors, Response::HTTP_BAD_REQUEST);
         }
 
         try {
-            $article = $this->articleService->create($param);
+            $article = $this->articleService->create($command);
             return $this->json(ViewArticle::createFrom($article), Response::HTTP_CREATED);
         } catch (EntityNotFoundException $e) {
             return $this->json($e->getMessage(), Response::HTTP_BAD_REQUEST);

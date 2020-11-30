@@ -6,7 +6,7 @@ namespace App\Service\User;
 
 use App\Entity\User\User;
 use App\Repository\User\UserRepository;
-use App\Service\User\Param\CreateParam;
+use App\Service\User\Command\CreateUser;
 
 class UserService
 {
@@ -32,10 +32,10 @@ class UserService
         return $this->userRepository->findAll();
     }
 
-    public function create(CreateParam $param): User
+    public function create(CreateUser $command): User
     {
         /** @var User $user */
-        $user = $this->userRepository->save(new User(null, $param->name));
+        $user = $this->userRepository->save(new User(null, $command->name));
 
         return $user;
     }

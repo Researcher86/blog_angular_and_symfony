@@ -8,7 +8,7 @@ use App\Entity\Article\Article;
 use App\Event\Article\ArticleCreatedEvent;
 use App\Repository\Article\ArticleRepository;
 use App\Repository\User\UserRepository;
-use App\Service\Article\Param\CreateParam;
+use App\Service\Article\Command\CreateArticle;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ArticleService
@@ -45,17 +45,17 @@ class ArticleService
         return $this->articleRepository->findAll();
     }
 
-    public function create(CreateParam $param): Article
+    public function create(CreateArticle $command): Article
     {
-        $this->userRepository->getById($param->userId);
+        $this->userRepository->getById($command->userId);
 
         /** @var Article $article */
         $article = $this->articleRepository->save(
             new Article(
                 null,
-                $param->userId,
-                $param->name,
-                $param->content
+                $command->userId,
+                $command->name,
+                $command->content
             )
         );
 
