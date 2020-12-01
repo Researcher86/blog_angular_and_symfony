@@ -33,7 +33,7 @@ app-code-check:
 app-init:
 	docker-compose run --rm backend bash -c "composer app-init"
 
-app-update-cache:
+app-cache-update:
 	docker-compose run --rm backend bash -c "composer install"
 
 app-backend:

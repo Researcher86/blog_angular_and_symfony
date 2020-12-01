@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Controller\Article;
 
 use App\Controller\Article\Dto\ViewArticle;
+use App\Controller\Article\Dto\ViewComment;
 use App\Controller\BaseController;
 use App\Service\Article\ArticleService;
 use App\Service\Article\Command\CreateArticle;
+use App\Service\Article\Command\CreateComment;
 use App\Service\CentrifugoService;
 use Doctrine\ORM\EntityNotFoundException;
 use Nelmio\ApiDocBundle\Annotation\Security;
@@ -122,7 +124,7 @@ class ArticleController extends BaseController
      * @OA\RequestBody(
      *     @OA\JsonContent(
      *         type="object",
-     *         required={"name", "userId", "text"},
+     *         required={"name", "userId", "content"},
      *         @OA\Property(property="name", type="string"),
      *         @OA\Property(property="userId", type="integer"),
      *         @OA\Property(property="content", type="string"),
@@ -137,6 +139,8 @@ class ArticleController extends BaseController
      *        @OA\Property(property="name", type="string"),
      *        @OA\Property(property="userId", type="integer"),
      *        @OA\Property(property="content", type="string"),
+     *        @OA\Property(property="status", type="string"),
+     *        @OA\Property(property="createdAt", type="string"),
      *     )
      * ),
      * @OA\Response(
@@ -166,6 +170,58 @@ class ArticleController extends BaseController
         try {
             $article = $this->articleService->create($command);
             return $this->json(ViewArticle::createFrom($article), Response::HTTP_CREATED);
+        } catch (EntityNotFoundException $e) {
+            return $this->json($e->getMessage(), Response::HTTP_BAD_REQUEST);
+        }
+    }
+    /**
+     * @Route("/articles/{articleId}/comments", methods={"POST"}, name="article_create_comment")
+     * @OA\RequestBody(
+     *     @OA\JsonContent(
+     *         type="object",
+     *         required={"userId", "content"},
+     *         @OA\Property(property="userId", type="integer"),
+     *         @OA\Property(property="content", type="string"),
+     *     ),
+     * ),
+     * @OA\Response(
+     *     response=201,
+     *     description="Created comment",
+     *     @OA\JsonContent(
+     *        type="object",
+     *        @OA\Property(property="id", type="integer"),
+     *        @OA\Property(property="userId", type="integer"),
+     *        @OA\Property(property="content", type="string"),
+     *        @OA\Property(property="createdAt", type="string"),
+     *     )
+     * ),
+     * @OA\Response(
+     *     response=400,
+     *     description="Invalid input",
+     *     @OA\JsonContent(
+     *        type="object",
+     *        @OA\Property(property="field", type="string")
+     *     )
+     * ),
+     * @OA\Tag(name="Articles")
+     * @Security(name="Bearer")
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function createComment(int $articleId, Request $request)
+    {
+        /** @var CreateComment $command */
+        $command = $this->deserialize($request, CreateComment::class);
+        $errors = $this->validate($command);
+
+        if ($errors) {
+            return $this->json($errors, Response::HTTP_BAD_REQUEST);
+        }
+
+        try {
+            $comment = $this->articleService->createComment($articleId, $command);
+            return $this->json(ViewComment::createFrom($comment), Response::HTTP_CREATED);
         } catch (EntityNotFoundException $e) {
             return $this->json($e->getMessage(), Response::HTTP_BAD_REQUEST);
         }

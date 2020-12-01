@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace App\Service\Article;
 
 use App\Entity\Article\Article;
+use App\Entity\Article\Comment;
+use App\Event\Article\ArticleCommentCreatedEvent;
 use App\Event\Article\ArticleCreatedEvent;
 use App\Repository\Article\ArticleRepository;
 use App\Repository\User\UserRepository;
 use App\Service\Article\Command\CreateArticle;
+use App\Service\Article\Command\CreateComment;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ArticleService
@@ -52,7 +55,6 @@ class ArticleService
         /** @var Article $article */
         $article = $this->articleRepository->save(
             new Article(
-                null,
                 $command->userId,
                 $command->name,
                 $command->content
@@ -62,5 +64,21 @@ class ArticleService
         $this->eventDispatcher->dispatch(new ArticleCreatedEvent($article));
 
         return $article;
+    }
+
+    public function createComment(int $articleId, CreateComment $command): Comment
+    {
+        $this->userRepository->getById($command->userId);
+        /** @var Article $article */
+        $article = $this->articleRepository->getById($articleId);
+
+        $comment = new Comment($command->userId, $command->content);
+        $article->addComment($comment);
+
+        $this->articleRepository->save($article);
+
+        $this->eventDispatcher->dispatch(new ArticleCommentCreatedEvent($comment));
+
+        return $comment;
     }
 }

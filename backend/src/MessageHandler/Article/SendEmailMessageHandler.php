@@ -19,6 +19,7 @@ final class SendEmailMessageHandler implements MessageHandlerInterface
 
     public function __invoke(SendEmailMessage $message)
     {
+        \sleep(100);
         $this->logger->debug('SendEmailMessageHandler', ['email' => $message->getEmail()]);
     }
 }

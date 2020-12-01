@@ -62,7 +62,7 @@ services:
       - ./z_config/backend/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
       - ./backend:/app
     restart: always
-    scale: 1
+    scale: 2
     command: bash -c "until $$(curl --output /dev/null --silent --head --fail http://rabbit_mq:15672); do echo 'Waiting RabbitMQ...'; sleep 1; done && php bin/console messenger:consume async_email -vv"
     depends_on:
       - db

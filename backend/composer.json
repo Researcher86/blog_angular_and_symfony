@@ -111,6 +111,9 @@
             "bin/console debug:twig > /dev/null"
         ],
 
+        "app-events" : "bin/console debug:event-dispatcher",
+        "app-messages" : "bin/console debug:messenger",
+
         "validate": [
             "bin/console doctrine:schema:validate --skip-sync -v"
         ],

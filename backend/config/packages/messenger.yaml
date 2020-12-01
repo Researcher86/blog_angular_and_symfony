@@ -8,7 +8,7 @@ framework:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 retry_strategy:
                     max_retries: 3
-                    multiplier: 2
+                    multiplier: 1
                 options:
                     # queue_name is specific to the doctrine transport
 #                    queue_name: es
@@ -18,12 +18,18 @@ framework:
                         name: es
                     queues:
                         messages_es: ~
+#                    queue:
+#                        name: 'pubsub_%rand(5)%'
+#                        binding_keys: pubsub
+#                        exchange:
+#                            name: pubsub
+#                            type: fanout
                     # or redis try "group"
             async_email:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 retry_strategy:
                     max_retries: 3
-                    multiplier: 2
+                    multiplier: 1 # Дублирует сообщение воркерам, если поставить 2 то сообщение придет на обработку двум воркерам
                 options:
                     exchange:
                         name: email

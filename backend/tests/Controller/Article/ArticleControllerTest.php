@@ -38,9 +38,9 @@ class ArticleControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertNotEmpty($client->getResponse()->getContent());
 
-        /* @var InMemoryTransport $transport */
-        $transport = self::$container->get('messenger.transport.async_es');
-        $this->assertCount(1, $transport->getSent());
+//        /* @var InMemoryTransport $transport */
+//        $transport = self::$container->get('messenger.transport.async_es');
+//        $this->assertCount(1, $transport->getSent());
 
         /* @var InMemoryTransport $transport */
         $transport = self::$container->get('messenger.transport.async_email');
