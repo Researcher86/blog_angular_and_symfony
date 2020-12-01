@@ -25,24 +25,22 @@ class UserServiceTest extends TestCase
 
     public function testGetByIdSuccess()
     {
-        $this->userRepositoryMock->method('getById')->willReturn(new User(5, 'User 5'));
+        $this->userRepositoryMock->method('getById')->willReturn(new User('User 5'));
         $user = $this->userService->getById(5);
 
         $this->assertNotNull($user);
-        $this->assertEquals(5, $user->getId());
         $this->assertEquals('User 5', $user->getName());
     }
 
     public function testCreateUserSuccess()
     {
-        $user = new User(5, 'Test');
+        $user = new User('Test');
         $this->userRepositoryMock->method('save')->willReturn($user);
 
         $command = new CreateUser();
         $command->name = 'Test';
         $result = $this->userService->create($command);
 
-        $this->assertEquals(5, $result->getId());
         $this->assertEquals('Test', $result->getName());
     }
 }

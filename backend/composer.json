@@ -101,6 +101,7 @@
         "migrate" : "bin/console doctrine:migrations:migrate",
         "make-fixtures" : "bin/console make:fixtures",
         "load-fixtures" : "bin/console doctrine:fixtures:load --purge-with-truncate",
+        "app-load-fixtures" : "bin/console app:fixturesReload",
         "api-doc" : "bin/console debug:router",
         "debug" : [
             "bin/console debug:autowiring > /dev/null",

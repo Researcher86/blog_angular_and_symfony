@@ -35,7 +35,7 @@ class UserService
     public function create(CreateUser $command): User
     {
         /** @var User $user */
-        $user = $this->userRepository->save(new User(null, $command->name));
+        $user = $this->userRepository->save(new User($command->name));
 
         return $user;
     }

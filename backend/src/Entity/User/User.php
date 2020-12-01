@@ -26,16 +26,14 @@ class User
 
     /**
      * User constructor.
-     * @param ?int $id
      * @param string $name
      */
-    public function __construct(?int $id, string $name)
+    public function __construct(string $name)
     {
-        $this->id = $id;
         $this->name = $name;
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }

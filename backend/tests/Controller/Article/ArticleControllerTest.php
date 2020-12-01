@@ -13,7 +13,7 @@ class ArticleControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $client->request('GET', '/api/articles/5');
+        $client->request('GET', '/api/articles/1');
 
         $this->assertResponseIsSuccessful();
         $this->assertNotEmpty($client->getResponse()->getContent());
@@ -41,6 +41,22 @@ class ArticleControllerTest extends WebTestCase
 //        /* @var InMemoryTransport $transport */
 //        $transport = self::$container->get('messenger.transport.async_es');
 //        $this->assertCount(1, $transport->getSent());
+
+        /* @var InMemoryTransport $transport */
+        $transport = self::$container->get('messenger.transport.async_email');
+        $this->assertCount(1, $transport->getSent());
+
+        return \json_decode($client->getResponse()->getContent());
+    }
+
+    public function testCreateCommentToArticleSuccess()
+    {
+        $client = static::createClient();
+
+        $client->request('POST', '/api/articles/2/comments', [], [], [], \json_encode(['userId' => 5, 'content' => 'Text']));
+
+        $this->assertResponseIsSuccessful();
+        $this->assertNotEmpty($client->getResponse()->getContent());
 
         /* @var InMemoryTransport $transport */
         $transport = self::$container->get('messenger.transport.async_email');
