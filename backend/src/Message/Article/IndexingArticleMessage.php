@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Message\Article;
 
-final class IndexerMessage
+final class IndexingArticleMessage
 {
     private int $articleId;
 
