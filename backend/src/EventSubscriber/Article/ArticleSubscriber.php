@@ -7,8 +7,10 @@ namespace App\EventSubscriber\Article;
 use App\Event\Article\ArticleCommentCreatedEvent;
 use App\Event\Article\ArticleCreatedEvent;
 use App\Event\Article\ArticlePublishedEvent;
-use App\Message\Article\IndexerMessage;
+use App\Message\Article\IndexingArticleMessage;
 use App\Message\Article\SendEmailMessage;
+use App\Message\Article\SendTelegramMessage;
+use App\Service\User\UserService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -17,32 +19,64 @@ class ArticleSubscriber implements EventSubscriberInterface
 {
     private LoggerInterface $logger;
     private MessageBusInterface $bus;
+    private UserService $userService;
 
-    public function __construct(LoggerInterface $logger, MessageBusInterface $bus)
+    public function __construct(LoggerInterface $logger, MessageBusInterface $bus, UserService $userService)
     {
         $this->logger = $logger;
         $this->bus = $bus;
+        $this->userService = $userService;
     }
 
     public function onArticleCreatedEvent(ArticleCreatedEvent $event)
     {
         $this->logger->debug('ArticleCreatedEvent', \get_object_vars($event));
 
-        $this->bus->dispatch(new SendEmailMessage('test@test.com'));
+        $user = $this->userService->getById($event->getArticle()->getUserId());
+
+        $title = 'Article submitted for moderation';
+        $this->bus->dispatch(new SendEmailMessage(
+            $title,
+            $user->getName(),
+            true,
+            $event->getArticle()->getId(),
+            \get_class($event->getArticle())
+        ));
+        $this->bus->dispatch(new SendTelegramMessage($title));
     }
 
     public function onArticlePublishedEvent(ArticlePublishedEvent $event)
     {
         $this->logger->debug('ArticlePublishedEvent', \get_object_vars($event));
 
-        $this->bus->dispatch(new IndexerMessage($event->getArticle()->getId()));
-        $this->bus->dispatch(new SendEmailMessage('test@test.com'));
+        $user = $this->userService->getById($event->getArticle()->getUserId());
+
+        $this->bus->dispatch(new IndexingArticleMessage($event->getArticle()->getId()));
+        $this->bus->dispatch(new SendEmailMessage(
+            'Article published',
+            $user->getName(),
+            false,
+            $event->getArticle()->getId(),
+            \get_class($event->getArticle())
+        ));
     }
 
     public function onArticleCommentCreatedEvent(ArticleCommentCreatedEvent $event)
     {
         $this->logger->debug('ArticleCommentCreatedEvent', \get_object_vars($event));
-        $this->bus->dispatch(new SendEmailMessage('test@test.com'));
+
+        $user = $this->userService->getById($event->getComment()->getUserId());
+
+        $title = 'Comment submitted for moderation';
+
+        $this->bus->dispatch(new SendEmailMessage(
+            $title,
+            $user->getName(),
+            true,
+            $event->getComment()->getId(),
+            \get_class($event->getComment())
+        ));
+        $this->bus->dispatch(new SendTelegramMessage($title));
     }
 
     public static function getSubscribedEvents()

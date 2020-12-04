@@ -16,7 +16,7 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 1; $i <= 100; ++$i) {
             $manager->persist(
                 new Article(
-                    \random_int(1, 50),
+                    \random_int(1, 10),
                     \sprintf('Name %d', $i),
                     \sprintf('Text %d', $i)
                 )

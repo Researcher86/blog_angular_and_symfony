@@ -81,4 +81,9 @@ class ArticleService
 
         return $comment;
     }
+
+    public function getCommentById(int $commentId): Comment
+    {
+        return $this->articleRepository->getCommentById($commentId);
+    }
 }

@@ -10,22 +10,28 @@ use App\Service\User\Command\CreateUser;
 use App\Service\User\UserService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
+use Symfony\Component\Security\Core\Encoder\SodiumPasswordEncoder;
 
 class UserServiceTest extends TestCase
 {
     private UserService $userService;
 
     private MockObject $userRepositoryMock;
+    private MockObject $passwordEncoderMock;
 
     protected function setUp(): void
     {
-        $this->userRepositoryMock = $this->createMock(UserRepository::class);
-        $this->userService = new UserService($this->userRepositoryMock);
+        $this->userService = new UserService(
+            $this->userRepositoryMock = $this->createMock(UserRepository::class),
+            $this->passwordEncoderMock = $this->createMock(PasswordEncoderInterface::class),
+        );
     }
 
     public function testGetByIdSuccess()
     {
-        $this->userRepositoryMock->method('getById')->willReturn(new User('User 5'));
+        $user = new User('User 5', 'test@test.com', 'password');
+        $this->userRepositoryMock->method('getById')->willReturn($user);
         $user = $this->userService->getById(5);
 
         $this->assertNotNull($user);
@@ -34,13 +40,16 @@ class UserServiceTest extends TestCase
 
     public function testCreateUserSuccess()
     {
-        $user = new User('Test');
+        $user = new User('User 5', 'test@test.com', 'password');
         $this->userRepositoryMock->method('save')->willReturn($user);
+        $this->passwordEncoderMock->method('encodePassword')->willReturn('encodePassword');
 
         $command = new CreateUser();
-        $command->name = 'Test';
+        $command->name = 'User 5';
+        $command->email = 'test@test.com';
+        $command->plainPassword = 'Test@test.com';
         $result = $this->userService->create($command);
 
-        $this->assertEquals('Test', $result->getName());
+        $this->assertEquals('User 5', $result->getName());
     }
 }

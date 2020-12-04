@@ -1,0 +1,13 @@
+framework:
+  notifier:
+#    texter_transports:
+#      twilio: 'null://null'
+    chatter_transports:
+#      slack: 'null://null'
+      telegram: 'null://null'
+#    channel_policy:
+#      # use chat/slack, chat/telegram, sms/twilio or sms/nexmo
+#      urgent: [ 'email' ]
+#      high: [ 'email' ]
+#      medium: [ 'chat/telegram' ]
+#      low: [ 'email' ]

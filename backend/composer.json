@@ -22,12 +22,21 @@
         "symfony/flex": "^1.3.1",
         "symfony/framework-bundle": "5.1.*",
         "symfony/intl": "5.1.*",
+        "symfony/mailer": "5.1.*",
         "symfony/messenger": "5.1.*",
+        "symfony/notifier": "5.1.*",
         "symfony/property-access": "5.1.*",
         "symfony/property-info": "5.1.*",
+        "symfony/security-bundle": "5.1.*",
         "symfony/serializer": "5.1.*",
+        "symfony/telegram-notifier": "5.1.*",
+        "symfony/twig-bundle": "^5.1",
         "symfony/validator": "5.1.*",
-        "symfony/yaml": "5.1.*"
+        "symfony/yaml": "5.1.*",
+        "twig/cssinliner-extra": "^3.1",
+        "twig/extra-bundle": "^2.12|^3.0",
+        "twig/inky-extra": "^3.1",
+        "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
         "ext-json": "*",
@@ -41,7 +50,6 @@
         "symfony/monolog-bundle": "^3.0",
         "symfony/phpunit-bridge": "^5.1",
         "symfony/stopwatch": "^5.1",
-        "symfony/twig-bundle": "^5.1",
         "symfony/var-dumper": "^5.1",
         "symfony/web-profiler-bundle": "^5.1"
     },
@@ -85,22 +93,20 @@
 
         "clear": "bin/console cache:clear",
         "app-init": [
-            "@migrate",
-            "@load-fixtures",
-            "@test"
+            "@app-load-fixtures"
         ],
         "make-list": "bin/console list make",
         "make-controller" : "bin/console make:constroller",
         "make-entity" : "bin/console make:entity",
         "make-migration" : "bin/console make:migration",
 
-        "diff-migration" : "bin/console doctrine:migrations:diff",
+        "diff-migration" : "bin/console doctrine:migrations:diff -n",
         "message-failed" : "bin/console messenger:failed:show -vv",
         "message-failed-retry" : "bin/console messenger:failed:retry -vv",
 
-        "migrate" : "bin/console doctrine:migrations:migrate",
+        "migrate" : "bin/console doctrine:migrations:migrate -n",
         "make-fixtures" : "bin/console make:fixtures",
-        "load-fixtures" : "bin/console doctrine:fixtures:load --purge-with-truncate",
+        "load-fixtures" : "bin/console doctrine:fixtures:load --purge-with-truncate -n",
         "app-load-fixtures" : "bin/console app:fixturesReload",
         "api-doc" : "bin/console debug:router",
         "debug" : [

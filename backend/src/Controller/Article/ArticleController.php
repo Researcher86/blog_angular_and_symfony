@@ -114,9 +114,9 @@ class ArticleController extends BaseController
     public function list(): Response
     {
         $articles = $this->articleService->getAll();
-        return $this->json(
-            \array_map(fn ($article) => ViewArticle::createFrom($article), $articles)
-        );
+        return $this
+            ->json(\array_map(fn ($article) => ViewArticle::createFrom($article), $articles))
+            ->setSharedMaxAge(3600);
     }
 
     /**

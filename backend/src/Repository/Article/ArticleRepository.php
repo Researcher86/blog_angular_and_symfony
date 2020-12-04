@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repository\Article;
 
 use App\Entity\Article\Article;
+use App\Entity\Article\Comment;
 use App\Repository\DoctrineRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -49,4 +50,12 @@ class ArticleRepository extends DoctrineRepository
         ;
     }
     */
+    public function getCommentById(int $commentId): Comment
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere(':commentId MEMBER OF a.comments')
+            ->setParameter('commentId', $commentId)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

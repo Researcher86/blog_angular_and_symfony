@@ -17,6 +17,9 @@ services:
             - '%env(CENTRIFUGO_API_KEY)%'
             - '%env(CENTRIFUGO_SECRET)%'
 
+    Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface:
+        class: Symfony\Component\Security\Core\Encoder\SodiumPasswordEncoder
+
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:

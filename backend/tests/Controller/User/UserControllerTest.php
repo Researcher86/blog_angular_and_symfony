@@ -32,7 +32,11 @@ class UserControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $client->request('POST', '/api/users', [], [], [], \json_encode(['name' => 'Test']));
+        $client->request('POST', '/api/users', [], [], [], \json_encode([
+            'name' => 'Test',
+            'email' => 'Test@Test.com',
+            'plainPassword' => 'Test@Test.com',
+        ]));
 
         $this->assertResponseIsSuccessful();
         $this->assertNotEmpty($client->getResponse()->getContent());

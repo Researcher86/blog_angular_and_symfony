@@ -9,6 +9,7 @@ use App\Entity\Article\Comment;
 class ArticleCommentCreatedEvent
 {
     private Comment $comment;
+
     public function __construct(Comment $comment)
     {
         $this->comment = $comment;

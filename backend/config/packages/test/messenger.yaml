@@ -23,3 +23,13 @@ framework:
             name: email
           queues:
             messages_email: ~
+      async_telegram:
+        dsn: 'in-memory://'
+#        retry_strategy:
+#          max_retries: 3
+#          multiplier: 1
+        options:
+          exchange:
+            name: telegram
+          queues:
+            messages_email: ~

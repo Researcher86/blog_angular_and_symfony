@@ -36,7 +36,8 @@ class UserController extends BaseController
      *     @OA\JsonContent(
      *        type="object",
      *        @OA\Property(property="id", type="integer"),
-     *        @OA\Property(property="name", type="string")
+     *        @OA\Property(property="name", type="string"),
+     *        @OA\Property(property="email", type="string"),
      *     )
      * ),
      * @OA\Response(
@@ -94,7 +95,8 @@ class UserController extends BaseController
      *        type="array",
      *        @OA\Items(
      *          @OA\Property(property="id", type="integer"),
-     *          @OA\Property(property="name", type="string")
+     *          @OA\Property(property="name", type="string"),
+     *          @OA\Property(property="email", type="string"),
      *        )
      *     )
      * )
@@ -118,6 +120,8 @@ class UserController extends BaseController
      *         type="object",
      *         required={"name"},
      *         @OA\Property(property="name", type="string"),
+     *         @OA\Property(property="email", type="string"),
+     *         @OA\Property(property="plainPassword", type="string"),
      *     ),
      * ),
      * @OA\Response(
@@ -126,7 +130,8 @@ class UserController extends BaseController
      *     @OA\JsonContent(
      *        type="object",
      *        @OA\Property(property="id", type="integer"),
-     *        @OA\Property(property="name", type="string")
+     *        @OA\Property(property="name", type="string"),
+     *        @OA\Property(property="email", type="string"),
      *     )
      * ),
      * @OA\Response(
