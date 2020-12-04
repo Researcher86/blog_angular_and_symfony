@@ -11,6 +11,7 @@
         "doctrine/doctrine-bundle": "^2.1",
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^2.7",
+        "elasticsearch/elasticsearch": "^7.10",
         "nelmio/api-doc-bundle": "^4.0",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^5.6",
@@ -137,6 +138,10 @@
         "test": [
             "@validate",
             "bin/phpunit --colors=always --testdox"
+        ],
+        "test-one": [
+            "@validate",
+            "bin/phpunit --colors=always --testdox --filter IndexServiceTest"
         ],
         "test-all": [
             "@validate",

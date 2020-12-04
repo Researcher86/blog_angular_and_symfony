@@ -11,6 +11,11 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
+    Elasticsearch\Client:
+        factory: ['Elasticsearch\ClientBuilder', 'fromConfig']
+        arguments:
+            - hosts: ['%env(ELASTIC_SEARCH_HOST)%']
+
     phpcent\Client:
         arguments:
             - '%env(CENTRIFUGO_API_HOST)%/api'
