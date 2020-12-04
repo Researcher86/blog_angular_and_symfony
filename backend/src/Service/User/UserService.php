@@ -8,7 +8,6 @@ use App\Entity\User\User;
 use App\Repository\User\UserRepository;
 use App\Service\User\Command\CreateUser;
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
-use Symfony\Component\Security\Core\Encoder\SodiumPasswordEncoder;
 
 class UserService
 {

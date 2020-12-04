@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Repository\Article;
 
 use App\Entity\Article\Article;
-use App\Entity\Article\Comment;
 use App\Repository\DoctrineRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -22,40 +21,22 @@ class ArticleRepository extends DoctrineRepository
         parent::__construct($registry, Article::class);
     }
 
-    // /**
-    //  * @return Article[] Returns an array of Article objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Article
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
-    public function getCommentById(int $commentId): Comment
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere(':commentId MEMBER OF a.comments')
-            ->setParameter('commentId', $commentId)
-            ->getQuery()
-            ->getOneOrNullResult();
-    }
+//    public function getCommentById(int $commentId): Comment
+//    {
+//        $comments = $this->createQueryBuilder('a')
+//            ->select('comments')
+////            ->andWhere(':commentId MEMBER OF a.comments')
+//            ->innerJoin('a.comments', 'comments')
+//            ->andWhere(':commentId = comments.id')
+//            ->setParameter('commentId', $commentId)
+//            ->getQuery()
+//            ->getResult();
+////        return $comments[0];
+//
+////        $comments = $this->_em->createQuery('select a.comments from App\Entity\Article\Article a where :commentId MEMBER OF a.comments')
+////        ->setParameter('commentId', $commentId)
+////        ->getResult();
+//
+//        return $comments[0];
+//    }
 }

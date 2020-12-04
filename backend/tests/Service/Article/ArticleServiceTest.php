@@ -6,6 +6,7 @@ namespace App\Tests\Service\Article;
 
 use App\Entity\Article\Article;
 use App\Repository\Article\ArticleRepository;
+use App\Repository\Article\CommentRepository;
 use App\Repository\User\UserRepository;
 use App\Service\Article\ArticleService;
 use App\Service\Article\Command\CreateArticle;
@@ -17,14 +18,16 @@ class ArticleServiceTest extends TestCase
 {
     private ArticleService $articleService;
 
-    private MockObject $userRepositoryMock;
     private MockObject $articleRepositoryMock;
+    private MockObject $commentRepositoryMock;
+    private MockObject $userRepositoryMock;
     private MockObject $eventDispatcherMock;
 
     protected function setUp(): void
     {
         $this->articleService = new ArticleService(
             $this->articleRepositoryMock = $this->createMock(ArticleRepository::class),
+            $this->commentRepositoryMock = $this->createMock(CommentRepository::class),
             $this->userRepositoryMock = $this->createMock(UserRepository::class),
             $this->eventDispatcherMock = $this->createMock(EventDispatcherInterface::class)
         );

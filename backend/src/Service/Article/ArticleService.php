@@ -9,6 +9,7 @@ use App\Entity\Article\Comment;
 use App\Event\Article\ArticleCommentCreatedEvent;
 use App\Event\Article\ArticleCreatedEvent;
 use App\Repository\Article\ArticleRepository;
+use App\Repository\Article\CommentRepository;
 use App\Repository\User\UserRepository;
 use App\Service\Article\Command\CreateArticle;
 use App\Service\Article\Command\CreateComment;
@@ -17,12 +18,18 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class ArticleService
 {
     private ArticleRepository $articleRepository;
+    private CommentRepository $commentRepository;
     private UserRepository $userRepository;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(ArticleRepository $articleRepository, UserRepository $userRepository, EventDispatcherInterface $eventDispatcher)
-    {
+    public function __construct(
+        ArticleRepository $articleRepository,
+        CommentRepository $commentRepository,
+        UserRepository $userRepository,
+        EventDispatcherInterface $eventDispatcher
+    ) {
         $this->articleRepository = $articleRepository;
+        $this->commentRepository = $commentRepository;
         $this->userRepository = $userRepository;
         $this->eventDispatcher = $eventDispatcher;
     }
@@ -84,6 +91,8 @@ class ArticleService
 
     public function getCommentById(int $commentId): Comment
     {
-        return $this->articleRepository->getCommentById($commentId);
+        /** @var Comment $comment */
+        $comment = $this->commentRepository->getById($commentId);
+        return $comment;
     }
 }

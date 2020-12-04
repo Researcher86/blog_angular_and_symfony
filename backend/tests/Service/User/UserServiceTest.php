@@ -11,7 +11,6 @@ use App\Service\User\UserService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
-use Symfony\Component\Security\Core\Encoder\SodiumPasswordEncoder;
 
 class UserServiceTest extends TestCase
 {

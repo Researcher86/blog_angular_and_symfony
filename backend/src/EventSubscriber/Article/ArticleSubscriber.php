@@ -37,7 +37,7 @@ class ArticleSubscriber implements EventSubscriberInterface
         $title = 'Article submitted for moderation';
         $this->bus->dispatch(new SendEmailMessage(
             $title,
-            $user->getName(),
+            $user->getEmail(),
             true,
             $event->getArticle()->getId(),
             \get_class($event->getArticle())
@@ -54,7 +54,7 @@ class ArticleSubscriber implements EventSubscriberInterface
         $this->bus->dispatch(new IndexingArticleMessage($event->getArticle()->getId()));
         $this->bus->dispatch(new SendEmailMessage(
             'Article published',
-            $user->getName(),
+            $user->getEmail(),
             false,
             $event->getArticle()->getId(),
             \get_class($event->getArticle())
@@ -71,7 +71,7 @@ class ArticleSubscriber implements EventSubscriberInterface
 
         $this->bus->dispatch(new SendEmailMessage(
             $title,
-            $user->getName(),
+            $user->getEmail(),
             true,
             $event->getComment()->getId(),
             \get_class($event->getComment())
