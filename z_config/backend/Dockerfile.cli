@@ -1,6 +1,6 @@
 FROM php:7.4-cli
 
-RUN apt-get update && apt-get install -y git libmcrypt-dev libpq-dev librabbitmq-dev libssl-dev libicu-dev libxslt-dev zip unzip \
+RUN apt-get update && apt-get install -y git libmcrypt-dev libpq-dev librabbitmq-dev libssl-dev libicu-dev libxslt-dev zip unzip wait-for-it \
     && pecl install xdebug amqp redis \
     && docker-php-ext-configure intl && docker-php-ext-install intl \
     && docker-php-ext-install pdo pdo_mysql bcmath xsl \
