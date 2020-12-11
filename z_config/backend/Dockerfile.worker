@@ -6,8 +6,6 @@ RUN apt-get update && apt-get install -y git libmcrypt-dev libpq-dev librabbitmq
     && docker-php-ext-install pdo pdo_pgsql pcntl bcmath xsl \
     && docker-php-ext-enable xdebug amqp redis
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
 RUN mkdir /app
 WORKDIR /app
 

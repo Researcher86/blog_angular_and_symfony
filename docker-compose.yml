@@ -47,7 +47,7 @@ services:
   worker_indexer:
     build:
       context: .
-      dockerfile: z_config/backend/Dockerfile.cli
+      dockerfile: z_config/backend/Dockerfile.worker
     environment:
       - XDEBUG_CONFIG=client_host=${WIN_HOST}
       - XDEBUG_MODE=debug
@@ -67,7 +67,7 @@ services:
   worker_email:
     build:
       context: .
-      dockerfile: z_config/backend/Dockerfile.cli
+      dockerfile: z_config/backend/Dockerfile.worker
     environment:
       - XDEBUG_CONFIG=client_host=${WIN_HOST}
       - XDEBUG_MODE=debug
@@ -87,7 +87,7 @@ services:
   worker_telegram:
     build:
       context: .
-      dockerfile: z_config/backend/Dockerfile.cli
+      dockerfile: z_config/backend/Dockerfile.worker
     environment:
       - XDEBUG_CONFIG=client_host=${WIN_HOST}
       - XDEBUG_MODE=debug
@@ -116,17 +116,16 @@ services:
       - backend
       - centrifugo
   db:
-    image: mysql:5.5
+    image: postgres:13
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - db_data:/var/lib/mysql
+      - db_data:/var/lib/postgresql/data
     restart: always
     environment:
-      MYSQL_DATABASE: blog
-      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-      MYSQL_ROOT_HOST: '%'
-      MYSQL_ROOT_PASSWORD: ''
+      POSTGRES_DB: blog
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: user
   redis:
     image: redis:6.0
     ports:
