@@ -1,5 +1,8 @@
 # blog_angular_and_symfony
 
+[![Build Status](https://travis-ci.org/Researcher86/blog_angular_and_symfony.svg?branch=master)](https://travis-ci.org/Researcher86/blog_angular_and_symfony)
+[![codecov](https://codecov.io/gh/Researcher86/blog_angular_and_symfony/branch/master/graph/badge.svg?token=A14YI7GA8X)](https://codecov.io/gh/Researcher86/blog_angular_and_symfony)
+
 ##### App base url
 http://dev.blog.kz:8080/
 
