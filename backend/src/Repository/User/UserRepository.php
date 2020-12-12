@@ -11,8 +11,8 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
  * @method User|null findOneBy(array $criteria, array $orderBy = null)
- * @method list<User> findAll()
- * @method list<User> findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method array findAll()
+ * @method array findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class UserRepository extends DoctrineRepository
 {
