@@ -33,7 +33,7 @@ app-code-check:
 	docker-compose run --rm php_cli bash -c "composer code-check"
 
 app-init:
-	docker-compose run --rm backend bash -c "composer app-init"
+	docker-compose run --rm php_cli bash -c "composer app-init"
 
 app-cache-update: app-install
 

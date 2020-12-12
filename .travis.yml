@@ -1,0 +1,28 @@
+language: php
+
+services:
+  - docker
+
+#cache:
+#  directories:
+#    - $HOME/.composer/cache/files
+
+php:
+  - "7.4"
+
+install:
+  - make build
+  - make app-install
+  - make app-init
+#  - cd backend/
+#  - composer install
+
+script:
+  - make app-test
+#  - cd backend/
+#  - composer code-check
+#  - composer test
+#  - vendor/bin/phpunit --coverage-clover=coverage.xml
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
