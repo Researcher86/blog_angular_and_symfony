@@ -15,13 +15,16 @@ class CentrifugoService
         $this->client = $client;
     }
 
-    public function publish(string $channel, array $data = ['message' => 'Hello from PHP!'])
+    /**
+     * @param array<string, string> $data
+     */
+    public function publish(string $channel, array $data = ['message' => 'Hello from PHP!']): void
     {
         $this->client->publish($channel, $data);
     }
 
-    public function generateToken($userId): string
+    public function generateToken(int $userId): string
     {
-        return $this->client->generateConnectionToken($userId);
+        return $this->client->generateConnectionToken((string) $userId);
     }
 }

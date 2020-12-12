@@ -28,7 +28,7 @@ class ArticleSubscriber implements EventSubscriberInterface
         $this->userService = $userService;
     }
 
-    public function onArticleCreatedEvent(ArticleCreatedEvent $event)
+    public function onArticleCreatedEvent(ArticleCreatedEvent $event): void
     {
         $this->logger->debug('ArticleCreatedEvent', \get_object_vars($event));
 
@@ -39,29 +39,29 @@ class ArticleSubscriber implements EventSubscriberInterface
             $title,
             $user->getEmail(),
             true,
-            $event->getArticle()->getId(),
+            (int) $event->getArticle()->getId(),
             \get_class($event->getArticle())
         ));
         $this->bus->dispatch(new SendTelegramMessage($title));
     }
 
-    public function onArticlePublishedEvent(ArticlePublishedEvent $event)
+    public function onArticlePublishedEvent(ArticlePublishedEvent $event): void
     {
         $this->logger->debug('ArticlePublishedEvent', \get_object_vars($event));
 
         $user = $this->userService->getById($event->getArticle()->getUserId());
 
-        $this->bus->dispatch(new IndexingArticleMessage($event->getArticle()->getId()));
+        $this->bus->dispatch(new IndexingArticleMessage((int) $event->getArticle()->getId()));
         $this->bus->dispatch(new SendEmailMessage(
             'Article published',
             $user->getEmail(),
             false,
-            $event->getArticle()->getId(),
+            (int) $event->getArticle()->getId(),
             \get_class($event->getArticle())
         ));
     }
 
-    public function onArticleCommentCreatedEvent(ArticleCommentCreatedEvent $event)
+    public function onArticleCommentCreatedEvent(ArticleCommentCreatedEvent $event): void
     {
         $this->logger->debug('ArticleCommentCreatedEvent', \get_object_vars($event));
 
@@ -73,17 +73,20 @@ class ArticleSubscriber implements EventSubscriberInterface
             $title,
             $user->getEmail(),
             true,
-            $event->getComment()->getId(),
+            (int) $event->getComment()->getId(),
             \get_class($event->getComment())
         ));
         $this->bus->dispatch(new SendTelegramMessage($title));
     }
 
-    public static function getSubscribedEvents()
+    /**
+     * @return array<string, string>
+     */
+    public static function getSubscribedEvents(): array
     {
         return [
-            ArticleCreatedEvent::class        => 'onArticleCreatedEvent',
-            ArticlePublishedEvent::class      => 'onArticlePublishedEvent',
+            ArticleCreatedEvent::class => 'onArticleCreatedEvent',
+            ArticlePublishedEvent::class => 'onArticlePublishedEvent',
             ArticleCommentCreatedEvent::class => 'onArticleCommentCreatedEvent',
         ];
     }

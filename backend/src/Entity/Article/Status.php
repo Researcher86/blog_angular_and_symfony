@@ -10,7 +10,7 @@ class Status
     public const PUBLISHED = 1;
 
     public const TEXT_STATUS = [
-        self::DRAFT     => 'DRAFT',
+        self::DRAFT => 'DRAFT',
         self::PUBLISHED => 'PUBLISHED',
     ];
 }

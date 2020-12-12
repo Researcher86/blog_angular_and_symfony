@@ -6,7 +6,9 @@ namespace App\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityNotFoundException;
+use Doctrine\ORM\ORMException;
 use ReflectionClass;
+use RuntimeException;
 
 abstract class DoctrineRepository extends ServiceEntityRepository
 {
@@ -14,14 +16,17 @@ abstract class DoctrineRepository extends ServiceEntityRepository
     {
         $this->_em->persist($entity);
         $this->_em->flush();
+
         return $entity;
     }
 
-    public function delete(int $id): void
+    public function delete(int $id): object
     {
-        $entity = $this->find($id);
+        $entity = $this->getById($id);
         $this->_em->remove($entity);
         $this->_em->flush();
+
+        return $entity;
     }
 
     public function exists(int $id): bool
@@ -37,8 +42,12 @@ abstract class DoctrineRepository extends ServiceEntityRepository
     public function getById(int $id): object
     {
         $entity = $this->find($id);
-        if (!$entity) {
+        if (! $entity) {
             throw new EntityNotFoundException(\sprintf('%s not found by id [%d]', $this->getShortEntityName(), $id));
+        }
+
+        if (! is_object($entity)) {
+            throw new ORMException(\sprintf('Return %s is not object [%d]', $this->getShortEntityName(), $id));
         }
 
         return $entity;
@@ -46,6 +55,10 @@ abstract class DoctrineRepository extends ServiceEntityRepository
 
     protected function getShortEntityName(): string
     {
+        if (! \class_exists($this->_entityName)) {
+            throw new RuntimeException(\sprintf('Class "%s" is not exists', $this->_entityName));
+        }
+
         return (new ReflectionClass($this->_entityName))->getShortName();
     }
 }

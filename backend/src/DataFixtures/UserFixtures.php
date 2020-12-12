@@ -9,6 +9,9 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 
+/**
+ * @psalm-suppress PropertyNotSetInConstructor
+ */
 class UserFixtures extends Fixture
 {
     private PasswordEncoderInterface $passwordEncoder;
@@ -18,7 +21,7 @@ class UserFixtures extends Fixture
         $this->passwordEncoder = $passwordEncoder;
     }
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         for ($i = 1; $i <= 10; ++$i) {
             $manager->persist(new User(

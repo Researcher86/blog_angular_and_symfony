@@ -2,6 +2,7 @@
 
 namespace App\Tests\Notification\Article;
 
+use App\Entity\Article\Article;
 use App\Entity\Article\Comment;
 use App\Notification\Article\CommentReviewNotification;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -34,7 +35,7 @@ class CommentReviewNotificationTest extends KernelTestCase
     public function testSendEmail()
     {
         $notification = (new CommentReviewNotification(
-            new Comment(1, 'New comment'),
+            new Comment(1, 'New comment', new Article(1, 'Text', 'Text')),
             'CommentReviewNotificationTest->testSendEmail()'
         )
         )->importance(Notification::IMPORTANCE_LOW);

@@ -13,20 +13,25 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @Route("/auth")
- * Class AuthController
+ *
  * @package App\Controller
  */
 class AuthController extends BaseController
 {
     private CentrifugoService $centrifugoService;
-    public function __construct(ValidatorInterface $validator, SerializerInterface $serializer, CentrifugoService $centrifugoService)
-    {
+
+    public function __construct(
+        ValidatorInterface $validator,
+        SerializerInterface $serializer,
+        CentrifugoService $centrifugoService
+    ) {
         parent::__construct($validator, $serializer);
         $this->centrifugoService = $centrifugoService;
     }
 
     /**
      * @Route("/centrifugo/token/{userId}", methods={"GET"}, name="auth_centrifugo_token")
+     *
      * @OA\Response(
      *     response=200,
      *     description="Return token",
@@ -34,11 +39,9 @@ class AuthController extends BaseController
      *        type="object",
      *        @OA\Property(property="token", type="string"),
      *     )
-     * ),
-     * @OA\Tag(name="Auth")
+     * )
      *
-     * @param int $userId
-     * @return Response
+     * @OA\Tag(name="Auth")
      */
     public function getCentrifugoToken(int $userId): Response
     {

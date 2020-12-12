@@ -8,9 +8,9 @@ use App\Entity\User\User;
 
 class ViewUser
 {
-    public ?int $id;
-    public string $name;
-    public string $email;
+    public ?int $id = null;
+    public ?string $name = null;
+    public ?string $email = null;
 
     public static function createFrom(User $user): self
     {

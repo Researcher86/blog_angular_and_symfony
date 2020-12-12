@@ -12,6 +12,7 @@ use App\Notification\Article\CommentReviewNotification;
 use App\Service\Article\ArticleService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Notifier\Notifier;
 use Symfony\Component\Notifier\NotifierInterface;
 use Symfony\Component\Notifier\Recipient\Recipient;
 
@@ -28,18 +29,16 @@ final class SendEmailMessageHandler implements MessageHandlerInterface
         $this->articleService = $articleService;
     }
 
-    public function __invoke(SendEmailMessage $message)
+    public function __invoke(SendEmailMessage $message): void
     {
         $this->logger->debug('SendEmailMessageHandler...', ['email' => $message->getEmail()]);
 
-        if ($message->isCopyToAdmins()) {
-            $this->logger->debug('Copy email to admins');
-        }
+        $recipients = [new Recipient($message->getEmail())];
 
-        $recipients = $message->isCopyToAdmins() ?
-            [new Recipient($message->getEmail()), ...$this->notifier->getAdminRecipients()] :
-            [new Recipient($message->getEmail())]
-        ;
+        if ($message->isCopyToAdmins() && $this->notifier instanceof Notifier) {
+            $this->logger->debug('Copy email to admins');
+            $recipients += $this->notifier->getAdminRecipients();
+        }
 
         if ($message->getType() === Article::class) {
             $this->logger->debug('Send article email...');

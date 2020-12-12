@@ -1,16 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Command;
 
+use RuntimeException;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class FixturesReloadCommand extends Command
 {
+    /**
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
+     *
+     * @var string
+     */
     protected static $defaultName = 'app:fixturesReload';
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             // the name of the command (the part after "bin/console")
@@ -22,11 +32,32 @@ class FixturesReloadCommand extends Command
             ->setHelp('This command allows you to load dummy data by recreating database and loading fixtures...');
     }
 
+    /**
+     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $application = $this->getApplication();
+
+        if (! $application) {
+            throw new RuntimeException('Null pointer exception.');
+        }
+
         $application->setAutoExit(false);
 
+        $this->dropDatabase($output, $application);
+        $this->createDatabase($output, $application);
+//        $this->schemaUpdate($output, $application);
+        $this->runMigration($output, $application);
+        $this->loadFixtures($output, $application);
+
+        return Command::SUCCESS;
+    }
+
+    protected function dropDatabase(OutputInterface $output, Application $application): void
+    {
         $output->writeln([
             '===================================================',
             '*********        Dropping DataBase        *********',
@@ -34,10 +65,11 @@ class FixturesReloadCommand extends Command
             '',
         ]);
 
-        $options = ['command' => 'doctrine:database:drop','--force' => true];
-        $application->run(new \Symfony\Component\Console\Input\ArrayInput($options));
+        $application->run(new ArrayInput(['command' => 'doctrine:database:drop', '--force' => true]));
+    }
 
-
+    protected function createDatabase(OutputInterface $output, Application $application): void
+    {
         $output->writeln([
             '===================================================',
             '*********        Creating DataBase        *********',
@@ -45,20 +77,23 @@ class FixturesReloadCommand extends Command
             '',
         ]);
 
-        $options = ['command' => 'doctrine:database:create','--if-not-exists' => true];
-        $application->run(new \Symfony\Component\Console\Input\ArrayInput($options));
+        $application->run(new ArrayInput(['command' => 'doctrine:database:create', '--if-not-exists' => true]));
+    }
 
-//        $output->writeln([
-//            '===================================================',
-//            '*********         Updating Schema         *********',
-//            '===================================================',
-//            '',
-//        ]);
-//
-//        //Create de Schema
-//        $options = array('command' => 'doctrine:schema:update',"--force" => true);
-//        $application->run(new \Symfony\Component\Console\Input\ArrayInput($options));
+    protected function schemaUpdate(OutputInterface $output, Application $application): void
+    {
+        $output->writeln([
+            '===================================================',
+            '*********         Updating Schema         *********',
+            '===================================================',
+            '',
+        ]);
 
+        $application->run(new ArrayInput(['command' => 'doctrine:schema:update', '--force' => true]));
+    }
+
+    protected function runMigration(OutputInterface $output, Application $application): void
+    {
         $output->writeln([
             '===================================================',
             '*********           Run Migration         *********',
@@ -66,10 +101,11 @@ class FixturesReloadCommand extends Command
             '',
         ]);
 
-        //Create de Schema
-        $options = ['command' => 'doctrine:migrations:migrate', '--no-interaction' => true];
-        $application->run(new \Symfony\Component\Console\Input\ArrayInput($options));
+        $application->run(new ArrayInput(['command' => 'doctrine:migrations:migrate', '--no-interaction' => true]));
+    }
 
+    protected function loadFixtures(OutputInterface $output, Application $application): void
+    {
         $output->writeln([
             '===================================================',
             '*********          Load Fixtures          *********',
@@ -78,9 +114,6 @@ class FixturesReloadCommand extends Command
         ]);
 
         //Loading Fixtures
-        $options = ['command' => 'doctrine:fixtures:load','--no-interaction' => true];
-        $application->run(new \Symfony\Component\Console\Input\ArrayInput($options));
-
-        return Command::SUCCESS;
+        $application->run(new ArrayInput(['command' => 'doctrine:fixtures:load', '--no-interaction' => true]));
     }
 }

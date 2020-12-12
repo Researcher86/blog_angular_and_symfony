@@ -10,53 +10,58 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=CommentRepository::class)
+ *
  * @ORM\Table(name="comments")
  */
 class Comment
 {
     /**
      * @ORM\Id()
+     *
      * @ORM\GeneratedValue()
+     *
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $userId;
+    private int $userId;
 
     /**
-     * @ORM\Column(type="string", length=65000)
+     * @ORM\Column(type="text")
      */
-    private $content;
+    private string $content;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $status;
+    private int $status;
 
     /**
      * @ORM\ManyToOne(targetEntity=Article::class, inversedBy="comments")
+     *
      * @ORM\JoinColumn(nullable=false)
      */
-    private $article;
+    private ?Article $article = null;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $createdAt;
+    private DateTime $createdAt;
 
-    public function __construct(int $userId, string $content)
+    public function __construct(int $userId, string $content, Article $article)
     {
         $this->userId = $userId;
         $this->content = $content;
+        $this->article = $article;
         $this->status = Status::DRAFT;
 
         $this->createdAt = new DateTime();
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -86,12 +91,12 @@ class Comment
         return $this->status === Status::PUBLISHED;
     }
 
-    public function setStatusDraft()
+    public function toStatusDraft(): void
     {
         $this->status = Status::DRAFT;
     }
 
-    public function setStatusPublished()
+    public function toStatusPublished(): void
     {
         $this->status = Status::PUBLISHED;
     }
@@ -104,12 +109,5 @@ class Comment
     public function getArticle(): ?Article
     {
         return $this->article;
-    }
-
-    public function setArticle(?Article $article): self
-    {
-        $this->article = $article;
-
-        return $this;
     }
 }

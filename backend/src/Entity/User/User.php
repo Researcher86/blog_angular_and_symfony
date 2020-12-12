@@ -9,16 +9,19 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ *
  * @ORM\Table(name="users")
  */
 class User
 {
     /**
      * @ORM\Id()
+     *
      * @ORM\GeneratedValue()
+     *
      * @ORM\Column(type="integer")
      */
-    private ?int $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string")
@@ -42,7 +45,7 @@ class User
         $this->password = $password;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -57,11 +60,9 @@ class User
         return $this->email;
     }
 
-    public function setEmail(string $email): self
+    public function changeEmail(string $email): void
     {
         $this->email = $email;
-
-        return $this;
     }
 
     public function getPassword(): string
@@ -69,10 +70,8 @@ class User
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function changePassword(string $password): void
     {
         $this->password = $password;
-
-        return $this;
     }
 }

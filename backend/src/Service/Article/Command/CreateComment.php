@@ -10,14 +10,19 @@ class CreateComment
 {
     /**
      * @Assert\Type("integer")
+     *
      * @Assert\NotBlank()
+     *
      * @Assert\Positive()
      */
-    public ?int $userId;
+    public ?int $userId = null;
+
     /**
-         * @Assert\Type("string")
-         * @Assert\NotBlank(normalizer="trim")
-         * @Assert\Length(min = 3, max = 255)
-         */
-    public ?string $content;
+     * @Assert\Type("string")
+     *
+     * @Assert\NotBlank(normalizer="trim")
+     *
+     * @Assert\Length(min = 3, max = 255)
+     */
+    public ?string $content = null;
 }

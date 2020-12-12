@@ -10,22 +10,28 @@ class CreateArticle
 {
     /**
      * @Assert\Type("string")
+     *
      * @Assert\NotBlank(normalizer="trim")
+     *
      * @Assert\Length(min = 3, max = 255)
      */
-    public ?string $name;
+    public ?string $name = null;
 
     /**
      * @Assert\Type("integer")
+     *
      * @Assert\NotBlank()
+     *
      * @Assert\Positive()
      */
-    public ?int $userId;
+    public ?int $userId = null;
 
     /**
      * @Assert\Type("string")
+     *
      * @Assert\NotBlank(normalizer="trim")
+     *
      * @Assert\Length(min = 3, max = 255)
      */
-    public ?string $content;
+    public ?string $content = null;
 }

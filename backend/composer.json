@@ -1,6 +1,16 @@
 {
     "type": "project",
-    "license": "proprietary",
+    "name": "researcher2286/blog",
+    "description": "Blog",
+    "authors": [
+        {
+            "name": "Alpenov Tanat",
+            "email": "researcher2286@gmail.com",
+            "homepage": "https://researcher86.github.io/",
+            "role": "Developer"
+        }
+    ],
+    "license": "MIT",
     "require": {
         "php": ">=7.4",
         "ext-ctype": "*",
@@ -43,6 +53,11 @@
         "ext-json": "*",
         "doctrine/doctrine-fixtures-bundle": "^3.3",
         "friendsofphp/php-cs-fixer": "^2.16",
+        "nunomaduro/phpinsights": "^1.14",
+        "phpmd/phpmd": "^2.9",
+        "phpstan/phpstan": "^0.12.59",
+        "psalm/plugin-phpunit": "^0.15.0",
+        "psalm/plugin-symfony": "^2.1",
         "squizlabs/php_codesniffer": "^3.5",
         "symfony/browser-kit": "^5.1",
         "symfony/css-selector": "^5.1",
@@ -52,7 +67,8 @@
         "symfony/phpunit-bridge": "^5.1",
         "symfony/stopwatch": "^5.1",
         "symfony/var-dumper": "^5.1",
-        "symfony/web-profiler-bundle": "^5.1"
+        "symfony/web-profiler-bundle": "^5.1",
+        "vimeo/psalm": "^4.3"
     },
     "config": {
         "optimize-autoloader": true,
@@ -83,7 +99,8 @@
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+            "assets:install %PUBLIC_DIR%": "symfony-cmd",
+            "security-checker security:check": "script"
         },
         "post-install-cmd": [
             "@auto-scripts"
@@ -94,7 +111,8 @@
 
         "clear": "bin/console cache:clear",
         "app-init": [
-            "@app-load-fixtures"
+            "@migrate",
+            "@load-fixtures"
         ],
         "make-list": "bin/console list make",
         "make-controller" : "bin/console make:constroller",
@@ -129,10 +147,17 @@
         "sql": "bin/console doctrine:query:sql 'SELECT * FROM user'",
 
         "code-check": [
-            "phpcs ./src ./tests --extensions=php --standard=./phpcs.xml --report=code --report-width=120"
+            "phpcs --report=code --report-width=120",
+            "phpstan analyse",
+            "phpmd src --exclude src/Kernel.php ansi phpmd.ruleset.xml",
+            "psalm",
+            "phpinsights -n"
         ],
+        "psalm-init": "psalm --init src/ 8",
+        "psalm-run": "psalm",
+
         "code-fix": [
-            "phpcbf ./src ./tests --extensions=php --standard=./phpcs.xml --report=code --report-width=120",
+            "phpcbf --report=code --report-width=120",
             "php-cs-fixer fix --allow-risky yes --config ./php-cs-fixer.php ./src ./tests"
         ],
         "test": [

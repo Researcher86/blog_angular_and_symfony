@@ -23,8 +23,7 @@ class ArticleRepositoryTest extends KernelTestCase
     public function testGetCommentById()
     {
         $article = $this->repository->find(1);
-        $comment = new Comment(1, 'Message');
-        $article->addComment($comment);
+        $article->addComment(1, 'Message');
         $this->repository->save($article);
 //
 //        $commentStore = $this->repository->getCommentById($article->getComments()[0]->getId());

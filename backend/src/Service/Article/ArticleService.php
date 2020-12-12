@@ -36,19 +36,23 @@ class ArticleService
 
     public function getById(int $id): Article
     {
-        /** @var Article $article */
         $article = $this->articleRepository->getById($id);
+        assert($article instanceof Article);
+
         return $article;
     }
 
-    public function delete(int $id): void
+    public function delete(int $id): Article
     {
-        $this->getById($id);
-        $this->articleRepository->delete($id);
+        $this->articleRepository->getById($id);
+        $article = $this->articleRepository->delete($id);
+        assert($article instanceof Article);
+
+        return $article;
     }
 
     /**
-     * @return Article[]
+     * @return array<Article>
      */
     public function getAll(): array
     {
@@ -57,14 +61,14 @@ class ArticleService
 
     public function create(CreateArticle $command): Article
     {
-        $this->userRepository->getById($command->userId);
+        $this->userRepository->getById((int) $command->userId);
 
         /** @var Article $article */
         $article = $this->articleRepository->save(
             new Article(
-                $command->userId,
-                $command->name,
-                $command->content
+                (int) $command->userId,
+                (string) $command->name,
+                (string) $command->content
             )
         );
 
@@ -75,12 +79,11 @@ class ArticleService
 
     public function createComment(int $articleId, CreateComment $command): Comment
     {
-        $this->userRepository->getById($command->userId);
+        $this->userRepository->getById((int) $command->userId);
         /** @var Article $article */
         $article = $this->articleRepository->getById($articleId);
 
-        $comment = new Comment($command->userId, $command->content);
-        $article->addComment($comment);
+        $comment = $article->addComment((int) $command->userId, (string) $command->content);
 
         $this->articleRepository->save($article);
 
@@ -91,8 +94,9 @@ class ArticleService
 
     public function getCommentById(int $commentId): Comment
     {
-        /** @var Comment $comment */
         $comment = $this->commentRepository->getById($commentId);
+        assert($comment instanceof Comment);
+
         return $comment;
     }
 }

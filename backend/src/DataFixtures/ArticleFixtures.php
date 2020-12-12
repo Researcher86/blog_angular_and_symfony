@@ -11,7 +11,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class ArticleFixtures extends Fixture implements DependentFixtureInterface
 {
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         for ($i = 1; $i <= 100; ++$i) {
             $manager->persist(
@@ -26,10 +26,13 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-    public function getDependencies()
+    /**
+     * {@inheritdoc}
+     */
+    public function getDependencies(): array
     {
         return [
-            UserFixtures::class
+            UserFixtures::class,
         ];
     }
 }

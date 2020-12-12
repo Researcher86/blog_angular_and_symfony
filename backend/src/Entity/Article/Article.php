@@ -13,16 +13,19 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=ArticleRepository::class)
+ *
  * @ORM\Table(name="articles")
  */
 class Article
 {
     /**
      * @ORM\Id()
+     *
      * @ORM\GeneratedValue()
+     *
      * @ORM\Column(type="integer")
      */
-    private ?int $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="integer")
@@ -41,18 +44,20 @@ class Article
 
     /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="article", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var ArrayCollection<int, Comment>
      */
     private Collection $comments;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $status;
+    private int $status;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $createdAt;
+    private DateTime $createdAt;
 
     public function __construct(int $userId, string $name, string $content)
     {
@@ -65,7 +70,7 @@ class Article
         $this->createdAt = new DateTime();
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -86,31 +91,34 @@ class Article
     }
 
     /**
-     * @return Collection|Comment[]
+     * @return ArrayCollection<int, Comment>
      */
     public function getComments(): Collection
     {
         return $this->comments;
     }
 
-    public function addComment(Comment $comment): self
+    public function addComment(int $userId, string $content): Comment
     {
-        if (!$this->comments->contains($comment)) {
+        $comment = new Comment($userId, $content, $this);
+
+        if (! $this->comments->contains($comment)) {
             $this->comments[] = $comment;
-            $comment->setArticle($this);
         }
 
-        return $this;
+        return $comment;
     }
 
     public function removeComment(Comment $comment): self
     {
-        if ($this->comments->removeElement($comment)) {
-            // set the owning side to null (unless already changed)
-            if ($comment->getArticle() === $this) {
-                $comment->setArticle(null);
-            }
-        }
+        $this->comments->removeElement($comment);
+
+//        if ($this->comments->removeElement($comment)) {
+//            // set the owning side to null (unless already changed)
+//            if ($comment->getArticle() === $this) {
+//                $comment->setArticle(null);
+//            }
+//        }
 
         return $this;
     }
@@ -130,12 +138,12 @@ class Article
         return Status::TEXT_STATUS[$this->status];
     }
 
-    public function setStatusDraft()
+    public function toStatusDraft(): void
     {
         $this->status = Status::DRAFT;
     }
 
-    public function setStatusPublished()
+    public function toStatusPublished(): void
     {
         $this->status = Status::PUBLISHED;
     }

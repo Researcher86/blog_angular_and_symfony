@@ -20,36 +20,45 @@ class UserService
         $this->passwordEncoder = $passwordEncoder;
     }
 
+    /**
+     * @psalm-suppress MoreSpecificReturnType
+     */
     public function getById(int $id): User
     {
-        /** @var User $user */
-        $user = $this->userRepository->getById($id);
-        return $user;
+        /** @psalm-suppress LessSpecificReturnStatement */
+        return $this->userRepository->getById($id); /** @phpstan-ignore-line */
     }
 
     /**
-     * @return User[]
+     * @return array<User>
      */
     public function getAll(): array
     {
         return $this->userRepository->findAll();
     }
 
+    /**
+     * @psalm-suppress MoreSpecificReturnType
+     */
     public function create(CreateUser $command): User
     {
-        /** @var User $user */
-        $user = $this->userRepository->save(new User(
-            $command->name,
-            $command->email,
-            $this->passwordEncoder->encodePassword($command->plainPassword, 'salt'),
-        ));
+        $user = new User(
+            (string) $command->name,
+            (string) $command->email,
+            $this->passwordEncoder->encodePassword((string) $command->plainPassword, 'salt'),
+        );
 
-        return $user;
+        /** @psalm-suppress LessSpecificReturnStatement */
+        return $this->userRepository->save($user); /** @phpstan-ignore-line */
     }
 
-    public function delete(int $id): void
+    /**
+     * @psalm-suppress MoreSpecificReturnType
+     */
+    public function delete(int $id): User
     {
         $this->getById($id);
-        $this->userRepository->delete($id);
+        /** @psalm-suppress LessSpecificReturnStatement */
+        return $this->userRepository->delete($id); /** @phpstan-ignore-line */
     }
 }

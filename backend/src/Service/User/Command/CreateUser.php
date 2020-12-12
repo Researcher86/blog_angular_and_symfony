@@ -10,22 +10,28 @@ class CreateUser
 {
     /**
      * @Assert\Type("string")
+     *
      * @Assert\NotBlank(normalizer="trim")
+     *
      * @Assert\Length(min = 3, max = 45)
      */
-    public ?string $name;
+    public ?string $name = null;
 
     /**
      * @Assert\Type("string")
+     *
      * @Assert\NotBlank(normalizer="trim")
+     *
      * @Assert\Email()
      */
-    public ?string $email;
+    public ?string $email = null;
 
     /**
      * @Assert\Type("string")
+     *
      * @Assert\NotBlank(normalizer="trim")
+     *
      * @Assert\Length(min = 8, max = 45)
      */
-    public ?string $plainPassword;
+    public ?string $plainPassword = null;
 }

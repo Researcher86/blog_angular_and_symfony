@@ -9,11 +9,11 @@ use DateTimeInterface;
 
 class ViewComment
 {
-    public int $id;
-    public int $userId;
-    public string $content;
-    public string $status;
-    public DateTimeInterface $createdAt;
+    public ?int $id = null;
+    public ?int $userId = null;
+    public ?string $content = null;
+    public ?string $status = null;
+    public ?DateTimeInterface $createdAt = null;
 
     public static function createFrom(Comment $comment): self
     {

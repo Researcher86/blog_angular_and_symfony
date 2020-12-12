@@ -11,5 +11,5 @@ use Symfony\Component\Validator\Constraint;
  */
 class ExistsUser extends Constraint
 {
-    public $message = 'User [{{ id }}] not found.';
+    public string $message = 'User [{{ id }}] not found.';
 }

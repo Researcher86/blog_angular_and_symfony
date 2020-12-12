@@ -22,7 +22,7 @@ final class TelegramMessageHandler implements MessageHandlerInterface
         $this->notifier = $notifier;
     }
 
-    public function __invoke(SendTelegramMessage $message)
+    public function __invoke(SendTelegramMessage $message): void
     {
         $this->logger->debug('TelegramMessageHandler...');
         $notification = new Notification($message->getText(), ['chat/telegram']);

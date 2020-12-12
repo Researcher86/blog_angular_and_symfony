@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Controller\User;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserControllerTest extends WebTestCase
 {
@@ -44,6 +45,20 @@ class UserControllerTest extends WebTestCase
         return \json_decode($client->getResponse()->getContent());
     }
 
+    public function testCreateUserFail()
+    {
+        $client = static::createClient();
+
+        $client->request('POST', '/api/users', [], [], [], \json_encode([
+            'name'          => 'T',
+            'email'         => 'Test',
+            'plainPassword' => 'Tes',
+        ]));
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+        $this->assertNotEmpty($client->getResponse()->getContent());
+    }
+
     /**
      * @depends testCreateUserSuccess
      */
@@ -54,7 +69,7 @@ class UserControllerTest extends WebTestCase
         $args = \func_get_args();
         $client->request('DELETE', '/api/users/' . $args[0]->id);
 
-        $this->assertResponseStatusCodeSame(204);
+        $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
         $this->assertEmpty($client->getResponse()->getContent());
     }
 }

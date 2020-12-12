@@ -26,12 +26,13 @@ final class IndexingArticleMessageHandler implements MessageHandlerInterface
         $this->indexService = $indexService;
     }
 
-    public function __invoke(IndexingArticleMessage $message)
+    public function __invoke(IndexingArticleMessage $message): void
     {
         $this->logger->debug('IndexerMessageHandler', ['id' => $message->getArticleId()]);
 
         for ($i = 0; $i < 10; ++$i) {
-            $this->centrifugoService->publish('news', ['message' => $i]);
+            $this->centrifugoService->publish('news', ['message' => (string) $i]);
+            $this->indexService->ping();
         }
     }
 }

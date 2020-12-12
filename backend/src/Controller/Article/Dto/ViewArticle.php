@@ -9,12 +9,12 @@ use DateTimeInterface;
 
 class ViewArticle
 {
-    public int $id;
-    public int $userId;
-    public string $name;
-    public string $content;
-    public string $status;
-    public DateTimeInterface $createdAt;
+    public ?int $id = null;
+    public ?int $userId = null;
+    public ?string $name = null;
+    public ?string $content = null;
+    public ?string $status = null;
+    public ?DateTimeInterface $createdAt = null;
 
     public static function createFrom(Article $article): self
     {
