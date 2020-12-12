@@ -19,10 +19,12 @@ install:
 
 script:
   - make app-test
+  - make app-test-coverage
 #  - cd backend/
 #  - composer code-check
 #  - composer test
 #  - vendor/bin/phpunit --coverage-clover=coverage.xml
 
 after_success:
+  - cd backend/
   - bash <(curl -s https://codecov.io/bash)

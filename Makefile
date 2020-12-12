@@ -67,5 +67,10 @@ app-test-debug:
 		composer test"
 #	docker-compose run --rm frontend bash -c "ng test"
 
+app-test-coverage:
+	docker-compose run --rm php_cli bash -c "\
+        export XDEBUG_MODE=coverage && \
+        export | grep -E 'XDEBUG|PHP_IDE' && \
+		composer coverage"
 
 .PHONY: up-log

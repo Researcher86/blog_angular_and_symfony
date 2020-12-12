@@ -164,6 +164,9 @@
             "@validate",
             "bin/phpunit --colors=always --testdox"
         ],
+        "coverage": [
+            "bin/phpunit --coverage-clover=coverage.xml"
+        ],
         "test-one": [
             "@validate",
             "bin/phpunit --colors=always --testdox --filter IndexServiceTest"
