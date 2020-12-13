@@ -110,4 +110,9 @@ class Comment
     {
         return $this->article;
     }
+
+    public function unsetArticle(): void
+    {
+        $this->article = null;
+    }
 }

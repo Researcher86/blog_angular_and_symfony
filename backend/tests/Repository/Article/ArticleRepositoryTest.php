@@ -26,7 +26,7 @@ class ArticleRepositoryTest extends KernelTestCase
 
     public function testGetCommentById()
     {
-        $article = $this->articleRepository->getById(1);
+        $article = $this->articleRepository->getById(3);
         $article->addComment(1, 'Message');
         $this->articleRepository->save($article);
 
@@ -43,5 +43,12 @@ class ArticleRepositoryTest extends KernelTestCase
         self::assertEquals($comment->getArticle()->getId(), $commentStore->getArticle()->getId());
         self::assertEquals($comment->getUserId(), $commentStore->getUserId());
         self::assertEquals($comment->getContent(), $commentStore->getContent());
+
+        $articleStore->removeComment($comment);
+        $this->articleRepository->save($articleStore);
+
+        /** @var Article $articleStore */
+        $articleStore = $this->articleRepository->getById($article->getId());
+        self::assertCount(0, $articleStore->getComments());
     }
 }
