@@ -42,7 +42,7 @@ return [
     'requirements' => [
         'min-quality' => 100,
         // https://github.com/nunomaduro/phpinsights/issues/367
-        'min-complexity' => 93,
+        'min-complexity' => 80,
         'min-architecture' => 100,
         'min-style' => 100,
     ],
