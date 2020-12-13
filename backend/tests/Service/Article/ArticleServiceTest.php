@@ -46,7 +46,6 @@ class ArticleServiceTest extends TestCase
 
     public function testCreateArticleSuccess()
     {
-        $this->markTestSkipped();
         $this->articleRepositoryMock->method('save')->willReturn(new Article(1, 'Article', 'Text'));
 //        $this->eventDispatcherMock->method('dispatch')->
 
