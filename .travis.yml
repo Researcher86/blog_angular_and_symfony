@@ -25,7 +25,12 @@ services:
 #  directories:
 #    - $HOME/.composer/cache/files
 
-cache: false
+cache:
+  directories:
+    - backend/vendor
+    - frontend/node_modules
+
+#cache: false
 
 install:
 #  - make build
