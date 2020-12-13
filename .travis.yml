@@ -1,5 +1,8 @@
 language: php
 
+php:
+  - "7.4"
+
 services:
   - docker
 
@@ -21,9 +24,6 @@ cache:
 #cache:
 #  directories:
 #    - $HOME/.composer/cache/files
-
-#php:
-#  - "7.4"
 
 install:
   - make build
