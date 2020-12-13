@@ -6,13 +6,13 @@ test-build:
 build:
 	docker-compose build
 
-up-new: app-install app-init
-
 up:
 	docker-compose up -d
 
 up-log:
 	docker-compose up
+
+up-new: app-install app-init
 
 down:
 	docker-compose down -v
@@ -35,13 +35,13 @@ app-code-fix:
 app-code-check:
 	docker-compose run --rm php_cli bash -c "composer code-check"
 
+app-install:
+	docker-compose run --rm php_cli bash -c "composer install"
+
 app-init:
 	docker-compose run --rm php_cli bash -c "wait-for-it db:5432 -s -t 60 && composer app-init"
 
 app-cache-update: app-install
-
-app-install:
-	docker-compose run --rm php_cli bash -c "composer install"
 
 app-backend:
 	docker-compose exec backend bash
