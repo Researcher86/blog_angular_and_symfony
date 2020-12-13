@@ -36,7 +36,7 @@ app-code-check:
 	docker-compose run --rm php_cli bash -c "composer code-check"
 
 app-init:
-	docker-compose run --rm php_cli bash -c "composer app-init"
+	docker-compose run --rm php_cli bash -c "wait-for-it db:5432 -s -t 60 && composer app-init"
 
 app-cache-update: app-install
 
@@ -56,11 +56,20 @@ app-restart-worker:
 	docker-compose restart worker_indexer
 	docker-compose restart worker_email
 
-app-test:
+wait:
+	docker-compose run --rm php_cli bash -c "\
+		wait-for-it db:5432 -s -t 60 && \
+		wait-for-it redis:6379 -s -t 60 && \
+		wait-for-it rabbit_mq:5672 -s -t 60 && \
+		wait-for-it es:9200 -s -t 60 && \
+		wait-for-it mailer:8025 -s -t 60 && \
+		wait-for-it centrifugo:8000 -s -t 60"
+
+app-test: wait
 	docker-compose run --rm php_cli bash -c "composer test"
 #	docker-compose run --rm frontend bash -c "ng test"
 
-app-test-debug:
+app-test-debug: wait
 	docker-compose run --rm php_cli bash -c "\
 	  	export XDEBUG_CONFIG=client_host=${WIN_HOST} && \
         export XDEBUG_MODE=debug && \
@@ -70,7 +79,7 @@ app-test-debug:
 		composer test"
 #	docker-compose run --rm frontend bash -c "ng test"
 
-app-test-coverage:
+app-test-coverage: wait
 	docker-compose run --rm php_cli bash -c "\
         export XDEBUG_MODE=coverage && \
         export | grep -E 'XDEBUG|PHP_IDE' && \
