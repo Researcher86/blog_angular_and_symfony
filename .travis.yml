@@ -26,13 +26,14 @@ cache:
 #    - $HOME/.composer/cache/files
 
 install:
-  - make build
+#  - make build
   - make app-install
   - make app-init
 #  - cd backend/
 #  - composer install
 
 script:
+  - make app-code-check
   - make app-test
   - make app-test-coverage
 #  - cd backend/

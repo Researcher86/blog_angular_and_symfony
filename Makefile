@@ -1,9 +1,9 @@
 export WIN_HOST = $(shell cat /etc/resolv.conf | grep nameserver | awk '{print $$2; exit;}')
 
-build:
+test-build:
 	docker-compose build --parallel --build-arg BUILDKIT_INLINE_CACHE=1
 
-local-build:
+build:
 	docker-compose build
 
 up-new: app-install app-init
