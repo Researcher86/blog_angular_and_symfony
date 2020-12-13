@@ -32,11 +32,16 @@ class ArticleRepositoryTest extends KernelTestCase
 
         /** @var Article $articleStore */
         $articleStore = $this->articleRepository->getById($article->getId());
-        $commentStore = $this->commentRepository->getById($articleStore->getComments()[0]->getId());
+        self::assertCount(1, $articleStore->getComments());
 
-        self::assertEquals($articleStore->getComments()[0]->getId(), $commentStore->getId());
-        self::assertEquals($articleStore->getComments()[0]->getArticle()->getId(), $commentStore->getArticle()->getId());
-        self::assertEquals($articleStore->getComments()[0]->getUserId(), $commentStore->getUserId());
-        self::assertEquals($articleStore->getComments()[0]->getContent(), $commentStore->getContent());
+        /** @var Comment $comment */
+        $comment = $articleStore->getComments()[0];
+
+        $commentStore = $this->commentRepository->getById($comment->getId());
+
+        self::assertEquals($comment->getId(), $commentStore->getId());
+        self::assertEquals($comment->getArticle()->getId(), $commentStore->getArticle()->getId());
+        self::assertEquals($comment->getUserId(), $commentStore->getUserId());
+        self::assertEquals($comment->getContent(), $commentStore->getContent());
     }
 }
