@@ -38,7 +38,7 @@ app-init:
 app-cache-update: app-install
 
 app-install:
-	docker-compose run --rm backend bash -c "composer install"
+	docker-compose run --rm php_cli bash -c "composer install"
 
 app-backend:
 	docker-compose exec backend bash
