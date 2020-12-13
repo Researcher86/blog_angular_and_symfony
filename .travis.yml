@@ -25,10 +25,10 @@ services:
 #  directories:
 #    - $HOME/.composer/cache/files
 
-cache:
-  directories:
-    - backend/vendor
-    - frontend/node_modules
+#cache:
+#  directories:
+#    - backend/vendor
+#    - frontend/node_modules
 
 #cache: false
 
