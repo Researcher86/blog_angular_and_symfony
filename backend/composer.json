@@ -109,42 +109,42 @@
             "@auto-scripts"
         ],
 
-        "clear": "bin/console cache:clear",
+        "clear": "php bin/console cache:clear",
         "app-init": [
             "@migrate",
             "@load-fixtures"
         ],
-        "make-list": "bin/console list make",
-        "make-controller" : "bin/console make:constroller",
-        "make-entity" : "bin/console make:entity",
-        "make-migration" : "bin/console make:migration",
+        "make-list": "php bin/console list make",
+        "make-controller" : "php bin/console make:constroller",
+        "make-entity" : "php bin/console make:entity",
+        "make-migration" : "php bin/console make:migration",
 
-        "diff-migration" : "bin/console doctrine:migrations:diff -n",
-        "message-failed" : "bin/console messenger:failed:show -vv",
-        "message-failed-retry" : "bin/console messenger:failed:retry -vv",
+        "diff-migration" : "php bin/console doctrine:migrations:diff -n",
+        "message-failed" : "php bin/console messenger:failed:show -vv",
+        "message-failed-retry" : "php bin/console messenger:failed:retry -vv",
 
-        "migrate" : "bin/console doctrine:migrations:migrate -n",
-        "make-fixtures" : "bin/console make:fixtures",
-        "load-fixtures" : "bin/console doctrine:fixtures:load --purge-with-truncate -n",
-        "app-load-fixtures" : "bin/console app:fixturesReload",
-        "api-doc" : "bin/console debug:router",
+        "migrate" : "php bin/console doctrine:migrations:migrate -n",
+        "make-fixtures" : "php bin/console make:fixtures",
+        "load-fixtures" : "php bin/console doctrine:fixtures:load --purge-with-truncate -n",
+        "app-load-fixtures" : "php bin/console app:fixturesReload",
+        "api-doc" : "php bin/console debug:router",
         "debug" : [
-            "bin/console debug:autowiring > /dev/null",
-            "bin/console debug:config > /dev/null",
-            "bin/console debug:container > /dev/null",
-            "bin/console debug:event-dispatcher > /dev/null",
-            "bin/console debug:router > /dev/null",
-            "bin/console debug:twig > /dev/null"
+            "php bin/console debug:autowiring > /dev/null",
+            "php bin/console debug:config > /dev/null",
+            "php bin/console debug:container > /dev/null",
+            "php bin/console debug:event-dispatcher > /dev/null",
+            "php bin/console debug:router > /dev/null",
+            "php bin/console debug:twig > /dev/null"
         ],
 
-        "app-events" : "bin/console debug:event-dispatcher",
-        "app-messages" : "bin/console debug:messenger",
+        "app-events" : "php bin/console debug:event-dispatcher",
+        "app-messages" : "php bin/console debug:messenger",
 
         "validate": [
-            "bin/console doctrine:schema:validate --skip-sync -v"
+            "php bin/console doctrine:schema:validate --skip-sync -v"
         ],
 
-        "sql": "bin/console doctrine:query:sql 'SELECT * FROM user'",
+        "sql": "php bin/console doctrine:query:sql 'SELECT * FROM user'",
 
         "code-check": [
             "phpcs --report=code --report-width=120",
@@ -162,18 +162,18 @@
         ],
         "test": [
             "@validate",
-            "bin/phpunit --colors=always --testdox"
+            "php bin/phpunit --colors=always --testdox"
         ],
         "coverage": [
-            "bin/phpunit --coverage-clover=coverage.xml"
+            "php bin/phpunit --coverage-clover=coverage.xml"
         ],
         "test-one": [
             "@validate",
-            "bin/phpunit --colors=always --testdox --filter IndexServiceTest"
+            "php bin/phpunit --colors=always --testdox --filter IndexServiceTest"
         ],
         "test-all": [
             "@validate",
-            "bin/phpunit --testsuite unit,integration,functional --colors=always --testdox"
+            "php bin/phpunit --testsuite unit,integration,functional --colors=always --testdox"
         ]
     },
     "conflict": {
