@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0c0b2bca40c3e439457951a08929ab22",
+    "content-hash": "c973b6ede0d48dd7d2e5fcc69f0e8900",
     "packages": [
         {
             "name": "centrifugal/phpcent",
@@ -1938,25 +1938,25 @@
         },
         {
             "name": "nelmio/api-doc-bundle",
-            "version": "v4.0.1",
+            "version": "v4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-                "reference": "2f8416618da57c276e5f6ad800bff48eecdcbdb5"
+                "reference": "a9e8db4af0522588c40b0f52992995efc7beaa62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/2f8416618da57c276e5f6ad800bff48eecdcbdb5",
-                "reference": "2f8416618da57c276e5f6ad800bff48eecdcbdb5",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/a9e8db4af0522588c40b0f52992995efc7beaa62",
+                "reference": "a9e8db4af0522588c40b0f52992995efc7beaa62",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "php": "^7.1",
-                "phpdocumentor/reflection-docblock": "^3.1|^4.0|^5.0",
-                "symfony/framework-bundle": "^4.0|^5.0",
-                "symfony/options-resolver": "^4.0|^5.0",
-                "symfony/property-info": "^4.0|^5.0",
+                "php": ">=7.1.3",
+                "phpdocumentor/reflection-docblock": "^3.1|^4.4|^5.0",
+                "symfony/framework-bundle": "^4.4|^5.0",
+                "symfony/options-resolver": "^4.4|^5.0",
+                "symfony/property-info": "^4.4|^5.0",
                 "zircote/swagger-php": "^3.0"
             },
             "conflict": {
@@ -1964,26 +1964,26 @@
             },
             "require-dev": {
                 "api-platform/core": "^2.4",
-                "doctrine/annotations": "^1.2",
+                "doctrine/annotations": "^1.11",
                 "doctrine/common": "^2.4",
-                "friendsofsymfony/rest-bundle": "^2.0|^3.0@beta",
+                "friendsofsymfony/rest-bundle": "^2.8|^3.0@dev",
                 "jms/serializer": "^1.14|^3.0",
                 "jms/serializer-bundle": "^2.3|^3.0",
-                "sensio/framework-extra-bundle": "^4.0|^5.0",
-                "symfony/asset": "^4.0|^5.0",
-                "symfony/browser-kit": "^4.0|^5.0",
-                "symfony/cache": "^4.0|^5.0",
-                "symfony/config": "^4.0|^5.0",
-                "symfony/console": "^4.0|^5.0",
-                "symfony/dom-crawler": "^4.0|^5.0",
-                "symfony/form": "^4.0|^5.0",
-                "symfony/phpunit-bridge": "^4.0|^5.0",
-                "symfony/property-access": "^4.0|^5.0",
-                "symfony/routing": "^4.0|^5.0",
-                "symfony/stopwatch": "^4.0|^5.0",
-                "symfony/templating": "^4.0|^5.0",
-                "symfony/twig-bundle": "^4.0|^5.0",
-                "symfony/validator": "^4.0|^5.0",
+                "sensio/framework-extra-bundle": "^4.4|^5.0",
+                "symfony/asset": "^4.4|^5.0",
+                "symfony/browser-kit": "^4.4|^5.0",
+                "symfony/cache": "^4.4|^5.0",
+                "symfony/config": "^4.4|^5.0",
+                "symfony/console": "^4.4|^5.0",
+                "symfony/dom-crawler": "^4.4|^5.0",
+                "symfony/form": "^4.4|^5.0",
+                "symfony/phpunit-bridge": "^5.2",
+                "symfony/property-access": "^4.4|^5.0",
+                "symfony/routing": "^4.4|^5.0",
+                "symfony/stopwatch": "^4.4|^5.0",
+                "symfony/templating": "^4.4|^5.0",
+                "symfony/twig-bundle": "^4.4|^5.0",
+                "symfony/validator": "^4.4|^5.0",
                 "willdurand/hateoas-bundle": "^1.0|^2.0"
             },
             "suggest": {
@@ -2027,9 +2027,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nelmio/NelmioApiDocBundle/issues",
-                "source": "https://github.com/nelmio/NelmioApiDocBundle/tree/v4.0.1"
+                "source": "https://github.com/nelmio/NelmioApiDocBundle/tree/v4.1.0"
             },
-            "time": "2020-09-29T10:31:37+00:00"
+            "time": "2020-12-10T22:00:21+00:00"
         },
         {
             "name": "ocramius/proxy-manager",
@@ -2278,6 +2278,85 @@
                 "source": "https://github.com/phpDocumentor/TypeResolver/tree/1.4.0"
             },
             "time": "2020-09-17T18:55:26+00:00"
+        },
+        {
+            "name": "predis/predis",
+            "version": "v1.1.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/predis/predis.git",
+                "reference": "9930e933c67446962997b05201c69c2319bf26de"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/predis/predis/zipball/9930e933c67446962997b05201c69c2319bf26de",
+                "reference": "9930e933c67446962997b05201c69c2319bf26de",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "require-dev": {
+                "cweagans/composer-patches": "^1.6",
+                "phpunit/phpunit": "~4.8"
+            },
+            "suggest": {
+                "ext-curl": "Allows access to Webdis when paired with phpiredis",
+                "ext-phpiredis": "Allows faster serialization and deserialization of the Redis protocol"
+            },
+            "type": "library",
+            "extra": {
+                "composer-exit-on-patch-failure": true,
+                "patches": {
+                    "phpunit/phpunit-mock-objects": {
+                        "Fix PHP 7 and 8 compatibility": "./tests/phpunit_mock_objects.patch"
+                    },
+                    "phpunit/phpunit": {
+                        "Fix PHP 7 compatibility": "./tests/phpunit_php7.patch",
+                        "Fix PHP 8 compatibility": "./tests/phpunit_php8.patch"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Predis\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniele Alessandri",
+                    "email": "suppakilla@gmail.com",
+                    "homepage": "http://clorophilla.net",
+                    "role": "Creator & Maintainer"
+                },
+                {
+                    "name": "Till Krüss",
+                    "homepage": "https://till.im",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "Flexible and feature-complete Redis client for PHP and HHVM",
+            "homepage": "http://github.com/predis/predis",
+            "keywords": [
+                "nosql",
+                "predis",
+                "redis"
+            ],
+            "support": {
+                "issues": "https://github.com/predis/predis/issues",
+                "source": "https://github.com/predis/predis/tree/v1.1.6"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/tillkruss",
+                    "type": "github"
+                }
+            ],
+            "time": "2020-09-11T19:18:05+00:00"
         },
         {
             "name": "psr/cache",
@@ -9392,7 +9471,7 @@
                 "issues": "https://github.com/object-calisthenics/phpcs-calisthenics-rules/issues",
                 "source": "https://github.com/object-calisthenics/phpcs-calisthenics-rules/tree/master"
             },
-            "abandoned": "symplify/coding-standard",
+            "abandoned": "symplify/phpstan-rules",
             "time": "2020-09-08T10:18:44+00:00"
         },
         {
@@ -9753,16 +9832,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.59",
+            "version": "0.12.62",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "cf4107257c8ca2ad967efdd6a00f12b21acbb779"
+                "reference": "632393159335bbbdd7ca07d19b3ad50d76aa7fd8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/cf4107257c8ca2ad967efdd6a00f12b21acbb779",
-                "reference": "cf4107257c8ca2ad967efdd6a00f12b21acbb779",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/632393159335bbbdd7ca07d19b3ad50d76aa7fd8",
+                "reference": "632393159335bbbdd7ca07d19b3ad50d76aa7fd8",
                 "shasum": ""
             },
             "require": {
@@ -9793,7 +9872,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/0.12.59"
+                "source": "https://github.com/phpstan/phpstan/tree/0.12.62"
             },
             "funding": [
                 {
@@ -9809,7 +9888,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-12-07T14:46:03+00:00"
+            "time": "2020-12-13T13:59:38+00:00"
         },
         {
             "name": "psalm/plugin-phpunit",

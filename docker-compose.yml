@@ -147,6 +147,12 @@ services:
     image: redis:6.0
     ports:
       - "6379:6379"
+  redisinsight:
+    image: redislabs/redisinsight:latest
+    ports:
+      - "8001:8001"
+    depends_on:
+      - redis
   es:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
     ports:
@@ -154,7 +160,7 @@ services:
       - "9300:9300"
     environment:
       - "discovery.type=single-node"
-      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+      - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
     volumes:
       - es_data:/usr/share/elasticsearch/data
   rabbit_mq:

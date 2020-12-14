@@ -46,8 +46,17 @@ app-cache-update: app-install
 app-backend:
 	docker-compose exec backend bash
 
-app-php-cli:
+app-php-cli: wait
 	docker-compose run --rm php_cli bash
+
+app-php-cli-debug: wait
+	docker-compose run --rm php_cli bash -c "\
+	  	export XDEBUG_CONFIG=client_host=${WIN_HOST} && \
+        export XDEBUG_MODE=debug && \
+        export XDEBUG_SESSION=PHPSTORM && \
+        export PHP_IDE_CONFIG=serverName=php-cli && \
+        export | grep -E 'XDEBUG|PHP_IDE' && \
+        bash"
 
 app-frontend:
 	docker-compose exec frontend bash

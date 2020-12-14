@@ -23,3 +23,6 @@ http://localhost:15672/#/queues
 ##### Mailer
 http://localhost:8082/
 
+##### RedisInsight
+http://localhost:8001/
+

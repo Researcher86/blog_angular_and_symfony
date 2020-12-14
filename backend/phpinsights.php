@@ -6,6 +6,7 @@ use NunoMaduro\PhpInsights\Domain\Insights\CyclomaticComplexityIsHigh;
 use NunoMaduro\PhpInsights\Domain\Insights\ForbiddenNormalClasses;
 use ObjectCalisthenics\Sniffs\Files\ClassTraitAndInterfaceLengthSniff;
 use ObjectCalisthenics\Sniffs\Metrics\MethodPerClassLimitSniff;
+use ObjectCalisthenics\Sniffs\NamingConventions\ElementNameMinimalLengthSniff;
 use PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff;
 use SlevomatCodingStandard\Sniffs\Classes\SuperfluousExceptionNamingSniff;
 
@@ -37,6 +38,10 @@ return [
         ],
         ClassTraitAndInterfaceLengthSniff::class => [
             'maxLength' => 400,
+        ],
+        ElementNameMinimalLengthSniff::class => [
+            'minLength' => 3,
+            'allowedShortNames' => ['i', 'id', 'to', 'up', 'io'],
         ],
     ],
     'requirements' => [

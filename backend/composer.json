@@ -24,6 +24,7 @@
         "elasticsearch/elasticsearch": "^7.10",
         "nelmio/api-doc-bundle": "^4.0",
         "phpdocumentor/reflection-docblock": "^5.2",
+        "predis/predis": "^1.1",
         "sensio/framework-extra-bundle": "^5.6",
         "symfony/amqp-messenger": "5.1.*",
         "symfony/asset": "5.1.*",
@@ -127,7 +128,7 @@
         "make-fixtures" : "php bin/console make:fixtures",
         "load-fixtures" : "php bin/console doctrine:fixtures:load --purge-with-truncate -n",
         "app-load-fixtures" : "php bin/console app:fixturesReload",
-        "api-doc" : "php bin/console debug:router",
+        "api-route" : "php bin/console debug:router",
         "debug" : [
             "php bin/console debug:autowiring > /dev/null",
             "php bin/console debug:config > /dev/null",
