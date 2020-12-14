@@ -149,7 +149,7 @@
 
         "code-check": [
             "phpcs --report=code --report-width=120",
-            "phpstan analyse",
+            "php -d memory_limit=256M vendor/bin/phpstan analyse",
             "phpmd src --exclude src/Kernel.php ansi phpmd.ruleset.xml",
             "psalm",
             "phpinsights -n"
