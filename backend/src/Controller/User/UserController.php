@@ -15,23 +15,17 @@ use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @SuppressWarnings(PHPMD.StaticAccess)
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UserController extends BaseController
 {
     private UserService $userService;
 
-    public function __construct(
-        ValidatorInterface $validator,
-        SerializerInterface $serializer,
-        UserService $userService
-    ) {
-        parent::__construct($validator, $serializer);
+    public function __construct(UserService $userService)
+    {
+        parent::__construct();
         $this->userService = $userService;
     }
 
@@ -61,9 +55,9 @@ class UserController extends BaseController
     public function show(int $id): Response
     {
         return $this->makeResponse(
-            fn () => $this->userService->getById($id),
-            static fn (User $user) => [ViewUser::createFrom($user)],
-            static fn () => [[], Response::HTTP_NOT_FOUND]
+            fn (): object => $this->userService->getById($id),
+            static fn (User $user): array => [ViewUser::createFrom($user)],
+            static fn (): array => [[], Response::HTTP_NOT_FOUND]
         );
     }
 
@@ -87,9 +81,9 @@ class UserController extends BaseController
     public function delete(int $id): Response
     {
         return $this->makeResponse(
-            fn () => $this->userService->delete($id),
-            static fn () => [[], Response::HTTP_NO_CONTENT],
-            static fn () => [[], Response::HTTP_NOT_FOUND]
+            fn (): object => $this->userService->delete($id),
+            static fn (): array => [[], Response::HTTP_NO_CONTENT],
+            static fn (): array => [[], Response::HTTP_NOT_FOUND]
         );
     }
 
@@ -116,7 +110,7 @@ class UserController extends BaseController
     public function list(): Response
     {
         $users = $this->userService->getAll();
-        $users = \array_map(static fn ($user) => ViewUser::createFrom($user), $users);
+        $users = \array_map(static fn ($user): ViewUser => ViewUser::createFrom($user), $users);
 
         return $this->json($users);
     }
@@ -164,9 +158,9 @@ class UserController extends BaseController
         $command = $this->deserialize($request, CreateUser::class);
 
         return $this->isValid($command) ?? $this->makeResponse(
-            fn () => $this->userService->create($command),
-            static fn (User $user) => [ViewUser::createFrom($user), Response::HTTP_CREATED],
-            static fn (Exception $exception) => [$exception->getMessage(), Response::HTTP_BAD_REQUEST]
+            fn (): object => $this->userService->create($command),
+            static fn (User $user): array => [ViewUser::createFrom($user), Response::HTTP_CREATED],
+            static fn (Exception $exception): array => [$exception->getMessage(), Response::HTTP_BAD_REQUEST]
         );
     }
 }

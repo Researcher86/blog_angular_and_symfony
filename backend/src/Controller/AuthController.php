@@ -8,8 +8,6 @@ use App\Service\CentrifugoService;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @Route("/auth")
@@ -20,12 +18,10 @@ class AuthController extends BaseController
 {
     private CentrifugoService $centrifugoService;
 
-    public function __construct(
-        ValidatorInterface $validator,
-        SerializerInterface $serializer,
-        CentrifugoService $centrifugoService
-    ) {
-        parent::__construct($validator, $serializer);
+    public function __construct(CentrifugoService $centrifugoService)
+    {
+        parent::__construct();
+
         $this->centrifugoService = $centrifugoService;
     }
 

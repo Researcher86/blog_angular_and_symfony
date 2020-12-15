@@ -18,8 +18,6 @@ use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @SuppressWarnings(PHPMD.StaticAccess)
@@ -28,12 +26,10 @@ class ArticleController extends BaseController
 {
     private ArticleService $articleService;
 
-    public function __construct(
-        ValidatorInterface $validator,
-        SerializerInterface $serializer,
-        ArticleService $articleService
-    ) {
-        parent::__construct($validator, $serializer);
+    public function __construct(ArticleService $articleService)
+    {
+        parent::__construct();
+
         $this->articleService = $articleService;
     }
 
@@ -66,9 +62,9 @@ class ArticleController extends BaseController
 //        $centrifugoService->publish('news');
 
         return $this->makeResponse(
-            fn () => $this->articleService->getById($id),
-            static fn (Article $article) => [ViewArticle::createFrom($article)],
-            static fn () => [[], Response::HTTP_NOT_FOUND]
+            fn (): object => $this->articleService->getById($id),
+            static fn (Article $article): array => [ViewArticle::createFrom($article)],
+            static fn (): array => [[], Response::HTTP_NOT_FOUND]
         );
     }
 
@@ -92,9 +88,9 @@ class ArticleController extends BaseController
     public function delete(int $id): Response
     {
         return $this->makeResponse(
-            fn () => $this->articleService->delete($id),
-            static fn () => [[], Response::HTTP_NO_CONTENT],
-            static fn () => [[], Response::HTTP_NOT_FOUND]
+            fn (): object => $this->articleService->delete($id),
+            static fn (): array => [[], Response::HTTP_NO_CONTENT],
+            static fn (): array => [[], Response::HTTP_NOT_FOUND]
         );
     }
 
@@ -123,7 +119,7 @@ class ArticleController extends BaseController
     {
         $articles = $this->articleService->getAll();
         return $this
-            ->json(\array_map(static fn ($article) => ViewArticle::createFrom($article), $articles))
+            ->json(\array_map(static fn ($article): ViewArticle => ViewArticle::createFrom($article), $articles))
             ->setSharedMaxAge(3600);
     }
 
@@ -173,9 +169,9 @@ class ArticleController extends BaseController
         $command = $this->deserialize($request, CreateArticle::class);
 
         return $this->isValid($command) ?? $this->makeResponse(
-            fn () => $this->articleService->create($command),
-            static fn (Article $article) => [ViewArticle::createFrom($article), Response::HTTP_CREATED],
-            static fn (Exception $exception) => [$exception->getMessage(), Response::HTTP_BAD_REQUEST]
+            fn (): object => $this->articleService->create($command),
+            static fn (Article $article): array => [ViewArticle::createFrom($article), Response::HTTP_CREATED],
+            static fn (Exception $exception): array => [$exception->getMessage(), Response::HTTP_BAD_REQUEST]
         );
     }
     /**
@@ -221,9 +217,9 @@ class ArticleController extends BaseController
         $command = $this->deserialize($request, CreateComment::class);
 
         return $this->isValid($command) ?? $this->makeResponse(
-            fn () => $this->articleService->createComment($articleId, $command),
-            static fn (Comment $comment) => [ViewComment::createFrom($comment), Response::HTTP_CREATED],
-            static fn (Exception $exception) => [$exception->getMessage(), Response::HTTP_BAD_REQUEST]
+            fn (): object => $this->articleService->createComment($articleId, $command),
+            static fn (Comment $comment): array => [ViewComment::createFrom($comment), Response::HTTP_CREATED],
+            static fn (Exception $exception): array => [$exception->getMessage(), Response::HTTP_BAD_REQUEST]
         );
     }
 }

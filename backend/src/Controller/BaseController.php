@@ -19,10 +19,10 @@ abstract class BaseController extends AbstractController
     protected ValidatorInterface $validator;
     protected SerializerInterface $serializer;
 
-    public function __construct(ValidatorInterface $validator, SerializerInterface $serializer)
+    public function __construct()
     {
-        $this->validator = $validator;
-        $this->serializer = $serializer;
+        $this->validator = $this->container->get(ValidatorInterface::class);
+        $this->serializer = $this->container->get(SerializerInterface::class);
     }
 
     /**
@@ -68,7 +68,6 @@ abstract class BaseController extends AbstractController
     protected function makeResponse(callable $fun, callable $success, callable $fail): Response
     {
         try {
-            /** @var object $result */
             $result = $fun();
             /** @psalm-suppress MixedArgument */
             return $this->json(...$success($result));
