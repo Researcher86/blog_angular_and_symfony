@@ -5,6 +5,7 @@ declare(strict_types=1);
 use NunoMaduro\PhpInsights\Domain\Insights\CyclomaticComplexityIsHigh;
 use NunoMaduro\PhpInsights\Domain\Insights\ForbiddenNormalClasses;
 use ObjectCalisthenics\Sniffs\Files\ClassTraitAndInterfaceLengthSniff;
+use ObjectCalisthenics\Sniffs\Files\FunctionLengthSniff;
 use ObjectCalisthenics\Sniffs\Metrics\MethodPerClassLimitSniff;
 use ObjectCalisthenics\Sniffs\NamingConventions\ElementNameMinimalLengthSniff;
 use PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff;
@@ -43,6 +44,9 @@ return [
         ElementNameMinimalLengthSniff::class => [
             'minLength' => 3,
             'allowedShortNames' => ['i', 'id', 'to', 'up', 'io'],
+        ],
+        FunctionLengthSniff::class => [
+            'maxLength' => 40,
         ],
 //        BinaryOperatorSpacesFixer::class => [
 //            'align_double_arrow' => true,
