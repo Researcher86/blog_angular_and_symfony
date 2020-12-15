@@ -37,7 +37,7 @@ class ArticleService
     public function getById(int $id): Article
     {
         $article = $this->articleRepository->getById($id);
-        assert($article instanceof Article);
+        \assert($article instanceof Article);
 
         return $article;
     }
@@ -46,7 +46,7 @@ class ArticleService
     {
         $this->articleRepository->getById($id);
         $article = $this->articleRepository->delete($id);
-        assert($article instanceof Article);
+        \assert($article instanceof Article);
 
         return $article;
     }
@@ -95,7 +95,7 @@ class ArticleService
     public function getCommentById(int $commentId): Comment
     {
         $comment = $this->commentRepository->getById($commentId);
-        assert($comment instanceof Comment);
+        \assert($comment instanceof Comment);
 
         return $comment;
     }

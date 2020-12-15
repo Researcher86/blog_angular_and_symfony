@@ -46,7 +46,7 @@ abstract class DoctrineRepository extends ServiceEntityRepository
             throw new EntityNotFoundException(\sprintf('%s not found by id [%d]', $this->getShortEntityName(), $id));
         }
 
-        if (! is_object($entity)) {
+        if (! \is_object($entity)) {
             throw new ORMException(\sprintf('Return %s is not object [%d]', $this->getShortEntityName(), $id));
         }
 

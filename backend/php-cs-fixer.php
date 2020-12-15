@@ -7,7 +7,9 @@ return PhpCsFixer\Config::create()
         'array_syntax' => array('syntax' => 'short'),
         'binary_operator_spaces' => [
             'operators' => [
-                '=>' => 'align'
+//                '=>' => 'align',
+//                'fn' => null,
+//                '=' => 'align',
             ]
         ],
         'blank_line_after_namespace' => true,

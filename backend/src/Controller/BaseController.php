@@ -34,7 +34,7 @@ abstract class BaseController extends AbstractController
         if ($constraints->count() > 0) {
             $errors = [];
             foreach ($constraints as $error) {
-                assert($error instanceof ConstraintViolation);
+                \assert($error instanceof ConstraintViolation);
                 $errors[$error->getPropertyPath()] = $error->getMessage();
             }
 

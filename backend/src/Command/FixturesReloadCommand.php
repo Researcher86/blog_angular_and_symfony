@@ -33,7 +33,7 @@ class FixturesReloadCommand extends Command
     }
 
     /**
-     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
+     * @phpcsSuppress() SlevomatCodingStandard.Functions.UnusedParameter
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

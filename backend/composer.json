@@ -159,7 +159,7 @@
 
         "code-fix": [
             "phpcbf --report=code --report-width=120",
-            "php-cs-fixer fix --allow-risky yes --config ./php-cs-fixer.php ./src ./tests"
+            "php-cs-fixer fix --allow-risky yes --config ./php-cs-fixer.php ./src ./tests ./phpinsights.php"
         ],
         "test": [
             "@validate",

@@ -34,8 +34,8 @@ class UserControllerTest extends WebTestCase
         $client = static::createClient();
 
         $client->request('POST', '/api/users', [], [], [], \json_encode([
-            'name'          => 'Test',
-            'email'         => 'Test@Test.com',
+            'name' => 'Test',
+            'email' => 'Test@Test.com',
             'plainPassword' => 'Test@Test.com',
         ]));
 
@@ -50,8 +50,8 @@ class UserControllerTest extends WebTestCase
         $client = static::createClient();
 
         $client->request('POST', '/api/users', [], [], [], \json_encode([
-            'name'          => 'T',
-            'email'         => 'Test',
+            'name' => 'T',
+            'email' => 'Test',
             'plainPassword' => 'Tes',
         ]));
 

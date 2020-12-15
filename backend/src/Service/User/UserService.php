@@ -20,13 +20,12 @@ class UserService
         $this->passwordEncoder = $passwordEncoder;
     }
 
-    /**
-     * @psalm-suppress MoreSpecificReturnType
-     */
     public function getById(int $id): User
     {
-        /** @psalm-suppress LessSpecificReturnStatement */
-        return $this->userRepository->getById($id); /** @phpstan-ignore-line */
+        $user = $this->userRepository->getById($id);
+        \assert($user instanceof User);
+
+        return $user;
     }
 
     /**
@@ -37,9 +36,6 @@ class UserService
         return $this->userRepository->findAll();
     }
 
-    /**
-     * @psalm-suppress MoreSpecificReturnType
-     */
     public function create(CreateUser $command): User
     {
         $user = new User(
@@ -48,17 +44,19 @@ class UserService
             $this->passwordEncoder->encodePassword((string) $command->plainPassword, 'salt'),
         );
 
-        /** @psalm-suppress LessSpecificReturnStatement */
-        return $this->userRepository->save($user); /** @phpstan-ignore-line */
+        $user = $this->userRepository->save($user);
+        \assert($user instanceof User);
+
+        return $user;
     }
 
-    /**
-     * @psalm-suppress MoreSpecificReturnType
-     */
     public function delete(int $id): User
     {
         $this->getById($id);
-        /** @psalm-suppress LessSpecificReturnStatement */
-        return $this->userRepository->delete($id); /** @phpstan-ignore-line */
+
+        $user = $this->userRepository->delete($id);
+        \assert($user instanceof User);
+
+        return $user;
     }
 }

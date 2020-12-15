@@ -8,6 +8,7 @@ use ObjectCalisthenics\Sniffs\Files\ClassTraitAndInterfaceLengthSniff;
 use ObjectCalisthenics\Sniffs\Metrics\MethodPerClassLimitSniff;
 use ObjectCalisthenics\Sniffs\NamingConventions\ElementNameMinimalLengthSniff;
 use PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff;
+//use PhpCsFixer\Fixer\Operator\BinaryOperatorSpacesFixer;
 use SlevomatCodingStandard\Sniffs\Classes\SuperfluousExceptionNamingSniff;
 
 return [
@@ -43,6 +44,10 @@ return [
             'minLength' => 3,
             'allowedShortNames' => ['i', 'id', 'to', 'up', 'io'],
         ],
+//        BinaryOperatorSpacesFixer::class => [
+//            'align_double_arrow' => true,
+//            'align_equals'       => false,
+//        ],
     ],
     'requirements' => [
         'min-quality' => 100,
