@@ -39,7 +39,10 @@ app-install:
 	docker-compose run --rm php_cli bash -c "composer install"
 
 app-init:
-	docker-compose run --rm php_cli bash -c "wait-for-it db:5432 -s -t 60 && composer app-init"
+	docker-compose run --rm php_cli bash -c "\
+		wait-for-it db:5432 -s -t 60 && \
+		wait-for-it es:9200 -s -t 60 && \
+		composer app-init"
 
 app-cache-update: app-install
 
