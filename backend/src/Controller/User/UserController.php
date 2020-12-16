@@ -25,7 +25,6 @@ class UserController extends BaseController
 
     public function __construct(UserService $userService)
     {
-        parent::__construct();
         $this->userService = $userService;
     }
 

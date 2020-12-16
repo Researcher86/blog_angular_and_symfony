@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 use NunoMaduro\PhpInsights\Domain\Insights\CyclomaticComplexityIsHigh;
 use NunoMaduro\PhpInsights\Domain\Insights\ForbiddenNormalClasses;
+use NunoMaduro\PhpInsights\Domain\Sniffs\ForbiddenSetterSniff;
 use ObjectCalisthenics\Sniffs\Files\ClassTraitAndInterfaceLengthSniff;
 use ObjectCalisthenics\Sniffs\Files\FunctionLengthSniff;
 use ObjectCalisthenics\Sniffs\Metrics\MethodPerClassLimitSniff;
 use ObjectCalisthenics\Sniffs\NamingConventions\ElementNameMinimalLengthSniff;
 use PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff;
-//use PhpCsFixer\Fixer\Operator\BinaryOperatorSpacesFixer;
 use SlevomatCodingStandard\Sniffs\Classes\SuperfluousExceptionNamingSniff;
 
 return [
@@ -47,6 +47,11 @@ return [
         ],
         FunctionLengthSniff::class => [
             'maxLength' => 40,
+        ],
+        ForbiddenSetterSniff::class => [
+            'exclude' => [
+                'src/Controller/BaseController.php',
+            ],
         ],
 //        BinaryOperatorSpacesFixer::class => [
 //            'align_double_arrow' => true,

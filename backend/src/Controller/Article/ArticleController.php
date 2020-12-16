@@ -28,8 +28,6 @@ class ArticleController extends BaseController
 
     public function __construct(ArticleService $articleService)
     {
-        parent::__construct();
-
         $this->articleService = $articleService;
     }
 

@@ -20,8 +20,6 @@ class AuthController extends BaseController
 
     public function __construct(CentrifugoService $centrifugoService)
     {
-        parent::__construct();
-
         $this->centrifugoService = $centrifugoService;
     }
 
