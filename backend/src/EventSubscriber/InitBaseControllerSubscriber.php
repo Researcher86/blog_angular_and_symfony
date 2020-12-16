@@ -8,18 +8,15 @@ use App\Controller\BaseController;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class InitBaseControllerSubscriber implements EventSubscriberInterface
 {
     private ValidatorInterface $validator;
-    private SerializerInterface $serializer;
 
-    public function __construct(ValidatorInterface $validator, SerializerInterface $serializer)
+    public function __construct(ValidatorInterface $validator)
     {
         $this->validator = $validator;
-        $this->serializer = $serializer;
     }
 
     public function onKernelController(ControllerEvent $event): void
@@ -34,7 +31,6 @@ class InitBaseControllerSubscriber implements EventSubscriberInterface
 
         if ($controller instanceof BaseController) {
             $controller->setValidator($this->validator);
-            $controller->setSerializer($this->serializer);
         }
     }
 

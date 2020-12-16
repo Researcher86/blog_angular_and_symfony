@@ -12,7 +12,6 @@ use App\Service\User\UserService;
 use Exception;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -151,11 +150,8 @@ class UserController extends BaseController
      *
      * @Security(name="Bearer")
      */
-    public function create(Request $request): Response
+    public function create(CreateUser $command): Response
     {
-        /** @var CreateUser $command */
-        $command = $this->deserialize($request, CreateUser::class);
-
         return $this->isValid($command) ?? $this->makeResponse(
             fn (): object => $this->userService->create($command),
             static fn (User $user): array => [ViewUser::createFrom($user), Response::HTTP_CREATED],

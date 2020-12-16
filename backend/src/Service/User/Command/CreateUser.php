@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Service\User\Command;
 
+use App\Service\CommandInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CreateUser
+class CreateUser implements CommandInterface
 {
     /**
      * @Assert\Type("string")

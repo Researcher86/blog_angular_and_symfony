@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Service\Article\Command;
 
+use App\Service\CommandInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CreateComment
+class CreateComment implements CommandInterface
 {
     /**
      * @Assert\Type("integer")

@@ -11,6 +11,7 @@ use ObjectCalisthenics\Sniffs\Metrics\MethodPerClassLimitSniff;
 use ObjectCalisthenics\Sniffs\NamingConventions\ElementNameMinimalLengthSniff;
 use PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff;
 use SlevomatCodingStandard\Sniffs\Classes\SuperfluousExceptionNamingSniff;
+use SlevomatCodingStandard\Sniffs\Classes\SuperfluousInterfaceNamingSniff;
 
 return [
     'preset' => 'symfony',
@@ -25,6 +26,7 @@ return [
     'remove' => [
         ForbiddenNormalClasses::class,
         SuperfluousExceptionNamingSniff::class,
+        SuperfluousInterfaceNamingSniff::class,
     ],
     'config' => [
         LineLengthSniff::class => [

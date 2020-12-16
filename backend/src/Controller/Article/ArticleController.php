@@ -15,7 +15,6 @@ use App\Service\Article\Command\CreateComment;
 use Exception;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -161,11 +160,8 @@ class ArticleController extends BaseController
      *
      * @Security(name="Bearer")
      */
-    public function create(Request $request): Response
+    public function create(CreateArticle $command): Response
     {
-        /** @var CreateArticle $command */
-        $command = $this->deserialize($request, CreateArticle::class);
-
         return $this->isValid($command) ?? $this->makeResponse(
             fn (): object => $this->articleService->create($command),
             static fn (Article $article): array => [ViewArticle::createFrom($article), Response::HTTP_CREATED],
@@ -209,11 +205,8 @@ class ArticleController extends BaseController
      *
      * @Security(name="Bearer")
      */
-    public function createComment(int $articleId, Request $request): Response
+    public function createComment(int $articleId, CreateComment $command): Response
     {
-        /** @var CreateComment $command */
-        $command = $this->deserialize($request, CreateComment::class);
-
         return $this->isValid($command) ?? $this->makeResponse(
             fn (): object => $this->articleService->createComment($articleId, $command),
             static fn (Comment $comment): array => [ViewComment::createFrom($comment), Response::HTTP_CREATED],

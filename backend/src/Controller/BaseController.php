@@ -7,26 +7,17 @@ namespace App\Controller;
 use Exception;
 use Stringable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 abstract class BaseController extends AbstractController
 {
     protected ValidatorInterface $validator;
-    protected SerializerInterface $serializer;
 
     public function setValidator(ValidatorInterface $validator): void
     {
         $this->validator = $validator;
-    }
-
-    public function setSerializer(SerializerInterface $serializer): void
-    {
-        $this->serializer = $serializer;
     }
 
     /**
@@ -57,16 +48,6 @@ abstract class BaseController extends AbstractController
         }
 
         return null;
-    }
-
-    protected function deserialize(Request $request, string $type, string $format = 'json'): object
-    {
-        $result = $this->serializer->deserialize($request->getContent(), $type, $format);
-        if (! \is_object($result)) {
-            throw new BadRequestException('An object was expected and an array arrived.');
-        }
-
-        return (object) $result;
     }
 
     protected function makeResponse(callable $fun, callable $success, callable $fail): Response
