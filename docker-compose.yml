@@ -57,12 +57,12 @@ services:
       - ./backend:/app
     restart: always
 #    scale: 1
-    command: bash -c "\
-      wait-for-it db:5432 -s -t 60 && \
-      wait-for-it redis:6379 -s -t 60 && \
-      wait-for-it rabbit_mq:5672 -s -t 60 && \
-      wait-for-it es:9200 -s -t 60 && \
-      wait-for-it centrifugo:8000 -s -t 60 && \
+    command: bash -c "
+      wait-for-it db:5432 -s -t 60 &&
+      wait-for-it redis:6379 -s -t 60 &&
+      wait-for-it rabbit_mq:5672 -s -t 60 &&
+      wait-for-it es:9200 -s -t 60 &&
+      wait-for-it centrifugo:8000 -s -t 60 &&
       php bin/console messenger:consume async_es -vv"
     depends_on:
       - db
@@ -83,12 +83,12 @@ services:
       - ./backend:/app
     restart: always
 #    scale: 2
-    command: bash -c "\
-      wait-for-it db:5432 -s -t 60 && \
-      wait-for-it redis:6379 -s -t 60 && \
-      wait-for-it rabbit_mq:5672 -s -t 60 && \
-      wait-for-it mailer:8025 -s -t 60 && \
-      wait-for-it centrifugo:8000 -s -t 60 && \
+    command: bash -c "
+      wait-for-it db:5432 -s -t 60 &&
+      wait-for-it redis:6379 -s -t 60 &&
+      wait-for-it rabbit_mq:5672 -s -t 60 &&
+      wait-for-it mailer:8025 -s -t 60 &&
+      wait-for-it centrifugo:8000 -s -t 60 &&
       php bin/console messenger:consume async_email -vv"
     depends_on:
       - db
@@ -109,11 +109,11 @@ services:
       - ./backend:/app
     restart: always
 #    scale: 1
-    command: bash -c "\
-      wait-for-it db:5432 -s -t 60 && \
-      wait-for-it redis:6379 -s -t 60 && \
-      wait-for-it rabbit_mq:5672 -s -t 60 && \
-      wait-for-it centrifugo:8000 -s -t 60 && \
+    command: bash -c "
+      wait-for-it db:5432 -s -t 60 &&
+      wait-for-it redis:6379 -s -t 60 &&
+      wait-for-it rabbit_mq:5672 -s -t 60 &&
+      wait-for-it centrifugo:8000 -s -t 60 &&
       php bin/console messenger:consume async_telegram -vv"
     depends_on:
       - db
