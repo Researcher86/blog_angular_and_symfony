@@ -152,7 +152,7 @@ class UserController extends BaseController
      */
     public function create(CreateUser $command): Response
     {
-        return $this->isValid($command) ?? $this->makeResponse(
+        return $this->makeResponse(
             fn (): object => $this->userService->create($command),
             static fn (User $user): array => [ViewUser::createFrom($user), Response::HTTP_CREATED],
             static fn (Exception $exception): array => [$exception->getMessage(), Response::HTTP_BAD_REQUEST]

@@ -56,7 +56,13 @@ class UserControllerTest extends WebTestCase
         ]));
 
         $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
-        $this->assertNotEmpty($client->getResponse()->getContent());
+        $this->assertJsonStringEqualsJsonString(<<<JSON
+            {
+                "name":"This value is too short. It should have 3 characters or more.",
+                "email":"This value is not a valid email address.",
+                "plainPassword":"This value is too short. It should have 8 characters or more."
+            }
+        JSON, $client->getResponse()->getContent());
     }
 
     /**

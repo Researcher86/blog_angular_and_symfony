@@ -162,7 +162,7 @@ class ArticleController extends BaseController
      */
     public function create(CreateArticle $command): Response
     {
-        return $this->isValid($command) ?? $this->makeResponse(
+        return $this->makeResponse(
             fn (): object => $this->articleService->create($command),
             static fn (Article $article): array => [ViewArticle::createFrom($article), Response::HTTP_CREATED],
             static fn (Exception $exception): array => [$exception->getMessage(), Response::HTTP_BAD_REQUEST]
@@ -207,7 +207,7 @@ class ArticleController extends BaseController
      */
     public function createComment(int $articleId, CreateComment $command): Response
     {
-        return $this->isValid($command) ?? $this->makeResponse(
+        return $this->makeResponse(
             fn (): object => $this->articleService->createComment($articleId, $command),
             static fn (Comment $comment): array => [ViewComment::createFrom($comment), Response::HTTP_CREATED],
             static fn (Exception $exception): array => [$exception->getMessage(), Response::HTTP_BAD_REQUEST]

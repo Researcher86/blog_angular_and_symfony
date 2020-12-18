@@ -5,51 +5,11 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Exception;
-use Stringable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\ConstraintViolation;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 abstract class BaseController extends AbstractController
 {
-    protected ValidatorInterface $validator;
-
-    public function setValidator(ValidatorInterface $validator): void
-    {
-        $this->validator = $validator;
-    }
-
-    /**
-     * @return array<int|string, string|Stringable>
-     */
-    protected function validate(object $param): array
-    {
-        $constraints = $this->validator->validate($param);
-        if ($constraints->count() > 0) {
-            $errors = [];
-            foreach ($constraints as $error) {
-                \assert($error instanceof ConstraintViolation);
-                $errors[$error->getPropertyPath()] = $error->getMessage();
-            }
-
-            return $errors;
-        }
-
-        return [];
-    }
-
-    protected function isValid(object $object): ?Response
-    {
-        $errors = $this->validate($object);
-
-        if ($errors) {
-            return $this->json($errors, Response::HTTP_BAD_REQUEST);
-        }
-
-        return null;
-    }
-
     protected function makeResponse(callable $fun, callable $success, callable $fail): Response
     {
         try {
