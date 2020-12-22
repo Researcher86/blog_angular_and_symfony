@@ -13,6 +13,13 @@ framework:
             name: es
           queues:
             messages_es: ~
+      async_plagiarism:
+        dsn: 'in-memory://'
+        options:
+          exchange:
+            name: plagiarism
+          queues:
+            messages_plagiarism: ~
       async_email:
         dsn: 'in-memory://'
 #        retry_strategy:

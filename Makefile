@@ -64,9 +64,11 @@ app-php-cli-debug: wait
 app-frontend:
 	docker-compose exec frontend bash
 
-app-restart-worker:
+app-worker-restart:
 	docker-compose restart worker_indexer
+	docker-compose restart worker_plagiarism
 	docker-compose restart worker_email
+	docker-compose restart worker_telegram
 
 wait:
 	docker-compose run --rm php_cli bash -c "\

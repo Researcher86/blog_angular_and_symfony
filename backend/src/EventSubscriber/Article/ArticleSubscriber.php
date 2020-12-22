@@ -8,6 +8,7 @@ use App\Event\Article\ArticleCommentCreatedEvent;
 use App\Event\Article\ArticleCreatedEvent;
 use App\Event\Article\ArticlePublishedEvent;
 use App\Message\Article\IndexingArticleMessage;
+use App\Message\Article\PlagiarismArticleMessage;
 use App\Message\Article\SendEmailMessage;
 use App\Message\Article\SendTelegramMessage;
 use App\Service\User\UserService;
@@ -43,6 +44,7 @@ class ArticleSubscriber implements EventSubscriberInterface
             \get_class($event->getArticle())
         ));
         $this->bus->dispatch(new SendTelegramMessage($title));
+        $this->bus->dispatch(new PlagiarismArticleMessage((int) $event->getArticle()->getId(), (int) $user->getId()));
     }
 
     public function onArticlePublishedEvent(ArticlePublishedEvent $event): void

@@ -25,6 +25,16 @@ framework:
 #                            name: pubsub
 #                            type: fanout
                     # or redis try "group"
+            async_plagiarism:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                retry_strategy:
+                    max_retries: 3
+                    multiplier: 1
+                options:
+                    exchange:
+                        name: plagiarism
+                    queues:
+                        messages_plagiarism: ~
             async_email:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 retry_strategy:
@@ -53,6 +63,7 @@ framework:
 
         routing:
             App\Message\Article\IndexingArticleMessage: async_es
+            App\Message\Article\PlagiarismArticleMessage: async_plagiarism
             App\Message\Article\SendEmailMessage: async_email
             App\Message\Article\SendTelegramMessage: async_telegram
             # Route your messages to the transports

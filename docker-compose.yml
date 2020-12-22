@@ -70,6 +70,31 @@ services:
       - rabbit_mq
       - redis
       - centrifugo
+  worker_plagiarism:
+    build:
+      context: .
+      dockerfile: z_config/backend/Dockerfile.worker
+    environment:
+      - XDEBUG_CONFIG=client_host=${WIN_HOST}
+      - XDEBUG_MODE=debug
+      - XDEBUG_SESSION=PHPSTORM
+      - PHP_IDE_CONFIG=serverName=worker-plagiarism
+    volumes:
+      - ./backend:/app
+    restart: always
+    command: bash -c "
+      wait-for-it db:5432 -s -t 60 &&
+      wait-for-it redis:6379 -s -t 60 &&
+      wait-for-it rabbit_mq:5672 -s -t 60 &&
+      wait-for-it es:9200 -s -t 60 &&
+      wait-for-it centrifugo:8000 -s -t 60 &&
+      php bin/console messenger:consume async_plagiarism -vv"
+    depends_on:
+      - db
+      - es
+      - rabbit_mq
+      - redis
+      - centrifugo
   worker_email:
     build:
       context: .
