@@ -10,6 +10,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+/**
+ * Run bin/console app:redis:client
+ *
+ * @package App\Command
+ */
 class RedisClientCommand extends Command
 {
     /**
