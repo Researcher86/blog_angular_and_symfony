@@ -166,7 +166,7 @@
             "php bin/phpunit --colors=always --testdox"
         ],
         "coverage": [
-            "php bin/phpunit --coverage-clover=coverage.xml"
+            "php bin/phpunit --coverage-clover=coverage.xml --coverage-html=z_coverage"
         ],
         "test-one": [
             "@validate",
