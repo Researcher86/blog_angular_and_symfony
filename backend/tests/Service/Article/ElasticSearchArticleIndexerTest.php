@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Service;
+namespace App\Tests\Service\Article;
 
 use App\Entity\Article\Article;
 use App\Repository\Article\ArticleRepository;
-use App\Service\ElasticSearchIndexer;
+use App\Service\Article\ElasticSearchArticleIndexer;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class ElasticSearchIndexerTest extends KernelTestCase
+class ElasticSearchArticleIndexerTest extends KernelTestCase
 {
-    private ?ElasticSearchIndexer $indexService;
+    private ?ElasticSearchArticleIndexer $indexService;
     private ?ArticleRepository $articleRepository;
 
     protected function setUp(): void
@@ -19,7 +19,7 @@ class ElasticSearchIndexerTest extends KernelTestCase
         self::bootKernel();
         $container = self::$container;
 
-        $this->indexService = $container->get(ElasticSearchIndexer::class);
+        $this->indexService = $container->get(ElasticSearchArticleIndexer::class);
         $this->articleRepository = $container->get(ArticleRepository::class);
     }
 

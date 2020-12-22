@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Service\Article;
 
 use App\Entity\Article\Article;
 use Elasticsearch\Client;
 use Elasticsearch\Common\Exceptions\Missing404Exception;
 use Psr\Log\LoggerInterface;
 
-class ElasticSearchIndexer implements IndexerInterface
+class ElasticSearchArticleIndexer implements ArticleIndexerInterface
 {
     private const INDEX_ARTICLES = 'articles';
 

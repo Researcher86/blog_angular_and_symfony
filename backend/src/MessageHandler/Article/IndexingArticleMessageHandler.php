@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\MessageHandler\Article;
 
 use App\Message\Article\IndexingArticleMessage;
+use App\Service\Article\ArticleIndexerInterface;
 use App\Service\Article\ArticleService;
 use App\Service\CentrifugoService;
-use App\Service\IndexerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
@@ -18,13 +18,13 @@ final class IndexingArticleMessageHandler implements MessageHandlerInterface
     private LoggerInterface $logger;
     private CentrifugoService $centrifugoService;
     private ArticleService $articleService;
-    private IndexerInterface $indexer;
+    private ArticleIndexerInterface $indexer;
 
     public function __construct(
         LoggerInterface $logger,
         CentrifugoService $centrifugoService,
         ArticleService $articleService,
-        IndexerInterface $indexer
+        ArticleIndexerInterface $indexer
     ) {
         $this->logger = $logger;
         $this->centrifugoService = $centrifugoService;

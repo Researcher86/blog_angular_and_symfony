@@ -6,10 +6,10 @@ namespace App\MessageHandler\Article;
 
 use App\Message\Article\PlagiarismArticleMessage;
 use App\Message\Article\SendEmailMessage;
+use App\Service\Article\ArticleIndexerInterface;
 use App\Service\Article\ArticleService;
 use App\Service\Article\ComparatorInterface;
 use App\Service\CentrifugoService;
-use App\Service\IndexerInterface;
 use App\Service\User\UserService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
@@ -19,7 +19,7 @@ final class PlagiarismArticleMessageHandler implements MessageHandlerInterface
 {
     private LoggerInterface $logger;
     private CentrifugoService $centrifugoService;
-    private IndexerInterface $indexer;
+    private ArticleIndexerInterface $indexer;
     private ComparatorInterface $comparator;
     private ArticleService $articleService;
     private MessageBusInterface $bus;
@@ -30,7 +30,7 @@ final class PlagiarismArticleMessageHandler implements MessageHandlerInterface
         CentrifugoService $centrifugoService,
         ArticleService $articleService,
         UserService $userService,
-        IndexerInterface $indexer,
+        ArticleIndexerInterface $indexer,
         ComparatorInterface $comparator,
         MessageBusInterface $bus
     ) {

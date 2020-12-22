@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Service\Article;
 
 use App\Entity\Article\Article;
 
-interface IndexerInterface
+interface ArticleIndexerInterface
 {
     public function add(Article $article): void;
 
