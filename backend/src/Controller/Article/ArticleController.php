@@ -54,13 +54,37 @@ class ArticleController extends BaseController
      *
      * @Security(name="Bearer")
      */
-    public function show(int $id/*, CentrifugoService $centrifugoService*/): Response
+    public function show(int $id): Response
     {
-//        $centrifugoService->publish('news');
-
         return $this->makeResponse(
             fn (): object => $this->articleService->getById($id),
             static fn (Article $article): array => [ViewArticle::createFrom($article)],
+            static fn (): array => [[], Response::HTTP_NOT_FOUND]
+        );
+    }
+
+    /**
+     * @Route("/articles/{id}/published", methods={"PUT"}, name="article_published")
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Article published"
+     * )
+     *
+     * @OA\Response(
+     *     response=404,
+     *     description="Article not found"
+     * )
+     *
+     * @OA\Tag(name="Articles")
+     *
+     * @Security(name="Bearer")
+     */
+    public function published(int $id): Response
+    {
+        return $this->makeResponse(
+            fn (): object => $this->articleService->published($id),
+            static fn (): array => [[]],
             static fn (): array => [[], Response::HTTP_NOT_FOUND]
         );
     }

@@ -8,6 +8,7 @@ use App\Entity\Article\Article;
 use App\Entity\Article\Comment;
 use App\Event\Article\ArticleCommentCreatedEvent;
 use App\Event\Article\ArticleCreatedEvent;
+use App\Event\Article\ArticlePublishedEvent;
 use App\Repository\Article\ArticleRepository;
 use App\Repository\Article\CommentRepository;
 use App\Repository\User\UserRepository;
@@ -98,5 +99,17 @@ class ArticleService
         \assert($comment instanceof Comment);
 
         return $comment;
+    }
+
+    public function published(int $id): Article
+    {
+        /** @var Article $article */
+        $article = $this->articleRepository->getById($id);
+        $article->toStatusPublished();
+        $this->articleRepository->save($article);
+
+        $this->eventDispatcher->dispatch(new ArticlePublishedEvent($article));
+
+        return $article;
     }
 }
