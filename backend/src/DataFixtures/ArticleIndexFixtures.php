@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\DataFixtures;
 
 use App\Entity\Article\Article;
-use App\Service\IndexService;
+use App\Service\IndexerInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -15,9 +15,9 @@ use Doctrine\Persistence\ObjectManager;
  */
 class ArticleIndexFixtures extends Fixture implements DependentFixtureInterface
 {
-    private IndexService $indexService;
+    private IndexerInterface $indexService;
 
-    public function __construct(IndexService $indexService)
+    public function __construct(IndexerInterface $indexService)
     {
         $this->indexService = $indexService;
     }

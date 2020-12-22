@@ -5,34 +5,42 @@ declare(strict_types=1);
 namespace App\MessageHandler\Article;
 
 use App\Message\Article\IndexingArticleMessage;
+use App\Service\Article\ArticleService;
 use App\Service\CentrifugoService;
-use App\Service\IndexService;
+use App\Service\IndexerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+
+use function Symfony\Component\String\u;
 
 final class IndexingArticleMessageHandler implements MessageHandlerInterface
 {
     private LoggerInterface $logger;
     private CentrifugoService $centrifugoService;
-    private IndexService $indexService;
+    private ArticleService $articleService;
+    private IndexerInterface $indexer;
 
     public function __construct(
         LoggerInterface $logger,
         CentrifugoService $centrifugoService,
-        IndexService $indexService
+        ArticleService $articleService,
+        IndexerInterface $indexer
     ) {
         $this->logger = $logger;
         $this->centrifugoService = $centrifugoService;
-        $this->indexService = $indexService;
+        $this->articleService = $articleService;
+        $this->indexer = $indexer;
     }
 
     public function __invoke(IndexingArticleMessage $message): void
     {
-        $this->logger->debug('IndexerMessageHandler', ['id' => $message->getArticleId()]);
+        $this->logger->debug('IndexingArticleMessageHandler', ['id' => $message->getArticleId()]);
 
-        for ($i = 0; $i < 10; ++$i) {
-            $this->centrifugoService->publish('news', ['message' => (string) $i]);
-            $this->indexService->ping();
-        }
+        $article = $this->articleService->getById($message->getArticleId());
+        $this->indexer->add($article);
+
+        $this->centrifugoService->publish('news', [
+            'message' => \sprintf('Article [%s] add in index', u($article->getName())->truncate(20)),
+        ]);
     }
 }

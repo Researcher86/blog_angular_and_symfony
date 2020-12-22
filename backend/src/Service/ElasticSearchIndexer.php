@@ -9,7 +9,7 @@ use Elasticsearch\Client;
 use Elasticsearch\Common\Exceptions\Missing404Exception;
 use Psr\Log\LoggerInterface;
 
-class IndexService
+class ElasticSearchIndexer implements IndexerInterface
 {
     private const INDEX_ARTICLES = 'articles';
 
@@ -20,11 +20,6 @@ class IndexService
     {
         $this->client = $client;
         $this->logger = $logger;
-    }
-
-    public function ping(): bool
-    {
-        return $this->client->ping();
     }
 
     public function add(Article $article): void
@@ -43,7 +38,7 @@ class IndexService
     }
 
     /**
-     * @return array<int, string>
+     * {@inheritdoc ()}
      */
     public function get(int $articleId): array
     {
@@ -71,7 +66,7 @@ class IndexService
     }
 
     /**
-     * @return array<int, array<string, array<string>>>
+     * {@inheritdoc ()}
      */
     public function search(string $text, int $page = 1, int $limit = 10): array
     {

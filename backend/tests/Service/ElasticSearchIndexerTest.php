@@ -6,12 +6,12 @@ namespace App\Tests\Service;
 
 use App\Entity\Article\Article;
 use App\Repository\Article\ArticleRepository;
-use App\Service\IndexService;
+use App\Service\ElasticSearchIndexer;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class IndexServiceTest extends KernelTestCase
+class ElasticSearchIndexerTest extends KernelTestCase
 {
-    private ?IndexService $indexService;
+    private ?ElasticSearchIndexer $indexService;
     private ?ArticleRepository $articleRepository;
 
     protected function setUp(): void
@@ -19,13 +19,8 @@ class IndexServiceTest extends KernelTestCase
         self::bootKernel();
         $container = self::$container;
 
-        $this->indexService = $container->get(IndexService::class);
+        $this->indexService = $container->get(ElasticSearchIndexer::class);
         $this->articleRepository = $container->get(ArticleRepository::class);
-    }
-
-    public function testPing()
-    {
-        self::assertTrue($this->indexService->ping());
     }
 
     public function testAdd()
@@ -57,15 +52,11 @@ class IndexServiceTest extends KernelTestCase
     public function testSearch()
     {
         /** @var Article $article */
-        $article = $this->articleRepository->getById(2);
+        $article = $this->articleRepository->getById(3);
         $this->indexService->add($article);
 
         $result = $this->indexService->search($article->getName())[0];
 
-        $expected = [
-            'name' => ['<b>Name</b> <b>2</b>'],
-            'content' => ['Text <b>2</b>'],
-        ];
-        self::assertEquals($expected, $result);
+        self::assertEquals('<b>Name</b> <b>3</b>', $result['name'][0]);
     }
 }
