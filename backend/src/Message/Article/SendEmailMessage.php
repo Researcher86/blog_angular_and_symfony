@@ -9,15 +9,20 @@ final class SendEmailMessage
     private string $email;
     private bool $isCopyToAdmins;
     private string $subject;
-    private int $id;
+    private int $articleOrCommentId;
     private string $type;
 
-    public function __construct(string $subject, string $email, bool $isCopyToAdmins, int $id, string $type)
-    {
+    public function __construct(
+        string $subject,
+        string $email,
+        bool $isCopyToAdmins,
+        int $articleOrCommentId,
+        string $type
+    ) {
         $this->subject = $subject;
         $this->email = $email;
         $this->isCopyToAdmins = $isCopyToAdmins;
-        $this->id = $id;
+        $this->articleOrCommentId = $articleOrCommentId;
         $this->type = $type;
     }
 
@@ -36,9 +41,9 @@ final class SendEmailMessage
         return $this->isCopyToAdmins;
     }
 
-    public function getId(): int
+    public function getArticleOrCommentId(): int
     {
-        return $this->id;
+        return $this->articleOrCommentId;
     }
 
     public function getType(): string
