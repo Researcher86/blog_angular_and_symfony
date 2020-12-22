@@ -12,6 +12,7 @@ use ObjectCalisthenics\Sniffs\NamingConventions\ElementNameMinimalLengthSniff;
 use PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff;
 use SlevomatCodingStandard\Sniffs\Classes\SuperfluousExceptionNamingSniff;
 use SlevomatCodingStandard\Sniffs\Classes\SuperfluousInterfaceNamingSniff;
+use SlevomatCodingStandard\Sniffs\Namespaces\UseSpacingSniff;
 
 return [
     'preset' => 'symfony',
@@ -27,6 +28,7 @@ return [
         ForbiddenNormalClasses::class,
         SuperfluousExceptionNamingSniff::class,
         SuperfluousInterfaceNamingSniff::class,
+        UseSpacingSniff::class,
     ],
     'config' => [
         LineLengthSniff::class => [
@@ -45,7 +47,7 @@ return [
         ],
         ElementNameMinimalLengthSniff::class => [
             'minLength' => 3,
-            'allowedShortNames' => ['i', 'id', 'to', 'up', 'io'],
+            'allowedShortNames' => ['i', 'j', 'id', 'to', 'up', 'io'],
         ],
         FunctionLengthSniff::class => [
             'maxLength' => 40,
