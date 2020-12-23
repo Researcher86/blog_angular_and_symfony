@@ -13,6 +13,7 @@ services:
       - frontend
       - backend
   backend:
+    image: blog_backend
     build:
       context: .
       dockerfile: z_config/backend/Dockerfile.fpm
@@ -30,9 +31,11 @@ services:
       - redis
       - centrifugo
   php_cli:
+    image: blog_php_cli
     build:
       context: .
       dockerfile: z_config/backend/Dockerfile.cli
+      target: cli
     volumes:
       - ./backend:/app
 #    restart: always
@@ -44,10 +47,14 @@ services:
       - redis
       - centrifugo
       - mailer
-  worker_indexer:
+  worker:
+    image: blog_worker
     build:
       context: .
-      dockerfile: z_config/backend/Dockerfile.worker
+      dockerfile: z_config/backend/Dockerfile.cli
+      target: worker
+  worker_indexer:
+    image: blog_worker
     environment:
       - XDEBUG_CONFIG=client_host=${WIN_HOST}
       - XDEBUG_MODE=debug
@@ -71,9 +78,7 @@ services:
       - redis
       - centrifugo
   worker_plagiarism:
-    build:
-      context: .
-      dockerfile: z_config/backend/Dockerfile.worker
+    image: blog_worker
     environment:
       - XDEBUG_CONFIG=client_host=${WIN_HOST}
       - XDEBUG_MODE=debug
@@ -96,9 +101,7 @@ services:
       - redis
       - centrifugo
   worker_email:
-    build:
-      context: .
-      dockerfile: z_config/backend/Dockerfile.worker
+    image: blog_worker
     environment:
       - XDEBUG_CONFIG=client_host=${WIN_HOST}
       - XDEBUG_MODE=debug
@@ -122,9 +125,7 @@ services:
       - centrifugo
       - mailer
   worker_telegram:
-    build:
-      context: .
-      dockerfile: z_config/backend/Dockerfile.worker
+    image: blog_worker
     environment:
       - XDEBUG_CONFIG=client_host=${WIN_HOST}
       - XDEBUG_MODE=debug
@@ -146,6 +147,7 @@ services:
       - redis
       - centrifugo
   frontend:
+    image: blog_frontend
     build:
       context: .
       dockerfile: z_config/frontend/Dockerfile
@@ -165,7 +167,6 @@ services:
       - db_data:/var/lib/postgresql/data
     restart: always
     environment:
-      POSTGRES_DB: blog
       POSTGRES_USER: user
       POSTGRES_PASSWORD: user
   redis:
