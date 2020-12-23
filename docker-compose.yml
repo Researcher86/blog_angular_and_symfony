@@ -2,6 +2,7 @@ version: '3'
 
 services:
   web_server:
+    container_name: blog_web_server
     image: nginx:1.15
     ports:
       - 8080:80
@@ -13,6 +14,7 @@ services:
       - frontend
       - backend
   backend:
+    container_name: blog_backend
     image: blog_backend
     build:
       context: .
@@ -31,6 +33,7 @@ services:
       - redis
       - centrifugo
   php_cli:
+    container_name: blog_php_cli
     image: blog_php_cli
     build:
       context: .
@@ -48,12 +51,14 @@ services:
       - centrifugo
       - mailer
   worker:
+    container_name: blog_worker
     image: blog_worker
     build:
       context: .
       dockerfile: z_config/backend/Dockerfile.cli
       target: worker
   worker_indexer:
+    container_name: blog_worker_indexer
     image: blog_worker
     environment:
       - XDEBUG_CONFIG=client_host=${WIN_HOST}
@@ -78,6 +83,7 @@ services:
       - redis
       - centrifugo
   worker_plagiarism:
+    container_name: blog_worker_plagiarism
     image: blog_worker
     environment:
       - XDEBUG_CONFIG=client_host=${WIN_HOST}
@@ -101,6 +107,7 @@ services:
       - redis
       - centrifugo
   worker_email:
+    container_name: blog_worker_email
     image: blog_worker
     environment:
       - XDEBUG_CONFIG=client_host=${WIN_HOST}
@@ -125,6 +132,7 @@ services:
       - centrifugo
       - mailer
   worker_telegram:
+    container_name: blog_worker_telegram
     image: blog_worker
     environment:
       - XDEBUG_CONFIG=client_host=${WIN_HOST}
@@ -147,6 +155,7 @@ services:
       - redis
       - centrifugo
   frontend:
+    container_name: blog_frontend
     image: blog_frontend
     build:
       context: .
@@ -160,6 +169,7 @@ services:
       - backend
       - centrifugo
   db:
+    container_name: blog_db
     image: postgres:13
     ports:
       - "5432:5432"
@@ -170,16 +180,19 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: user
   redis:
+    container_name: blog_redis
     image: redis:6.0
     ports:
       - "6379:6379"
   redisinsight:
+    container_name: blog_redisinsight
     image: redislabs/redisinsight:latest
     ports:
       - "8001:8001"
     depends_on:
       - redis
   es:
+    container_name: blog_es
     image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
     ports:
       - "9200:9200"
@@ -190,6 +203,7 @@ services:
     volumes:
       - es_data:/usr/share/elasticsearch/data
   rabbit_mq:
+    container_name: blog_rabbit_mq
     image: rabbitmq:3.8.9-management
     ports:
       - "15672:15672"
@@ -202,10 +216,12 @@ services:
 #      timeout: 10s
 #      retries: 5
   mailer:
+    container_name: blog_mailer
     image: mailhog/mailhog
     ports:
       - "8082:8025"
   centrifugo:
+    container_name: blog_centrifugo
     image: centrifugo/centrifugo:v2.8
     ulimits:
       nofile:
@@ -221,6 +237,8 @@ services:
     command: centrifugo --admin --admin_insecure
 volumes:
   db_data:
+    name: blog_db_data
     driver: local
   es_data:
+    name: blog_es_data
     driver: local
