@@ -4,21 +4,19 @@ declare(strict_types=1);
 
 namespace App\Controller\User;
 
-use App\Controller\BaseController;
 use App\Controller\User\Dto\ViewUser;
-use App\Entity\User\User;
 use App\Service\User\Command\CreateUser;
 use App\Service\User\UserService;
-use Exception;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @SuppressWarnings(PHPMD.StaticAccess)
  */
-class UserController extends BaseController
+class UserController extends AbstractController
 {
     private UserService $userService;
 
@@ -52,10 +50,8 @@ class UserController extends BaseController
      */
     public function show(int $id): Response
     {
-        return $this->makeResponse(
-            fn (): object => $this->userService->getById($id),
-            static fn (User $user): array => [ViewUser::createFrom($user)],
-            static fn (): array => [[], Response::HTTP_NOT_FOUND]
+        return $this->json(
+            ViewUser::createFrom($this->userService->getById($id))
         );
     }
 
@@ -78,11 +74,8 @@ class UserController extends BaseController
      */
     public function delete(int $id): Response
     {
-        return $this->makeResponse(
-            fn (): object => $this->userService->delete($id),
-            static fn (): array => [[], Response::HTTP_NO_CONTENT],
-            static fn (): array => [[], Response::HTTP_NOT_FOUND]
-        );
+        $this->userService->delete($id);
+        return $this->json([], Response::HTTP_NO_CONTENT);
     }
 
     /**
@@ -152,10 +145,9 @@ class UserController extends BaseController
      */
     public function create(CreateUser $command): Response
     {
-        return $this->makeResponse(
-            fn (): object => $this->userService->create($command),
-            static fn (User $user): array => [ViewUser::createFrom($user), Response::HTTP_CREATED],
-            static fn (Exception $exception): array => [$exception->getMessage(), Response::HTTP_BAD_REQUEST]
+        return $this->json(
+            ViewUser::createFrom($this->userService->create($command)),
+            Response::HTTP_CREATED
         );
     }
 }

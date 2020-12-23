@@ -50,13 +50,9 @@ class UserService
         return $user;
     }
 
-    public function delete(int $id): User
+    public function delete(int $id): void
     {
         $this->getById($id);
-
-        $user = $this->userRepository->delete($id);
-        \assert($user instanceof User);
-
-        return $user;
+        $this->userRepository->delete($id);
     }
 }

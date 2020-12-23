@@ -6,22 +6,19 @@ namespace App\Controller\Article;
 
 use App\Controller\Article\Dto\ViewArticle;
 use App\Controller\Article\Dto\ViewComment;
-use App\Controller\BaseController;
-use App\Entity\Article\Article;
-use App\Entity\Article\Comment;
 use App\Service\Article\ArticleService;
 use App\Service\Article\Command\CreateArticle;
 use App\Service\Article\Command\CreateComment;
-use Exception;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @SuppressWarnings(PHPMD.StaticAccess)
  */
-class ArticleController extends BaseController
+class ArticleController extends AbstractController
 {
     private ArticleService $articleService;
 
@@ -56,11 +53,7 @@ class ArticleController extends BaseController
      */
     public function show(int $id): Response
     {
-        return $this->makeResponse(
-            fn (): object => $this->articleService->getById($id),
-            static fn (Article $article): array => [ViewArticle::createFrom($article)],
-            static fn (): array => [[], Response::HTTP_NOT_FOUND]
-        );
+        return $this->json(ViewArticle::createFrom($this->articleService->getById($id)));
     }
 
     /**
@@ -82,11 +75,7 @@ class ArticleController extends BaseController
      */
     public function published(int $id): Response
     {
-        return $this->makeResponse(
-            fn (): object => $this->articleService->published($id),
-            static fn (): array => [[]],
-            static fn (): array => [[], Response::HTTP_NOT_FOUND]
-        );
+        return $this->json(ViewArticle::createFrom($this->articleService->published($id)));
     }
 
     /**
@@ -108,11 +97,8 @@ class ArticleController extends BaseController
      */
     public function delete(int $id): Response
     {
-        return $this->makeResponse(
-            fn (): object => $this->articleService->delete($id),
-            static fn (): array => [[], Response::HTTP_NO_CONTENT],
-            static fn (): array => [[], Response::HTTP_NOT_FOUND]
-        );
+        $this->articleService->delete($id);
+        return $this->json([], Response::HTTP_NO_CONTENT);
     }
 
     /**
@@ -186,10 +172,9 @@ class ArticleController extends BaseController
      */
     public function create(CreateArticle $command): Response
     {
-        return $this->makeResponse(
-            fn (): object => $this->articleService->create($command),
-            static fn (Article $article): array => [ViewArticle::createFrom($article), Response::HTTP_CREATED],
-            static fn (Exception $exception): array => [$exception->getMessage(), Response::HTTP_BAD_REQUEST]
+        return $this->json(
+            ViewArticle::createFrom($this->articleService->create($command)),
+            Response::HTTP_CREATED
         );
     }
     /**
@@ -231,10 +216,9 @@ class ArticleController extends BaseController
      */
     public function createComment(int $articleId, CreateComment $command): Response
     {
-        return $this->makeResponse(
-            fn (): object => $this->articleService->createComment($articleId, $command),
-            static fn (Comment $comment): array => [ViewComment::createFrom($comment), Response::HTTP_CREATED],
-            static fn (Exception $exception): array => [$exception->getMessage(), Response::HTTP_BAD_REQUEST]
+        return $this->json(
+            ViewComment::createFrom($this->articleService->createComment($articleId, $command)),
+            Response::HTTP_CREATED
         );
     }
 }

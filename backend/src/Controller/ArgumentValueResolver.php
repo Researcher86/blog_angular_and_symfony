@@ -13,6 +13,7 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ArgumentValueResolver implements ArgumentValueResolverInterface
@@ -45,19 +46,28 @@ class ArgumentValueResolver implements ArgumentValueResolverInterface
     {
         $result = $this->serializer->deserialize($request->getContent(), (string) $argument->getType(), 'json');
         if (! \is_object($result)) {
-            throw new BadRequestHttpException('An object was expected and an array arrived.');
+            $json = $this->serialize('An object was expected and an array arrived.');
+            throw new BadRequestHttpException($json);
         }
 
         $errors = $this->validate((object) $result);
 
         if ($errors) {
-            $json = $this->serializer->serialize($errors, 'json', \array_merge([
-                'json_encode_options' => JsonResponse::DEFAULT_ENCODING_OPTIONS,
-            ]));
-            throw new BadRequestHttpException($json);
+            $json = $this->serialize($errors);
+            throw new ValidatorException($json);
         }
 
         yield (object) $result;
+    }
+
+    /**
+     * @param string|array<int|string, int|string|Stringable> $message
+     */
+    private function serialize($message): string
+    {
+        return $this->serializer->serialize($message, 'json', \array_merge([
+            'json_encode_options' => JsonResponse::DEFAULT_ENCODING_OPTIONS,
+        ]));
     }
 
     /**

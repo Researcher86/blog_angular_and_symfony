@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Service\CentrifugoService;
 use OpenApi\Annotations as OA;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -14,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @package App\Controller
  */
-class AuthController extends BaseController
+class AuthController extends AbstractController
 {
     private CentrifugoService $centrifugoService;
 

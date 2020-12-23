@@ -43,13 +43,10 @@ class ArticleService
         return $article;
     }
 
-    public function delete(int $id): Article
+    public function delete(int $id): void
     {
         $this->articleRepository->getById($id);
-        $article = $this->articleRepository->delete($id);
-        \assert($article instanceof Article);
-
-        return $article;
+        $this->articleRepository->delete($id);
     }
 
     /**
