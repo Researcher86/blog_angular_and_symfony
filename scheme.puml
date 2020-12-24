@@ -1,0 +1,15 @@
+@startmindmap
++ Blog
+++ Docker
++++ Nginx 1.15
++++ PHP 7.4
++++ PostgreSQL 13
++++ ElasticSearch 7.10
++++ Redis 6.0
++++ RabbitMQ 3.8.9
++++ Centrifugo 2.8
+++ Frontend
++++ Angular 10.2
+++ Backend
++++ Symfony 5.1
+@endmindmap
