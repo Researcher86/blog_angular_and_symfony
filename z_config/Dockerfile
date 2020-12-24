@@ -1,0 +1,38 @@
+FROM php:7.4-cli as build
+
+RUN apt-get update && apt-get install -y git libmcrypt-dev libpq-dev librabbitmq-dev libssl-dev libicu-dev libxslt-dev zip unzip wait-for-it \
+    && pecl install xdebug amqp redis \
+    && docker-php-ext-configure intl && docker-php-ext-install intl \
+    && docker-php-ext-install pdo pdo_pgsql pcntl bcmath xsl \
+    && docker-php-ext-enable xdebug amqp redis
+
+RUN mkdir /app
+WORKDIR /app
+
+FROM build as cli
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+FROM build as worker
+
+#=======================================================================================================================
+FROM php:7.4-fpm as fpm
+
+RUN apt-get update && apt-get install -y git libmcrypt-dev libpq-dev librabbitmq-dev libssl-dev libicu-dev libxslt-dev zip unzip \
+    && pecl install xdebug amqp redis \
+    && docker-php-ext-configure intl && docker-php-ext-install intl \
+    && docker-php-ext-install pdo pdo_pgsql pcntl bcmath xsl \
+    && docker-php-ext-enable xdebug amqp redis
+
+RUN mkdir /app
+WORKDIR /app
+
+#=======================================================================================================================
+FROM node:15 as frontend
+
+RUN npm install -g @angular/cli
+
+RUN mkdir /app
+WORKDIR /app
+
+# start app
+# CMD ["npm", "start"]

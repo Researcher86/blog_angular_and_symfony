@@ -15,7 +15,7 @@ up-log:
 up-new: app-install app-init
 
 down:
-	docker-compose down -v
+	docker-compose down -v --remove-orphans
 
 nginx-reload-config:
 	docker-compose exec web-server sh -c "nginx -s reload"
@@ -24,22 +24,22 @@ app-build:
 	docker-compose run --rm frontend bash -c "ng build --prod"
 
 app-message-failed:
-	docker-compose run --rm php_cli bash -c "composer message-failed"
+	docker-compose run --rm php-cli bash -c "composer message-failed"
 
 app-message-failed-retry:
-	docker-compose run --rm php_cli bash -c "composer message-failed-retry"
+	docker-compose run --rm php-cli bash -c "composer message-failed-retry"
 
 app-code-fix:
-	docker-compose run --rm php_cli bash -c "composer code-fix"
+	docker-compose run --rm php-cli bash -c "composer code-fix"
 
 app-code-check:
-	docker-compose run --rm php_cli bash -c "composer code-check"
+	docker-compose run --rm php-cli bash -c "composer code-check"
 
 app-install:
-	docker-compose run --rm php_cli bash -c "composer install"
+	docker-compose run --rm php-cli bash -c "composer install"
 
 app-init:
-	docker-compose run --rm php_cli bash -c "\
+	docker-compose run --rm php-cli bash -c "\
 		wait-for-it db:5432 -s -t 60 && \
 		wait-for-it es:9200 -s -t 60 && \
 		composer app-init"
@@ -50,10 +50,10 @@ app-backend:
 	docker-compose exec backend bash
 
 app-php-cli: wait
-	docker-compose run --rm php_cli bash
+	docker-compose run --rm php-cli bash
 
 app-php-cli-debug: wait
-	docker-compose run --rm php_cli bash -c "\
+	docker-compose run --rm php-cli bash -c "\
 	  	export XDEBUG_CONFIG=client_host=${WIN_HOST} && \
         export XDEBUG_MODE=debug && \
         export XDEBUG_SESSION=PHPSTORM && \
@@ -65,26 +65,26 @@ app-frontend:
 	docker-compose exec frontend bash
 
 app-worker-restart:
-	docker-compose restart worker_indexer
-	docker-compose restart worker_plagiarism
-	docker-compose restart worker_email
-	docker-compose restart worker_telegram
+	docker-compose restart worker-indexer
+	docker-compose restart worker-plagiarism
+	docker-compose restart worker-email
+	docker-compose restart worker-telegram
 
 wait:
-	docker-compose run --rm php_cli bash -c "\
+	docker-compose run --rm php-cli bash -c "\
 		wait-for-it db:5432 -s -t 60 && \
 		wait-for-it redis:6379 -s -t 60 && \
-		wait-for-it rabbit_mq:5672 -s -t 60 && \
+		wait-for-it rabbit-mq:5672 -s -t 60 && \
 		wait-for-it es:9200 -s -t 60 && \
 		wait-for-it mailer:8025 -s -t 60 && \
 		wait-for-it centrifugo:8000 -s -t 60"
 
 app-test: wait
-	docker-compose run --rm php_cli bash -c "composer test"
+	docker-compose run --rm php-cli bash -c "composer test"
 #	docker-compose run --rm frontend bash -c "ng test"
 
 app-test-debug: wait
-	docker-compose run --rm php_cli bash -c "\
+	docker-compose run --rm php-cli bash -c "\
 	  	export XDEBUG_CONFIG=client_host=${WIN_HOST} && \
         export XDEBUG_MODE=debug && \
         export XDEBUG_SESSION=PHPSTORM && \
@@ -94,7 +94,7 @@ app-test-debug: wait
 #	docker-compose run --rm frontend bash -c "ng test"
 
 app-test-coverage: wait
-	docker-compose run --rm php_cli bash -c "\
+	docker-compose run --rm --name blog_php_cli php_cli bash -c "\
         export XDEBUG_MODE=coverage && \
         export | grep -E 'XDEBUG|PHP_IDE' && \
 		composer coverage"
