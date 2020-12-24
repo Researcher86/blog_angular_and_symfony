@@ -112,6 +112,7 @@
 
         "clear": "php bin/console cache:clear",
         "app-init": [
+            "php bin/console doctrine:database:drop --if-exists --force",
             "php bin/console doctrine:database:create",
             "@migrate",
             "@load-fixtures"
