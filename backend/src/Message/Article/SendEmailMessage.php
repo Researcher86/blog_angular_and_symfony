@@ -17,13 +17,13 @@ final class SendEmailMessage
         string $email,
         bool $isCopyToAdmins,
         int $articleOrCommentId,
-        string $type
+        object $object
     ) {
         $this->subject = $subject;
         $this->email = $email;
         $this->isCopyToAdmins = $isCopyToAdmins;
         $this->articleOrCommentId = $articleOrCommentId;
-        $this->type = $type;
+        $this->type = \get_class($object);
     }
 
     public function getSubject(): string
