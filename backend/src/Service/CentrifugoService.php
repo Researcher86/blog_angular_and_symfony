@@ -16,7 +16,7 @@ class CentrifugoService
     }
 
     /**
-     * @param array<string, string> $data
+     * @param array<string, int|string> $data
      */
     public function publish(string $channel, array $data = ['message' => 'Hello from PHP!']): void
     {

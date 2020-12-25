@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\MessageHandler\Article;
 
+use App\Entity\Article\Article;
 use App\Message\Article\PlagiarismArticleMessage;
 use App\Message\Article\SendEmailMessage;
 use App\Service\Article\ArticleIndexerInterface;
@@ -14,6 +15,8 @@ use App\Service\User\UserService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
+
+use function Symfony\Component\String\u;
 
 final class PlagiarismArticleMessageHandler implements MessageHandlerInterface
 {
@@ -54,30 +57,43 @@ final class PlagiarismArticleMessageHandler implements MessageHandlerInterface
         foreach ($articlesInIndex as $articleInIndex) {
             $result = $this->comparator->compare($article->getContent(), $articleInIndex['content'][0]);
             if ($result > 50) {
-                $msg = [
-                    'message' => \sprintf(
-                        'Article [%d] received a plagiarism rating below the norm [%.2f].',
-                        $article->getId(),
-                        $result
-                    ),
-                ];
-                $this->logger->debug('PlagiarismArticleMessageHandler', $msg);
+                $msg = \sprintf(
+                    'Article "%s" received a plagiarism rating below the norm [%.2f].',
+                    $this->truncateArticleName($article),
+                    $result
+                );
+                $this->logger->debug('PlagiarismArticleMessageHandler', [$msg]);
+                $this->sendMessageToFrontend($msg, $article);
 
-                $this->centrifugoService->publish('news', $msg);
                 return;
             }
         }
 
-        $this->centrifugoService->publish('news', [
-            'message' => \sprintf('Article [%d] passed plagiarism.', $article->getId()),
-        ]);
+        $this->sendMessageToFrontend(\sprintf(
+            'Article "%s" passed plagiarism.',
+            $this->truncateArticleName($article)
+        ), $article);
 
         $this->bus->dispatch(new SendEmailMessage(
-            \sprintf('Article [%d] passed plagiarism.', $article->getId()),
+            'Article passed plagiarism.',
             $user->getEmail(),
             true,
             (int) $article->getId(),
-            \get_class($article)
+            $article
         ));
+    }
+
+    private function sendMessageToFrontend(string $message, Article $article): void
+    {
+        $this->centrifugoService->publish('news', [
+            'message' => $message,
+            'id' => (int) $article->getId(),
+            'name' => 'article',
+        ]);
+    }
+
+    private function truncateArticleName(Article $article): string
+    {
+        return u($article->getName())->truncate(30, '...')->toString();
     }
 }
