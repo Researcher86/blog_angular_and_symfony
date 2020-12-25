@@ -205,7 +205,7 @@ services:
       - blog
   redisinsight:
     container_name: blog_redisinsight
-    image: redislabs/redisinsight:latest
+    image: redislabs/redisinsight:1.8.3
     ports:
       - "8001:8001"
     depends_on:
@@ -242,7 +242,7 @@ services:
       - blog
   mailer:
     container_name: blog_mailer
-    image: mailhog/mailhog
+    image: mailhog/mailhog:v1.0.1
     ports:
       - "8082:8025"
     networks:
