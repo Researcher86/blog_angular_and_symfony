@@ -94,7 +94,7 @@ app-test-debug: wait
 #	docker-compose run --rm frontend bash -c "ng test"
 
 app-test-coverage: wait
-	docker-compose run --rm --name blog_php_cli php_cli bash -c "\
+	docker-compose run --rm php-cli bash -c "\
         export XDEBUG_MODE=coverage && \
         export | grep -E 'XDEBUG|PHP_IDE' && \
 		composer coverage"
