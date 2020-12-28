@@ -70,6 +70,18 @@ app-worker-restart:
 	docker-compose restart worker-email
 	docker-compose restart worker-telegram
 
+app-worker-stop:
+	docker-compose stop worker-indexer
+	docker-compose stop worker-plagiarism
+	docker-compose stop worker-email
+	docker-compose stop worker-telegram
+
+app-worker-start:
+	docker-compose start worker-indexer
+	docker-compose start worker-plagiarism
+	docker-compose start worker-email
+	docker-compose start worker-telegram
+
 wait:
 	docker-compose run --rm php-cli bash -c "\
 		wait-for-it db:5432 -s -t 60 && \
