@@ -1,5 +1,10 @@
 framework:
   messenger:
+    serializer:
+      default_serializer: messenger.transport.symfony_serializer
+      symfony_serializer:
+        format: json
+        context: { }
 #    failure_transport: failed
     transports:
 #      failed: 'doctrine://default?queue_name=failed'
@@ -10,16 +15,22 @@ framework:
 #          multiplier: 2
         options:
           exchange:
-            name: es
+            name: blog-messages
+            type: direct
+            default_publish_routing_key: es
           queues:
-            messages_es: ~
+            messages_es:
+              binding_keys: [ es ]
       async_plagiarism:
         dsn: 'in-memory://'
         options:
           exchange:
-            name: plagiarism
+            name: blog-messages
+            type: direct
+            default_publish_routing_key: plagiarism
           queues:
-            messages_plagiarism: ~
+            messages_plagiarism:
+              binding_keys: [plagiarism]
       async_email:
         dsn: 'in-memory://'
 #        retry_strategy:
@@ -27,9 +38,12 @@ framework:
 #          multiplier: 2
         options:
           exchange:
-            name: email
+            name: blog-messages
+            type: direct
+            default_publish_routing_key: email
           queues:
-            messages_email: ~
+            messages_email:
+              binding_keys: [email]
       async_telegram:
         dsn: 'in-memory://'
 #        retry_strategy:
@@ -37,6 +51,9 @@ framework:
 #          multiplier: 1
         options:
           exchange:
-            name: telegram
+            name: blog-messages
+            type: direct
+            default_publish_routing_key: telegram
           queues:
-            messages_email: ~
+            messages_telegram:
+              binding_keys: [telegram]

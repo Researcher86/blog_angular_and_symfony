@@ -42,12 +42,12 @@ final class SendEmailMessageHandler implements MessageHandlerInterface
 
         if ($message->getType() === Article::class) {
             $this->logger->debug('Send article email...');
-            $article = $this->articleService->getById($message->getArticleOrCommentId());
-            $this->notifier->send(new ArticleReviewNotification($article), ...$recipients);
+            $article = $this->articleService->getById($message->getArticleIdOrCommentId());
+            $this->notifier->send(new ArticleReviewNotification($article, $message->getSubject()), ...$recipients);
         } elseif ($message->getType() === Comment::class) {
             $this->logger->debug('Send comment email...');
-            $comment = $this->articleService->getCommentById($message->getArticleOrCommentId());
-            $this->notifier->send(new CommentReviewNotification($comment), ...$recipients);
+            $comment = $this->articleService->getCommentById($message->getArticleIdOrCommentId());
+            $this->notifier->send(new CommentReviewNotification($comment, $message->getSubject()), ...$recipients);
         }
     }
 }

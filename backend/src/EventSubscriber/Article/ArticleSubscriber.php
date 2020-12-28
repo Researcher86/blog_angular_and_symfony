@@ -41,7 +41,7 @@ class ArticleSubscriber implements EventSubscriberInterface
             $user->getEmail(),
             true,
             (int) $event->getArticle()->getId(),
-            $event->getArticle()
+            \get_class($event->getArticle())
         ));
         $this->bus->dispatch(new SendTelegramMessage($title));
         $this->bus->dispatch(new PlagiarismArticleMessage((int) $event->getArticle()->getId(), (int) $user->getId()));
@@ -59,7 +59,7 @@ class ArticleSubscriber implements EventSubscriberInterface
             $user->getEmail(),
             false,
             (int) $event->getArticle()->getId(),
-            $event->getArticle()
+            \get_class($event->getArticle())
         ));
     }
 
@@ -76,7 +76,7 @@ class ArticleSubscriber implements EventSubscriberInterface
             $user->getEmail(),
             true,
             (int) $event->getComment()->getId(),
-            $event->getComment()
+            \get_class($event->getComment())
         ));
         $this->bus->dispatch(new SendTelegramMessage($title));
     }

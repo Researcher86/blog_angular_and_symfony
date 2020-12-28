@@ -1,5 +1,10 @@
 framework:
     messenger:
+        serializer:
+            default_serializer: messenger.transport.symfony_serializer
+            symfony_serializer:
+                format: json
+                context: { }
         # Uncomment this (and the failed transport below) to send failed messages to this transport for later handling.
         failure_transport: failed
 
@@ -8,53 +13,54 @@ framework:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 retry_strategy:
                     max_retries: 3
-                    multiplier: 1
+                    multiplier: 2
                 options:
-                    # queue_name is specific to the doctrine transport
-#                    queue_name: es
-
-                    # for AMQP send to a separate exchange then queue
                     exchange:
-                        name: es
+                        name: blog-messages
+                        type: direct
+                        default_publish_routing_key: es
                     queues:
-                        messages_es: ~
-#                    queue:
-#                        name: 'pubsub_%rand(5)%'
-#                        binding_keys: pubsub
-#                        exchange:
-#                            name: pubsub
-#                            type: fanout
-                    # or redis try "group"
+                        messages_es:
+                            binding_keys: [ es ]
             async_plagiarism:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 retry_strategy:
                     max_retries: 3
-                    multiplier: 1
+                    multiplier: 2
                 options:
                     exchange:
-                        name: plagiarism
+                        name: blog-messages
+                        type: direct
+                        default_publish_routing_key: plagiarism
                     queues:
-                        messages_plagiarism: ~
+                        messages_plagiarism:
+                            binding_keys: [plagiarism]
             async_email:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 retry_strategy:
                     max_retries: 3
-                    multiplier: 1 # Дублирует сообщение воркерам, если поставить 2 то сообщение придет на обработку двум воркерам
+                    multiplier: 2
                 options:
                     exchange:
-                        name: email
+                        name: blog-messages
+                        type: direct
+                        default_publish_routing_key: email
                     queues:
-                        messages_email: ~
+                        messages_email:
+                            binding_keys: [email]
             async_telegram:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 retry_strategy:
                     max_retries: 3
-                    multiplier: 1
+                    multiplier: 2
                 options:
                     exchange:
-                        name: telegram
+                        name: blog-messages
+                        type: direct
+                        default_publish_routing_key: telegram
                     queues:
-                        messages_email: ~
+                        messages_telegram:
+                            binding_keys: [telegram]
 
             # https://symfony.com/doc/current/messenger.html#transport-configuration
 #             async: '%env(MESSENGER_TRANSPORT_DSN)%'
@@ -62,9 +68,9 @@ framework:
             # sync: 'sync://'
 
         routing:
-            App\Message\Article\IndexingArticleMessage: async_es
-            App\Message\Article\PlagiarismArticleMessage: async_plagiarism
-            App\Message\Article\SendEmailMessage: async_email
-            App\Message\Article\SendTelegramMessage: async_telegram
             # Route your messages to the transports
             # 'App\Message\YourMessage': async
+            'App\Message\Article\IndexingArticleMessage': async_es
+            'App\Message\Article\PlagiarismArticleMessage': async_plagiarism
+            'App\Message\Article\SendEmailMessage': async_email
+            'App\Message\Article\SendTelegramMessage': async_telegram

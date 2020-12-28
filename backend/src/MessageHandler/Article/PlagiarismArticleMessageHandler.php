@@ -79,7 +79,7 @@ final class PlagiarismArticleMessageHandler implements MessageHandlerInterface
             $user->getEmail(),
             true,
             (int) $article->getId(),
-            $article
+            \get_class($article)
         ));
     }
 

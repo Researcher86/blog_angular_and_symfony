@@ -6,24 +6,24 @@ namespace App\Message\Article;
 
 final class SendEmailMessage
 {
+    private string $subject;
     private string $email;
     private bool $isCopyToAdmins;
-    private string $subject;
-    private int $articleOrCommentId;
+    private int $articleIdOrCommentId;
     private string $type;
 
     public function __construct(
         string $subject,
         string $email,
-        bool $isCopyToAdmins,
-        int $articleOrCommentId,
-        object $object
+        bool $copyToAdmins,
+        int $articleIdOrCommentId,
+        string $type
     ) {
         $this->subject = $subject;
         $this->email = $email;
-        $this->isCopyToAdmins = $isCopyToAdmins;
-        $this->articleOrCommentId = $articleOrCommentId;
-        $this->type = \get_class($object);
+        $this->isCopyToAdmins = $copyToAdmins;
+        $this->articleIdOrCommentId = $articleIdOrCommentId;
+        $this->type = $type;
     }
 
     public function getSubject(): string
@@ -41,9 +41,9 @@ final class SendEmailMessage
         return $this->isCopyToAdmins;
     }
 
-    public function getArticleOrCommentId(): int
+    public function getArticleIdOrCommentId(): int
     {
-        return $this->articleOrCommentId;
+        return $this->articleIdOrCommentId;
     }
 
     public function getType(): string
