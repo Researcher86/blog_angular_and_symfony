@@ -1,4 +1,4 @@
-
+z_coverage
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php

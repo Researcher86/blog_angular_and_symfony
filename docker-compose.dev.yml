@@ -1,0 +1,247 @@
+version: '3.9'
+
+services:
+  web-server:
+    container_name: blog_web_server
+    image: researcher2286/blog_nginx:dev
+    restart: unless-stopped
+    ports:
+      - 8080:80
+    depends_on:
+      - backend
+      - centrifugo
+    networks:
+      - blog
+    volumes:
+      - ./z_config/nginx/dev.nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./backend/public/bundles:/app/backend/bundles
+  frontend:
+    container_name: blog_frontend
+    image: researcher2286/blog_frontend:dev
+    command: ng serve --host frontend --public-host http://blog.local:8080 --disableHostCheck true
+    tty: true
+    networks:
+      - blog
+    volumes:
+      - ./frontend:/app
+  backend:
+    container_name: blog_backend
+    image: researcher2286/blog_backend:dev
+    environment:
+      - XDEBUG_CONFIG=client_host=${WIN_HOST} start_with_request=trigger
+      - XDEBUG_MODE=debug
+      - XDEBUG_SESSION=PHPSTORM
+      - PHP_IDE_CONFIG=serverName=php-fpm
+    networks:
+      - blog
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - db
+      - es
+      - rabbit-mq
+      - redis
+      - centrifugo
+  php-cli:
+    container_name: blog_php_cli
+    image: researcher2286/blog_php_cli:dev
+    networks:
+      - blog
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - db
+      - es
+      - rabbit-mq
+      - redis
+      - centrifugo
+      - mailer
+  worker-indexer:
+    container_name: blog_worker_indexer
+    image: researcher2286/blog_worker:dev
+    environment:
+      - XDEBUG_CONFIG=client_host=${WIN_HOST}
+      - XDEBUG_MODE=debug
+      - XDEBUG_SESSION=PHPSTORM
+      - PHP_IDE_CONFIG=serverName=worker-indexer
+    networks:
+      - blog
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - db
+      - es
+      - rabbit-mq
+      - redis
+      - centrifugo
+    command: bash -c "
+      wait-for-it db:5432 -s -t 60 &&
+      wait-for-it redis:6379 -s -t 60 &&
+      wait-for-it rabbit-mq:5672 -s -t 60 &&
+      wait-for-it es:9200 -s -t 60 &&
+      wait-for-it centrifugo:8000 -s -t 60 &&
+      php bin/console messenger:consume async_es -vv"
+  worker-plagiarism:
+    container_name: blog_worker_plagiarism
+    image: researcher2286/blog_worker:dev
+    environment:
+      - XDEBUG_CONFIG=client_host=${WIN_HOST}
+      - XDEBUG_MODE=debug
+      - XDEBUG_SESSION=PHPSTORM
+      - PHP_IDE_CONFIG=serverName=worker-plagiarism
+    networks:
+      - blog
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - db
+      - es
+      - rabbit-mq
+      - redis
+      - centrifugo
+    command: bash -c "
+      wait-for-it db:5432 -s -t 60 &&
+      wait-for-it redis:6379 -s -t 60 &&
+      wait-for-it rabbit-mq:5672 -s -t 60 &&
+      wait-for-it es:9200 -s -t 60 &&
+      wait-for-it centrifugo:8000 -s -t 60 &&
+      php bin/console messenger:consume async_plagiarism -vv"
+  worker-email:
+    container_name: blog_worker_email
+    image: researcher2286/blog_worker:dev
+    environment:
+      - XDEBUG_CONFIG=client_host=${WIN_HOST}
+      - XDEBUG_MODE=debug
+      - XDEBUG_SESSION=PHPSTORM
+      - PHP_IDE_CONFIG=serverName=worker-email
+    networks:
+      - blog
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - db
+      - rabbit-mq
+      - redis
+      - centrifugo
+      - mailer
+    command: bash -c "
+      wait-for-it db:5432 -s -t 60 &&
+      wait-for-it redis:6379 -s -t 60 &&
+      wait-for-it rabbit-mq:5672 -s -t 60 &&
+      wait-for-it mailer:8025 -s -t 60 &&
+      wait-for-it centrifugo:8000 -s -t 60 &&
+      php bin/console messenger:consume async_email -vv"
+  worker-telegram:
+    container_name: blog_worker_telegram
+    image: researcher2286/blog_worker:dev
+    environment:
+      - XDEBUG_CONFIG=client_host=${WIN_HOST}
+      - XDEBUG_MODE=debug
+      - XDEBUG_SESSION=PHPSTORM
+      - PHP_IDE_CONFIG=serverName=worker-telegram
+    networks:
+      - blog
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - db
+      - rabbit-mq
+      - redis
+      - centrifugo
+    command: bash -c "
+      wait-for-it db:5432 -s -t 60 &&
+      wait-for-it redis:6379 -s -t 60 &&
+      wait-for-it rabbit-mq:5672 -s -t 60 &&
+      wait-for-it centrifugo:8000 -s -t 60 &&
+      php bin/console messenger:consume async_telegram -vv"
+  db:
+    container_name: blog_db
+    image: postgres:13
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    networks:
+      - blog
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: user
+  redisinsight:
+    container_name: blog_redisinsight
+    image: redislabs/redisinsight:1.8.3
+    restart: unless-stopped
+    ports:
+      - "8001:8001"
+    depends_on:
+      - redis
+    networks:
+      - blog
+  redis:
+    container_name: blog_redis
+    image: redis:6.0
+    restart: unless-stopped
+    networks:
+      - blog
+  es:
+    container_name: blog_es
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+    restart: unless-stopped
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - "discovery.type=single-node"
+      - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    networks:
+      - blog
+  rabbit-mq:
+    container_name: blog_rabbit_mq
+    image: rabbitmq:3.8.9-management
+    restart: unless-stopped
+    ports:
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - blog
+  mailer:
+    container_name: blog_mailer
+    image: mailhog/mailhog:v1.0.1
+    restart: unless-stopped
+    ports:
+      - "8082:8025"
+    networks:
+      - blog
+  centrifugo:
+    container_name: blog_centrifugo
+    image: researcher2286/blog_centrifugo:dev
+    restart: unless-stopped
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    environment:
+      CENTRIFUGO_SECRET: secret
+      CENTRIFUGO_API_KEY: secret
+    ports:
+      - "8083:8000"
+    command: centrifugo --admin --admin_insecure
+    networks:
+      - blog
+
+volumes:
+  db_data:
+    name: blog_db_data
+    driver: local
+  es_data:
+    name: blog_es_data
+    driver: local
+
+networks:
+  blog:
+    name: blog
+    driver: bridge

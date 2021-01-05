@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  api_url: 'http://dev.blog.kz:8080/api',
-  centrifugo_url: 'ws://dev.blog.kz:8080/centrifugo/connection/websocket'
+  api_url: 'http://blog.local:8080/api',
+  centrifugo_url: 'ws://blog.local:8080/centrifugo/connection/websocket'
 };
 
 /*

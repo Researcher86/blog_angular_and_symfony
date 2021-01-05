@@ -3,43 +3,65 @@ export WIN_HOST = $(shell cat /etc/resolv.conf | grep nameserver | awk '{print $
 test-build:
 	docker-compose build --parallel --build-arg BUILDKIT_INLINE_CACHE=1
 
-build:
-	docker-compose build
+build-dev:
+	docker-compose -f docker-compose.build.dev.yml -f docker-compose.dev.yml build --force-rm
 
-up:
-	docker-compose up -d
+build-prod:
+	export TAG=v1.1
+	docker-compose -f docker-compose.build.prod.yml -f docker-compose.prod.yml build --force-rm
 
-up-log:
-	docker-compose up
+images-push:
+	docker-compose -f docker-compose.build.yml -f docker-compose.prod.yml push
+
+up-dev:
+	docker-compose -f docker-compose.dev.yml up -d
+
+up-prod:
+	docker-compose -f docker-compose.prod.yml up -d
+
+up-log-dev:
+	docker-compose -f docker-compose.dev.yml up
+
+up-log-prod:
+	docker-compose -f docker-compose.prod.yml up
+
+restart-dev:
+	docker-compose -f docker-compose.dev.yml restart
+
+restart-prod:
+	docker-compose -f docker-compose.prod.yml restart
 
 up-new: app-install app-init
 
-down:
-	docker-compose down -v --remove-orphans
+down-dev:
+	docker-compose -f docker-compose.dev.yml down -v --remove-orphans
+
+down-prod:
+	docker-compose -f docker-compose.prod.yml down -v --remove-orphans
 
 nginx-reload-config:
-	docker-compose exec web-server sh -c "nginx -s reload"
+	docker-compose -f docker-compose.dev.yml exec web-server sh -c "nginx -s reload"
 
 app-build:
-	docker-compose run --rm frontend bash -c "ng build --prod"
+	docker-compose -f docker-compose.dev.yml run --rm frontend bash -c "ng build --prod"
 
 app-message-failed:
-	docker-compose run --rm php-cli bash -c "composer message-failed"
+	docker-compose -f docker-compose.dev.yml run --rm php-cli bash -c "composer message-failed"
 
 app-message-failed-retry:
-	docker-compose run --rm php-cli bash -c "composer message-failed-retry"
+	docker-compose -f docker-compose.dev.yml run --rm php-cli bash -c "composer message-failed-retry"
 
 app-code-fix:
-	docker-compose run --rm php-cli bash -c "composer code-fix"
+	docker-compose -f docker-compose.dev.yml run --rm php-cli bash -c "composer code-fix"
 
 app-code-check:
-	docker-compose run --rm php-cli bash -c "composer code-check"
+	docker-compose -f docker-compose.dev.yml run --rm php-cli bash -c "composer code-check"
 
 app-install:
-	docker-compose run --rm php-cli bash -c "composer install"
+	docker-compose -f docker-compose.dev.yml run --rm php-cli bash -c "composer install"
 
 app-init:
-	docker-compose run --rm php-cli bash -c "\
+	docker-compose -f docker-compose.dev.yml run --rm php-cli bash -c "\
 		wait-for-it db:5432 -s -t 60 && \
 		wait-for-it es:9200 -s -t 60 && \
 		composer app-init"
@@ -47,13 +69,13 @@ app-init:
 app-cache-update: app-install
 
 app-backend:
-	docker-compose exec backend bash
+	docker-compose -f docker-compose.dev.yml exec backend bash
 
 app-php-cli: wait
-	docker-compose run --rm php-cli bash
+	docker-compose -f docker-compose.dev.yml run --rm php-cli bash
 
 app-php-cli-debug: wait
-	docker-compose run --rm php-cli bash -c "\
+	docker-compose -f docker-compose.dev.yml run --rm php-cli bash -c "\
 	  	export XDEBUG_CONFIG=client_host=${WIN_HOST} && \
         export XDEBUG_MODE=debug && \
         export XDEBUG_SESSION=PHPSTORM && \
@@ -62,28 +84,28 @@ app-php-cli-debug: wait
         bash"
 
 app-frontend:
-	docker-compose exec frontend bash
+	docker-compose -f docker-compose.dev.yml exec frontend bash
 
 app-worker-restart:
-	docker-compose restart worker-indexer
-	docker-compose restart worker-plagiarism
-	docker-compose restart worker-email
-	docker-compose restart worker-telegram
+	docker-compose -f docker-compose.dev.yml restart worker-indexer
+	docker-compose -f docker-compose.dev.yml restart worker-plagiarism
+	docker-compose -f docker-compose.dev.yml restart worker-email
+	docker-compose -f docker-compose.dev.yml restart worker-telegram
 
 app-worker-stop:
-	docker-compose stop worker-indexer
-	docker-compose stop worker-plagiarism
-	docker-compose stop worker-email
-	docker-compose stop worker-telegram
+	docker-compose -f docker-compose.dev.yml stop worker-indexer
+	docker-compose -f docker-compose.dev.yml stop worker-plagiarism
+	docker-compose -f docker-compose.dev.yml stop worker-email
+	docker-compose -f docker-compose.dev.yml stop worker-telegram
 
 app-worker-start:
-	docker-compose start worker-indexer
-	docker-compose start worker-plagiarism
-	docker-compose start worker-email
-	docker-compose start worker-telegram
+	docker-compose -f docker-compose.dev.yml start worker-indexer
+	docker-compose -f docker-compose.dev.yml start worker-plagiarism
+	docker-compose -f docker-compose.dev.yml start worker-email
+	docker-compose -f docker-compose.dev.yml start worker-telegram
 
 wait:
-	docker-compose run --rm php-cli bash -c "\
+	docker-compose -f docker-compose.dev.yml run --rm php-cli bash -c "\
 		wait-for-it db:5432 -s -t 60 && \
 		wait-for-it redis:6379 -s -t 60 && \
 		wait-for-it rabbit-mq:5672 -s -t 60 && \
@@ -92,11 +114,11 @@ wait:
 		wait-for-it centrifugo:8000 -s -t 60"
 
 app-test: wait
-	docker-compose run --rm php-cli bash -c "composer test"
+	docker-compose -f docker-compose.dev.yml run --rm php-cli bash -c "composer test"
 #	docker-compose run --rm frontend bash -c "ng test"
 
 app-test-debug: wait
-	docker-compose run --rm php-cli bash -c "\
+	docker-compose -f docker-compose.dev.yml run --rm php-cli bash -c "\
 	  	export XDEBUG_CONFIG=client_host=${WIN_HOST} && \
         export XDEBUG_MODE=debug && \
         export XDEBUG_SESSION=PHPSTORM && \
@@ -106,7 +128,7 @@ app-test-debug: wait
 #	docker-compose run --rm frontend bash -c "ng test"
 
 app-test-coverage: wait
-	docker-compose run --rm php-cli bash -c "\
+	docker-compose -f docker-compose.dev.yml run --rm php-cli bash -c "\
         export XDEBUG_MODE=coverage && \
         export | grep -E 'XDEBUG|PHP_IDE' && \
 		composer coverage"

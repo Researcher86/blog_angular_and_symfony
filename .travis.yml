@@ -32,7 +32,7 @@ install:
   - docker version
   - docker-compose -v
   - echo "$DOCKER_HUB_ACCESS_TOKEN" | docker login -u "$DOCKER_HUB_LOGIN" --password-stdin
-  - make build
+  - make build-dev
   - make app-install
   - make app-init
 
@@ -40,6 +40,8 @@ script:
   - make app-code-check
   - make app-test
   - make app-test-coverage
+  - make build-prod
+  - make images-push
 
 after_success:
   - cd backend/

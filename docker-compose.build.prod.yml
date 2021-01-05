@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+  web-server:
+    build:
+      context: .
+      target: prod
+      dockerfile: z_config/nginx/Dockerfile
+  backend:
+    build:
+      context: ./backend
+      target: fpm-prod
+  worker:
+    container_name: blog_worker
+    image: researcher2286/blog_worker:${TAG}
+    build:
+      context: ./backend
+      target: worker-prod
+  centrifugo:
+    build:
+      context: ./z_config/centrifugo
+      target: prod

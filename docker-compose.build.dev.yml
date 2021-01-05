@@ -1,0 +1,31 @@
+version: '3.9'
+
+services:
+  web-server:
+    build:
+      context: .
+      target: dev
+      dockerfile: z_config/nginx/Dockerfile
+  frontend:
+    build:
+      context: ./frontend
+      target: dev
+  backend:
+    build:
+      context: ./backend
+      target: fpm-dev
+  worker:
+    container_name: blog_worker
+    image: researcher2286/blog_worker:dev
+    build:
+      context: ./backend
+      target: worker-dev
+  php-cli:
+    image: researcher2286/blog_php_cli:dev
+    build:
+      context: ./backend
+      target: cli
+  centrifugo:
+    build:
+      context: ./z_config/centrifugo
+      target: dev
