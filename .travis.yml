@@ -31,7 +31,8 @@ cache:
 install:
   - docker version
   - docker-compose -v
-  - echo "$DOCKER_HUB_ACCESS_TOKEN" | docker login -u "$DOCKER_HUB_LOGIN" --password-stdin
+#  - echo "$DOCKER_HUB_ACCESS_TOKEN" | docker login -u "$DOCKER_HUB_LOGIN" --password-stdin
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_LOGIN" --password-stdin
   - make build-dev
   - make app-install
   - make app-init
