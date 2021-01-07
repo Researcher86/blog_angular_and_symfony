@@ -7,11 +7,10 @@ build-dev:
 	docker-compose -f docker-compose.build.dev.yml -f docker-compose.dev.yml build --force-rm
 
 build-prod:
-	export TAG=v1.1
 	docker-compose -f docker-compose.build.prod.yml -f docker-compose.prod.yml build --force-rm
 
 images-push:
-	docker-compose -f docker-compose.build.yml -f docker-compose.prod.yml push
+	docker-compose -f docker-compose.build.prod.yml -f docker-compose.prod.yml push
 
 up-dev:
 	docker-compose -f docker-compose.dev.yml up -d
