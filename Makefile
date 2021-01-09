@@ -71,6 +71,15 @@ app-init:
 		wait-for-it es:9200 -s -t 60 && \
 		composer app-init"
 
+app-init-prod:
+	docker-compose -f docker-compose.build.prod.yml -f docker-compose.prod.yml run --rm worker bash -c "\
+		wait-for-it db:5432 -s -t 60 && \
+		wait-for-it es:9200 -s -t 60 && \
+		php bin/console doctrine:database:drop --if-exists --force && \
+		php bin/console doctrine:database:create && \
+		php bin/console doctrine:migrations:migrate -n && \
+		php bin/console doctrine:fixtures:load -n"
+
 app-cache-update: app-install
 
 app-backend:

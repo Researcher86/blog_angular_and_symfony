@@ -16,6 +16,8 @@ services:
     build:
       context: ./backend
       target: worker-prod
+    networks:
+      - blog
   centrifugo:
     build:
       context: ./z_config/centrifugo
