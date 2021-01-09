@@ -46,4 +46,11 @@ RUN pecl install xdebug && docker-php-ext-enable xdebug
 
 #=======================================================================================================================
 FROM fpm-base as fpm-prod
+RUN  docker-php-ext-configure opcache --enable-opcache \
+     && docker-php-ext-install opcache \
+     && docker-php-ext-enable opcache
+COPY --from=build /app /app
+
+#=======================================================================================================================
+FROM base as worker-prod
 COPY --from=build /app /app
