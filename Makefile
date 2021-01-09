@@ -42,7 +42,7 @@ nginx-reload-config:
 	docker-compose -f docker-compose.dev.yml exec web-server sh -c "nginx -s reload"
 
 app-build:
-	docker-compose -f docker-compose.dev.yml run --rm frontend sh -c "yarn install && npm run build"
+	docker-compose -f docker-compose.dev.yml run --rm frontend sh -c "npm run build"
 
 app-message-failed:
 	docker-compose -f docker-compose.dev.yml run --rm php-cli bash -c "composer message-failed"
@@ -64,6 +64,7 @@ app-code-check:
 
 app-install:
 	docker-compose -f docker-compose.dev.yml run --rm php-cli bash -c "composer install"
+	docker-compose -f docker-compose.dev.yml run --rm frontend sh -c "yarn install"
 
 app-init:
 	docker-compose -f docker-compose.dev.yml run --rm php-cli bash -c "\
