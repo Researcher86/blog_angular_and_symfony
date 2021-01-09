@@ -3,13 +3,13 @@ export WIN_HOST = $(shell cat /etc/resolv.conf | grep nameserver | awk '{print $
 test-build:
 	docker-compose build --parallel --build-arg BUILDKIT_INLINE_CACHE=1
 
-build-dev:
+build-dev-docker-images:
 	docker-compose -f docker-compose.build.dev.yml -f docker-compose.dev.yml build --force-rm
 
-build-prod:
+build-prod-docker-images:
 	docker-compose -f docker-compose.build.prod.yml -f docker-compose.prod.yml build --force-rm
 
-images-push:
+push-prod-docker-images:
 	docker-compose -f docker-compose.build.prod.yml -f docker-compose.prod.yml push
 
 up-dev:
