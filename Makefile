@@ -50,6 +50,12 @@ app-message-failed:
 app-message-failed-retry:
 	docker-compose -f docker-compose.dev.yml run --rm php-cli bash -c "composer message-failed-retry"
 
+app-message-failed-prod:
+	docker-compose -f docker-compose.build.prod.yml  -f docker-compose.prod.yml run --rm worker bash -c "php bin/console messenger:failed:show -vv"
+
+app-message-failed-retry-prod:
+	docker-compose -f docker-compose.build.prod.yml -f docker-compose.prod.yml run --rm worker bash -c "php bin/console messenger:failed:retry -vv"
+
 app-code-fix:
 	docker-compose -f docker-compose.dev.yml run --rm php-cli bash -c "composer code-fix"
 
