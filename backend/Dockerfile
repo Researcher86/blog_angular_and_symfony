@@ -17,13 +17,10 @@ RUN pecl install xdebug && docker-php-ext-enable xdebug
 FROM dev as cli
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+#=======================================================================================================================
 FROM cli as build
 COPY . /app
 RUN composer install
-
-#=======================================================================================================================
-FROM base as worker-prod
-COPY --from=build /app /app
 
 #=======================================================================================================================
 FROM dev as worker-dev

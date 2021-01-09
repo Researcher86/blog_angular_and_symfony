@@ -5,6 +5,5 @@ WORKDIR /app
 FROM base as dev
 RUN npm install -g @angular/cli@10.2.1
 
-
 # start app
 # CMD ["npm", "start"]
