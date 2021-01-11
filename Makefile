@@ -73,7 +73,7 @@ app-init:
 		composer app-init"
 
 app-init-prod:
-	docker-compose -f docker-compose.build.prod.yml -f docker-compose.prod.yml run --rm worker bash -c "\
+	docker-compose -f docker-compose.prod.yml run --rm worker-indexer bash -c "\
 		wait-for-it db:5432 -s -t 60 && \
 		wait-for-it es:9200 -s -t 60 && \
 		php bin/console doctrine:database:drop --if-exists --force && \

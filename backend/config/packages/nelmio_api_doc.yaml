@@ -6,11 +6,6 @@ nelmio_api_doc:
 #    host_patterns:
 #      - ^/api/users
   documentation:
-    servers:
-      - url: http://blog.local:8080
-        description: API over HTTP
-      - url: https://blog.local:8080
-        description: API over HTTPS
     info:
       title: Blog
       description: Blog API

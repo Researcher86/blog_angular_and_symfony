@@ -1,0 +1,7 @@
+nelmio_api_doc:
+  documentation:
+    servers:
+      - url: http://blog.kz:8080
+        description: API over HTTP
+      - url: https://blog.kz:8080
+        description: API over HTTPS

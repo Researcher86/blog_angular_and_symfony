@@ -47,7 +47,7 @@ RUN rm -f -R z_coverage && \
     rm -f -R src/DataFixtures && \
     rm -f -R tests && \
     rm -f -R var && mkdir var && chown www-data:www-data var && \
-    rm -f  .php_cs.dist .php_cs.cache
+    rm -f  .php_cs.dist .php_cs.cache .env.local .env.test
 
 #=======================================================================================================================
 FROM base as worker-prod
@@ -55,4 +55,4 @@ COPY . /app
 RUN rm -f -R z_coverage && \
     rm -f -R tests && \
     rm -f -R var && mkdir var && chown www-data:www-data var && \
-    rm -f  .php_cs.dist .php_cs.cache
+    rm -f  .php_cs.dist .php_cs.cache .env.local .env.test
