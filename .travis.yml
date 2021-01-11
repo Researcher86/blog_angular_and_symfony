@@ -18,7 +18,7 @@ install:
   - docker version
   - docker-compose -v
   - echo "$DOCKER_HUB_ACCESS_TOKEN" | docker login -u "$DOCKER_HUB_LOGIN" --password-stdin
-#  - make build-dev-docker-images
+  - make build-dev-docker-images
   - make app-install
 #  - make app-init
 
