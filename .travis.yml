@@ -20,16 +20,18 @@ install:
   - echo "$DOCKER_HUB_ACCESS_TOKEN" | docker login -u "$DOCKER_HUB_LOGIN" --password-stdin
   - make build-dev-docker-images
   - make app-install
-  - make app-init
+  - ls -ahl frontend
+#  - make app-init
 
 script:
-  - make app-code-check
-  - make app-test
-  - make app-test-coverage
+#  - make app-code-check
+#  - make app-test
+#  - make app-test-coverage
+  - ls -ahl frontend
   - make app-build
-  - make build-prod-docker-images
-  - make push-prod-docker-images
+#  - make build-prod-docker-images
+#  - make push-prod-docker-images
 
-after_success:
-  - cd backend/
-  - bash <(curl -s https://codecov.io/bash)
+#after_success:
+#  - cd backend/
+#  - bash <(curl -s https://codecov.io/bash)
