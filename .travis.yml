@@ -18,7 +18,7 @@ install:
   - docker version
   - docker-compose -v
   - echo "$DOCKER_HUB_ACCESS_TOKEN" | docker login -u "$DOCKER_HUB_LOGIN" --password-stdin
-  - make build-dev-docker-images
+  - make build-docker-images-for-dev
   - make app-install
   - make app-init
 
@@ -26,9 +26,9 @@ script:
   - make app-code-check
   - make app-test
   - make app-test-coverage
-  - make app-build
-  - make build-prod-docker-images
-  - make push-prod-docker-images
+  - make app-build-for-prod
+  - make build-docker-images-for-prod
+  - make push-docker-images-for-prod
 
 after_success:
   - cd backend/
