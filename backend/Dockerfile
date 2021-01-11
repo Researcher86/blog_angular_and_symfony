@@ -37,16 +37,24 @@ FROM fpm-base as fpm-dev
 RUN pecl install xdebug && docker-php-ext-enable xdebug
 
 #=======================================================================================================================
-FROM cli as build
-COPY . /app
-
-#=======================================================================================================================
 FROM fpm-base as fpm-prod
 RUN  docker-php-ext-configure opcache --enable-opcache \
      && docker-php-ext-install opcache \
      && docker-php-ext-enable opcache
-COPY --from=build /app /app
+COPY . /app
+RUN rm -f -R z_coverage && \
+    rm -f -R migrations && \
+    rm -f -R src/DataFixtures && \
+    rm -f -R tests && \
+    rm -f -R var && \
+    rm -f  .php_cs.dist .php_cs.cache
 
 #=======================================================================================================================
 FROM base as worker-prod
-COPY --from=build /app /app
+COPY . /app
+RUN rm -f -R z_coverage && \
+    rm -f -R migrations && \
+    rm -f -R src/DataFixtures && \
+    rm -f -R tests && \
+    rm -f -R var && \
+    rm -f  .php_cs.dist .php_cs.cache
