@@ -26,7 +26,6 @@ script:
 #  - make app-code-check
 #  - make app-test
 #  - make app-test-coverage
-  - ls -ahl frontend/node_modules
   - make app-build
 #  - make build-prod-docker-images
 #  - make push-prod-docker-images
