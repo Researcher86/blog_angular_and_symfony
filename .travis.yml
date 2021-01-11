@@ -18,16 +18,15 @@ install:
   - docker version
   - docker-compose -v
   - echo "$DOCKER_HUB_ACCESS_TOKEN" | docker login -u "$DOCKER_HUB_LOGIN" --password-stdin
-  - make build-dev-docker-images
+#  - make build-dev-docker-images
   - make app-install
-  - ls -ahl frontend
 #  - make app-init
 
 script:
 #  - make app-code-check
 #  - make app-test
 #  - make app-test-coverage
-  - ls -ahl frontend
+  - ls -ahl frontend/node_modules
   - make app-build
 #  - make build-prod-docker-images
 #  - make push-prod-docker-images
