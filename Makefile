@@ -71,18 +71,21 @@ app-code-check:
 
 app-init:
 	docker-compose -f docker-compose.dev.yml run --rm php-cli bash -c "\
+		echo 'APP_ENV=dev' > .env.local && \
 		wait-for-it db:5432 -s -t 60 && \
 		wait-for-it es:9200 -s -t 60 && \
 		composer app-init"
 
 app-init-prod:
 	docker-compose -f docker-compose.prod.yml run --rm worker-indexer bash -c "\
+		echo 'APP_ENV=dev' > .env.local && \
 		wait-for-it db:5432 -s -t 60 && \
 		wait-for-it es:9200 -s -t 60 && \
 		php bin/console doctrine:database:drop --if-exists --force && \
 		php bin/console doctrine:database:create && \
 		php bin/console doctrine:migrations:migrate -n && \
-		php bin/console doctrine:fixtures:load -n"
+		php bin/console doctrine:fixtures:load -n && \
+		rm -f .env.local"
 
 app-cache-update: app-install
 
