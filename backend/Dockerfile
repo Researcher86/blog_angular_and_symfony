@@ -27,7 +27,8 @@ RUN apt-get update && apt-get install -y git libmcrypt-dev libpq-dev librabbitmq
     && pecl install amqp redis \
     && docker-php-ext-configure intl && docker-php-ext-install intl \
     && docker-php-ext-install pdo pdo_pgsql pcntl bcmath xsl \
-    && docker-php-ext-enable amqp redis
+    && docker-php-ext-enable amqp redis \
+    && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
 RUN mkdir /app
 WORKDIR /app
