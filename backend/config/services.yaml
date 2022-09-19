@@ -26,6 +26,8 @@ services:
         arguments:
             - '%env(REDIS_DSN)%'
 
+#    Symfony\Bridge\Monolog\Handler\ElasticsearchLogstashHandler: ~
+
     Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface:
         class: Symfony\Component\Security\Core\Encoder\SodiumPasswordEncoder
 
