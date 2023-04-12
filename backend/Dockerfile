@@ -1,4 +1,4 @@
-FROM php:7.4-cli as base
+FROM php:8.2-cli as base
 
 RUN apt-get update && apt-get install -y git libmcrypt-dev libpq-dev librabbitmq-dev libssl-dev libicu-dev libxslt-dev zip unzip wait-for-it \
     && pecl install amqp redis \
@@ -21,7 +21,7 @@ FROM dev as cli
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 #=======================================================================================================================
-FROM php:7.4-fpm as fpm-base
+FROM php:8.2-fpm as fpm-base
 
 RUN apt-get update && apt-get install -y git libmcrypt-dev libpq-dev librabbitmq-dev libssl-dev libicu-dev libxslt-dev zip unzip \
     && pecl install amqp redis \
